@@ -1,0 +1,15 @@
+.idea/
+
+#node modules
+node_modules/
+/yarn.lock
+.json/*
+*.sh
+
+#visual studio code
+.vscode/*
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
