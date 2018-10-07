@@ -28,7 +28,8 @@ SELECT	p.IdProducto
 		, ep.Nombre
 		, p.Habilitado
 		, P.DiasRotacion
-		, p.TipoInsumo 
+		, im.IdTipoInsumo 
+		, DescripcionInsumo = im.Descripcion
 		, p.CodigoProducto
 		, p.CodigoInterno
 		, p.CodigoBarra
@@ -48,7 +49,10 @@ SELECT	p.IdProducto
     INNER JOIN UNIDAD_MEDIDA um 
 		ON	p.IdUnidadMedida = um.IdUnidadMedida
     INNER JOIN ESTADO_PRODUCTO ep 
-		ON	p.IdEstado = ep.IdEstado;
+		ON	p.IdEstado = ep.IdEstado
+	INNER JOIN dbo.TIPO_INSUMO im
+		ON	p.IdTipoInsumo = im.IdTipoInsumo
+		
 GO
 IF OBJECT_ID('V_SUBCLASIFICACIONES','V') IS NOT NULL
 	DROP VIEW V_SUBCLASIFICACIONES
@@ -66,4 +70,3 @@ FROM	SUBCLASIFICACION_PRODUCTO s
 		INNER JOIN CLASIFICACION_PRODUCTO c 
 			ON s.IdClasificacion = c.IdClasificacion;
 GO
-

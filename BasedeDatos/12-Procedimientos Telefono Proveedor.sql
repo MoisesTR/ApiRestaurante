@@ -6,6 +6,7 @@ CREATE PROCEDURE dbo.USP_CREATE_TELEFONO_PROVEEDOR (
 	, @Nombre NVARCHAR(50)
 	, @Cargo NVARCHAR(50)
 	, @Telefono NVARCHAR(15)
+	, @Titular BIT
 )
 AS	
 BEGIN
@@ -17,8 +18,8 @@ BEGIN
 	--END
 	
 	BEGIN 
-		INSERT INTO dbo.TELEFONOS_PROVEEDOR(IdProveedor, Nombre, Cargo, Telefono) 
-		VALUES(@IdProveedor, @Nombre, @Cargo, @Telefono)
+		INSERT INTO dbo.TELEFONOS_PROVEEDOR(IdProveedor, Nombre, Cargo, Telefono,Titular) 
+		VALUES(@IdProveedor, @Nombre, @Cargo, @Telefono, @Titular)
 		SELECT @@IDENTITY AS IdTelefono
 	END
 END
