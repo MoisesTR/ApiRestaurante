@@ -108,6 +108,7 @@ CREATE TABLE dbo.PROVEEDOR(
     NombreRepresentante NVARCHAR(100)		NOT NULL,
 	IdTipoDocumento		INT					NOT NULL,  -- Foraneo
 	Documento			NVARCHAR(50)		NULL,
+	Abreviatura			NVARCHAR(20)		NULL,
     Retencion2			Bit					NOT NULL	DEFAULT 0,
 	Mercado				BIT					NOT NULL	DEFAULT 0,
 	Habilitado			Bit					NOT NULL	DEFAULT 1,
@@ -129,6 +130,7 @@ CREATE TABLE dbo.TELEFONOS_PROVEEDOR (
 	, Telefono NVARCHAR(15) NOT NULL
 	, Nombre NVARCHAR(20) NOT NULL
 	, Cargo NVARCHAR(15) NULL
+	, Titular	BIT NOT NULL
 	, Habilitado	BIT NOT NULL DEFAULT 1
 	, CreatedAt			SMALLDATETIME		NOT NULL	DEFAULT GETDATE()
     , UpdateAt			SMALLDATETIME		NULL
@@ -352,7 +354,7 @@ CREATE TABLE dbo.TIPO_INSUMO (
 )
 GO
 
-INSERT INTO dbo.TIPO_INSUMO(Descripcion) VALUES ('Consumo')
+INSERT INTO dbo.TIPO_INSUMO(Descripcion) VALUES ('Alimento')
 INSERT INTO dbo.TIPO_INSUMO(Descripcion) VALUES('Limpieza')
 
 GO
@@ -373,7 +375,7 @@ CREATE TABLE dbo.PRODUCTO (
 	CodigoProducto		NVARCHAR(100)		NOT NULL,
 	CodigoInterno		NVARCHAR(100)		NULL,
 	CodigoBarra			NVARCHAR(100)		NULL,
-	TipoInsumo			INT					NOT NULL, 
+	IdTipoInsumo			INT				NOT NULL, 
     Imagen				NVARCHAR(100)		NOT NULL	DEFAULT 'nodisponible.png', --	
 	Habilitado			Bit DEFAULT 1		NOT NULL,
     CreatedAt			SMALLDATETIME		NOT NULL DEFAULT GETDATE(),
@@ -393,7 +395,7 @@ CREATE TABLE dbo.PRODUCTO (
 		REFERENCES dbo.EMPAQUE(IdEmpaque),
 		CONSTRAINT FL_Proveedor FOREIGN KEY(IdProveedor)  
 		REFERENCES dbo.PROVEEDOR(IdProveedor),
-	CONSTRAINT FL_TipoInsumoProducto FOREIGN KEY(TipoInsumo)  
+	CONSTRAINT FL_TipoInsumoProducto FOREIGN KEY(IdTipoInsumo)  
 		REFERENCES dbo.TIPO_INSUMO(IdTipoInsumo),
 	CONSTRAINT UC_CodigoProducto UNIQUE (CodigoProducto),	
 );

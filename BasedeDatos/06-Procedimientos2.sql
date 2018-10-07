@@ -16,7 +16,7 @@ CREATE PROCEDURE USP_CREATE_PRODUCTO(
 	@ValorUnidadMedida	NUMERIC(10,5),
 	@CantidadEmpaque	INT, 
 	@DiasRotacion		INT,
-	@TipoInsumo			INT,
+	@IdTipoInsumo			INT,
 	@CodigoProducto		NVARCHAR(200),
 	@CodigoInterno		NVARCHAR(200),
 	@CodigoBarra		NVARCHAR(200)
@@ -49,7 +49,7 @@ CREATE PROCEDURE USP_CREATE_PRODUCTO(
 			, ValorUnidadMedida
 			, CantidadEmpaque
 			, DiasRotacion
-			, TipoInsumo
+			, IdTipoInsumo
 			, CodigoProducto
 			, CodigoInterno
 			, CodigoBarra
@@ -67,7 +67,7 @@ CREATE PROCEDURE USP_CREATE_PRODUCTO(
 			, @ValorUnidadMedida
 			, @CantidadEmpaque
 			, @DiasRotacion
-			, @TipoInsumo
+			, @IdTipoInsumo
 			, @CodigoProducto
 			, @CodigoInterno
 			, @CodigoBarra
@@ -99,7 +99,7 @@ CREATE PROCEDURE USP_UPDATE_PRODUCTO(
 	@ValorUnidadMedida	INT,
 	@CantidadEmpaque	INT,
 	@DiasRotacion		INT,
-	@TipoInsumo			INT,
+	@IdTipoInsumo			INT,
 	@CodigoProducto		NVARCHAR(200),
 	@CodigoInterno		NVARCHAR(200),
 	@CodigoBarra		NVARCHAR(200)
@@ -117,7 +117,7 @@ CREATE PROCEDURE USP_UPDATE_PRODUCTO(
 		,	IdUnidadMedida = @IdUnidadMedida
 		,	ValorUnidadMedida = @ValorUnidadMedida
 		,   DiasRotacion = ISNULL(@DiasRotacion, DiasRotacion)
-		,	TipoInsumo = @TipoInsumo
+		,	IdTipoInsumo = @IdTipoInsumo
 		,	CodigoProducto = @CodigoProducto
 		,	CodigoInterno = @CodigoInterno
 		,   CodigoBarra = @CodigoBarra
@@ -144,7 +144,7 @@ AS BEGIN
 			, P.ValorUnidadMedida
 			, P.CantidadEmpaque
 			, P.DiasRotacion
-			, P.TipoInsumo
+			, P.IdTipoInsumo
 			, P.CodigoProducto
 			, P.CodigoInterno
 			, P.CodigoBarra
@@ -187,7 +187,7 @@ AS BEGIN
 		, p.Descripcion
 		, p.Imagen
 		, P.DiasRotacion
-		, P.TipoInsumo
+		, P.IdTipoInsumo
 		, P.CodigoProducto
 		, P.CodigoInterno
 		, P.CodigoBarra

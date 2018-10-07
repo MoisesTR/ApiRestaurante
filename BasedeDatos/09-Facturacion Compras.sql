@@ -49,8 +49,9 @@ CREATE TABLE FACTURA_COMPRA(
 	CambioActual	NUMERIC(14,2) CHECK(CambioActual > 0) NOT NULL,
 	TotalDescuento	NUMERIC(14,2) DEFAULT 0 CHECK(TotalDescuento >= 0) NOT NULL,
 	TotalCordobas	NUMERIC(14,2) DEFAULT 0 CHECK(TotalCordobas >= 0) NOT NULL,
+	TotalOrigenFactura NUMERIC DEFAULT 0 CHECK(TotalOrigenFactura >= 0) NOT NULL,
 	Retencion		BIT NOT NULL,
-	Respaldo		NVARCHAR(200) NULL DEFAULT 'noimage.png',
+	ImgRespaldo	NVARCHAR(200) NULL DEFAULT 'noimage.png',
 	Habilitado	BIT DEFAULT 1 NOT NULL,
 	CreatedAt	SMALLDATETIME DEFAULT GETDATE() NOT NULL,
 	UpdateAt	SMALLDATETIME NULL,
@@ -105,6 +106,7 @@ CREATE PROCEDURE USP_CREATE_FACTURA_COMPRA(
 	@CambioActual	NUMERIC(14,2),
 	@TotalDescuento	NUMERIC(14,2),
 	@TotalCordobas	NUMERIC(14,2),
+	@TotalOrigenFactura NUMERIC(14,2),
 	@Retencion		BIT,
 	@IdFactura		INT OUTPUT
 )
@@ -117,9 +119,9 @@ AS BEGIN
 	END
 
 	INSERT INTO dbo.FACTURA_COMPRA(IdProveedor,NumRefFactura, IdTrabajador,IdTipoMoneda, IdFormaPago, NombVendedor,
-		FechaFactura,FechaRecepcion, SubTotal, TotalIva,CambioActual, TotalDescuento, TotalCordobas,Retencion)
+		FechaFactura,FechaRecepcion, SubTotal, TotalIva,CambioActual, TotalDescuento, TotalCordobas,TotalOrigenFactura,Retencion)
 	VALUES(@IdProveedor,@NumRefFactura, @IdTrabajador,@IdTipoMoneda, @IdFormaPago, @NombVendedor, @FechaFactura,@FechaRecepcion, @Subtotal,
-			@TotalIva, @CambioActual, @TotalDescuento, @TotalCordobas, @Retencion)
+			@TotalIva, @CambioActual, @TotalDescuento, @TotalCordobas, @TotalOrigenFactura,@Retencion)
 	SET @IdFactura = @@IDENTITY
 END
 GO
@@ -177,6 +179,7 @@ AS BEGIN
 			, FC.CambioActual
 			, FC.TotalDescuento
 			, FC.TotalCordobas
+			, FC.TotalOrigenFactura
 			, FC.Habilitado
 			, FechaIngreso = FC.CreatedAt 
 			, HoraIngreso = CONVERT(VARCHAR(10),FC.CreatedAt,108) + ' ' + RIGHT(CONVERT(VARCHAR(30), FC.CreatedAt , 9), 2) 
