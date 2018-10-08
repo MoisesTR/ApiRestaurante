@@ -410,9 +410,11 @@ var createTelefonoProveedor = [
     body('Telefono', 'Ingresa un telefono.').isAscii(),
     body('Nombre','Ingresar un nombre.').isAscii(),
     body('Cargo').optional({nullable:true}),
+    body('Titular').isInt(),
     sanitize('IdProveedor').toInt(),
     sanitize('Telefono').toString(),
-    sanitize('Nombre').toString()
+    sanitize('Nombre').toString(),
+    sanitize('Titular').toInt()
 ];
 
 exports.createTelefonoProveedor = createTelefonoProveedor;

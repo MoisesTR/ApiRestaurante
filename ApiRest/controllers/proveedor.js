@@ -96,6 +96,7 @@ function createTelefonoProveedor(req,res) {
     db.pushAOJParam(aoj, 'Nombre', sql.NVarChar(50), data.Nombre);
     db.pushAOJParam(aoj, 'Cargo', sql.NVarChar(50), data.Cargo);
     db.pushAOJParam(aoj, 'Telefono', sql.NVarChar(15), data.Telefono);
+    db.pushAOJParam(aoj, 'Titular', sql.Bit, data.Titular);
     db.storedProcExecute('USP_CREATE_TELEFONO_PROVEEDOR', aoj)
         .then((results) => {
             res.status(200).json(results.recordset[0])
