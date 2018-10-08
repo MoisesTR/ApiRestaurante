@@ -48,7 +48,7 @@ function createProducto(req, res) {
     db.pushAOJParam(aoj, 'ValorUnidadMedida', sql.Numeric(10, 5), data.ValorUnidadMedida)
     db.pushAOJParam(aoj, 'CantidadEmpaque', sql.Int, data.CantidadEmpaque);
     db.pushAOJParam(aoj, 'DiasRotacion',   sql.Int, data.DiasRotacion);
-    db.pushAOJParam(aoj, 'TipoInsumo',   sql.Int, data.TipoInsumo);
+    db.pushAOJParam(aoj, 'IdTipoInsumo',   sql.Int, data.IdTipoInsumo);
     db.pushAOJParam(aoj, 'CodigoProducto',   sql.NVarChar(200), data.CodigoProducto);
     db.pushAOJParam(aoj, 'CodigoInterno',   sql.NVarChar(200), data.CodigoInterno);
     db.pushAOJParam(aoj, 'CodigoBarra',   sql.NVarChar(200), data.CodigoBarra);

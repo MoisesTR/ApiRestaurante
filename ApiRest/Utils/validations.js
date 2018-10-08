@@ -274,7 +274,7 @@ var createProducto = [
     body('IdUnidadMedida','Debes seleccionar una unidad de medida.').isInt(),
     body('ValorUnidadMedida').exists(),
     body('DiasRotacion').isInt(),
-    body('TipoInsumo').isInt(),
+    body('IdTipoInsumo').isInt(),
     body('CodigoProducto').isAscii(),
     body('CodigoInterno').optional({nullable:true}),
     body('CodigoBarra').optional({nullable:true}),
@@ -336,6 +336,7 @@ exports.createFacturaCompra  = [
     body('CambioActual').exists(),
     body('TotalDescuento').exists(),
     body('TotalCordobas').exists(),
+    body('TotalOrigenFactura').exists(),
     body('Retencion').exists()
 ];
 
@@ -389,10 +390,12 @@ exports.getCambiosFacturaById = [
 
 
 exports.obtenerFacturasC = [
+    check('IdFechaFiltro').toInt().optional({nullable:true}),
     check('FechaInicio').toDate().optional({nullable:true}),
     check('FechaFin').toDate().optional({nullable:true}),
     check('IdProveedor').isInt().optional({nullable:true}),
     check('IdEstadoFactura').isInt().optional({nullable:true}),
+    sanitize('IdFechaFiltro', 'La fecha filtro enviada no es una fecha valida.').toInt(),
     sanitize('FechaInicio', 'La fecha Inicio enviada no es una fecha valida.').toDate(),
     sanitize('FechaFin', 'La Fecha Fin Enviada no es una fecha valida').toDate()
 ];
