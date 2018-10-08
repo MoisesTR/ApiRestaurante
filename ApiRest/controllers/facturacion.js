@@ -19,6 +19,7 @@ function createFacturaCompra(req, res) {
     db.pushAOJParam(aoj, 'CambioActual', sql.Numeric(14,2),data.CambioActual);
     db.pushAOJParam(aoj, 'TotalDescuento', sql.Numeric(14,2),data.TotalDescuento);
     db.pushAOJParam(aoj, 'TotalCordobas', sql.Numeric(14,2),data.TotalCordobas);
+    db.pushAOJParam(aoj, 'TotalOrigenFactura', sql.Numeric(14,2),data.TotalOrigenFactura);
     db.pushAOJParam(aoj, 'Retencion', sql.Bit,data.Retencion);
     db.pushOutParam(aoj, 'IdFactura', sql.Int);
     db.storedProcExecute('USP_CREATE_FACTURA_COMPRA',aoj)
@@ -138,6 +139,7 @@ function obtenerFacturasCompra(req, res ) {
     let aoj = [];
     let data = matchedData(req,{locations:['params','query','body']});
     console.log(data);
+    db.pushAOJParam(aoj, 'IdFechaFiltro', sql.Int,data.IdFechaFiltro);
     db.pushAOJParam(aoj, 'FechaInicio', sql.Date,data.FechaInicio);
     db.pushAOJParam(aoj, 'FechaFin', sql.Date,data.FechaFin);
     db.pushAOJParam(aoj, 'IdProveedor', sql.Int,data.IdProveedor);
