@@ -155,10 +155,11 @@ IF OBJECT_ID('dbo.USP_GET_FACTURAS_COMPRA',N'P') IS NOT NULL
 	DROP PROCEDURE dbo.USP_GET_FACTURAS_COMPRA
 GO
 CREATE PROCEDURE dbo.USP_GET_FACTURAS_COMPRA (
-	@FechaInicio		SMALLDATETIME,
-	@FechaFin			SMALLDATETIME,
-	@IdProveedor		INT NULL,
-	@IdEstadoFactura	INT NULL
+	@IdFechaFiltro		INT --1 Fecha Recepcion, 2-Fecha Ingreso--
+	, @FechaInicio		SMALLDATETIME
+	, @FechaFin			SMALLDATETIME
+	, @IdProveedor		INT NULL
+	, @IdEstadoFactura	INT NULL
 )
 AS BEGIN
 
@@ -190,8 +191,19 @@ AS BEGIN
 				ON FC.IdProveedor = PRO.IdProveedor
 			INNER JOIN dbo.TRABAJADOR TRA
 				ON FC.IdTrabajador = TRA.IdTrabajador
-	WHERE	FC.CreatedAt BETWEEN ISNULL(@FechaInicio,FC.CreatedAt) AND ISNULL(@FechaFin,FC.CreatedAt)  AND FC.IdProveedor = ISNULL(@IdProveedor,FC.IdProveedor) 
+	WHERE	(@IdFechaFiltro IS NULL 
+			AND FC.IdProveedor = @IdProveedor)
 			AND FC.IdEstadoFactura = ISNULL(@IdEstadoFactura,FC.IdEstadoFactura)
+			OR 
+			(@IdFechaFiltro IS NOT NULL 
+			AND FC.IdProveedor = @IdProveedor)
+			AND FC.IdEstadoFactura = ISNULL(@IdEstadoFactura,FC.IdEstadoFactura)
+			AND (( @IdFechaFiltro = 1 AND FC.FechaRecepcion BETWEEN ISNULL(@FechaInicio,FC.FechaRecepcion) AND ISNULL(@FechaFin,FC.FechaRecepcion))
+				OR @IdFechaFiltro = 2 AND FC.CreatedAt BETWEEN ISNULL(@FechaInicio,FC.FechaRecepcion) AND ISNULL(@FechaFin,FC.FechaRecepcion))
+	ORDER BY CASE WHEN @IdFechaFiltro IS NULL THEN FC.FechaRecepcion 
+					WHEN @IdFechaFiltro = 1 THEN FC.FechaRecepcion 
+					WHEN @IdFechaFiltro = 2 THEN FC.FechaFactura
+					END ASC
 END
 
 
