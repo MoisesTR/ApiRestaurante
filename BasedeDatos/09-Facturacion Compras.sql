@@ -49,7 +49,7 @@ CREATE TABLE FACTURA_COMPRA(
 	CambioActual	NUMERIC(14,2) CHECK(CambioActual > 0) NOT NULL,
 	TotalDescuento	NUMERIC(14,2) DEFAULT 0 CHECK(TotalDescuento >= 0) NOT NULL,
 	TotalCordobas	NUMERIC(14,2) DEFAULT 0 CHECK(TotalCordobas >= 0) NOT NULL,
-	TotalOrigenFactura NUMERIC DEFAULT 0 CHECK(TotalOrigenFactura >= 0) NOT NULL,
+	TotalOrigenFactura NUMERIC(14,2) DEFAULT 0 CHECK(TotalOrigenFactura >= 0) NOT NULL,
 	Retencion		BIT NOT NULL,
 	ImgRespaldo	NVARCHAR(200) NULL DEFAULT 'noimage.png',
 	Habilitado	BIT DEFAULT 1 NOT NULL,

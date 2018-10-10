@@ -319,13 +319,13 @@ CREATE PROCEDURE USP_CREATE_PROVEEDOR(
 	BEGIN TRANSACTION myTran
 	BEGIN TRY
 
-		IF EXISTS (SELECT NombreProveedor FROM PROVEEDOR WHERE NombreProveedor = @NombreProveedor)
+		IF EXISTS (SELECT NombreProveedor FROM PROVEEDOR WHERE NombreProveedor = @NombreProveedor AND Habilitado = 1)
 		BEGIN
 			RAISERROR('El nombre del proveedor ya existe.',16,1);
 			RETURN
 		END
 
-		IF EXISTS (SELECT Documento FROM PROVEEDOR WHERE Documento = @Documento)
+		IF EXISTS (SELECT Documento FROM PROVEEDOR WHERE Documento = @Documento AND Habilitado = 1)
 		BEGIN
 			RAISERROR('El Numero Ruc del proveedor ya existe.',16,1);
 			RETURN
