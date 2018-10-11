@@ -1,4 +1,4 @@
-USE pruebas_node;
+USE ATOMIC_RESTAURANTE;
 
 
 INSERT INTO PROVEEDOR(IdPais,NombreProveedor,Direccion,Email,Imagen,Descripcion,NombreRepresentante,IdTipoDocumento,Documento,Retencion2,Mercado,CreatedAt)
