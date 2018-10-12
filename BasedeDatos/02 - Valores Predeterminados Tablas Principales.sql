@@ -1,4 +1,4 @@
-﻿USE pruebas_node
+﻿USE ATOMIC_RESTAURANTE;
 GO
 --// Valores predeterminados tabla moneda
 SET IDENTITY_INSERT  dbo.FACTURACION_MONEDA ON

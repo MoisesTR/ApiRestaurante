@@ -3,7 +3,7 @@
 *	@last_update	03/08/2018
 *	@modifier		Genaro Tinoco
 **/
-USE pruebas_node;
+USE ATOMIC_RESTAURANTE;
 GO
 IF OBJECT_ID('dbo.USP_GET_ROL','P') IS NOT NULL
 	DROP PROCEDURE USP_GET_ROL

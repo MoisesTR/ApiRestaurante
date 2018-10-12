@@ -1,6 +1,4 @@
-USE pruebas_node;
-GO
-USE pruebas_node;
+USE ATOMIC_RESTAURANTE;
 GO
 IF OBJECT_ID('dbo.V_ProductosDetallados','V') IS NOT NULL
 	DROP VIEW dbo.V_ProductosDetallados

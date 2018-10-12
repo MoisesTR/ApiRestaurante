@@ -1,4 +1,4 @@
-use pruebas_node;
+use ATOMIC_RESTAURANTE;
 GO
 CREATE TABLE ROL_USUARIO(
 	IdRol			INT IDENTITY(1,1), 
