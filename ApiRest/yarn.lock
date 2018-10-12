@@ -842,11 +842,11 @@ express-session@^1.15.6:
     utils-merge "1.0.1"
 
 express-validator@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/express-validator/-/express-validator-5.0.1.tgz#8394ad15b865b5cb45346418c225d2f52db36173"
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/express-validator/-/express-validator-5.3.0.tgz#18a4e4a6e6410e3b9d492fb4ffcb4556fec51806"
   dependencies:
-    lodash "^4.16.0"
-    validator "^9.4.0"
+    lodash "^4.17.10"
+    validator "^10.4.0"
 
 express@~4.15.5:
   version "4.15.5"
@@ -1579,10 +1579,6 @@ lodash.merge@^4.6.0:
 lodash.once@^4.0.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
-
-lodash@^4.16.0:
-  version "4.17.5"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.5.tgz#99a92d65c0272debe8c96b6057bc8fbfa3bed511"
 
 lodash@^4.17.10:
   version "4.17.11"
@@ -2880,9 +2876,9 @@ v8-compile-cache@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.0.2.tgz#a428b28bb26790734c4fc8bc9fa106fccebf6a6c"
 
-validator@^9.4.0:
-  version "9.4.1"
-  resolved "https://registry.yarnpkg.com/validator/-/validator-9.4.1.tgz#abf466d398b561cd243050112c6ff1de6cc12663"
+validator@^10.4.0:
+  version "10.8.0"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-10.8.0.tgz#8acb15a5c39411cbc8ef2be0c98c2514da4410a7"
 
 vary@~1.1.1:
   version "1.1.2"
