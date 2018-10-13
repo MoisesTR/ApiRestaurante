@@ -83,7 +83,7 @@ exports.updateCargo = createCargo.concat([
 var createProveedor = [
     body('NombreProveedor').exists(),
     body('NombreProveedor', 'Ingrese el Nombre del proveedor.').exists(),
-    body('Direccion', 'Ingrese la direccion del proveedor.').isString().trim(),
+    body('Direccion', 'Ingrese la direccion del proveedor.').isAscii().trim(),
     body('Email','Ingrese el Email del Proveedor.').isEmail(),
     body('Descripcion').optional({nullable:true}),
     body('NombreRepresentante','Ingrese el Nombre del representante.').exists(),
@@ -142,8 +142,8 @@ function isDate(nombreCampo ) {
 }
 
 var createEnvase = [
-    body('NombreEnvase', 'El nombre de envase es requerido!').isString().isLength({min: 3, max:50}),
-    body('Descripcion', 'La descripcion debe tener una longitud maxima de 150 caracteres.').isString().optional({nullable:true}).isLength({max:150}),
+    body('NombreEnvase', 'El nombre de envase es requerido!').isAscii().isLength({min: 3, max:50}),
+    body('Descripcion', 'La descripcion debe tener una longitud maxima de 150 caracteres.').isAscii().optional({nullable:true}).isLength({max:150}),
     sanitize('NombreEnvase').toString(),
     sanitize('Descripcion').toString()
 ];
@@ -190,8 +190,8 @@ exports.updateTrabajador = [
 ];
 
 var createEmpaque = [
-    body('NombreEmpaque', 'Nombre de Empaque requerido').isString(),
-    body('Descripcion'  , 'La descripcion debe ser texto!').isString().optional({nullable: true}),
+    body('NombreEmpaque', 'Nombre de Empaque requerido').isAscii(),
+    body('Descripcion'  , 'La descripcion debe ser texto!').isAscii().optional({nullable: true}),
     sanitize('NombreEmpaque').toString(),
     sanitize('Descripcion').toString()
 ];
@@ -204,8 +204,8 @@ exports.updateEmpaque = createEmpaque.concat([
 ]);
 
 var createClasificacion =  [
-    body('NombreClasificacion','El nombre de la clasificacion es requerido, y no debe tener mas de 50 caracteres.').isString().isLength({max:50}),
-    body('DescripcionClasificacion', 'La Descripcion no debe tener mas de 150 caracteres.').isString().optional({nullable:true}),
+    body('NombreClasificacion','El nombre de la clasificacion es requerido, y no debe tener mas de 50 caracteres.').isAscii().isLength({max:50}),
+    body('DescripcionClasificacion', 'La Descripcion no debe tener mas de 150 caracteres.').isAscii().optional({nullable:true}),
     body('IdCategoria', 'Id de la categoria es requerido!').isInt(),
     sanitize('IdCategoria').toInt(),
     sanitize('NombreClasificacion').toString()
@@ -218,8 +218,8 @@ exports.updateClasificacion = createClasificacion.concat([
 ]);
 
 var createSubclasificacion =  [
-    body('NombreSubClasificacion','El nombre de la subclasificacion es requerido, y no debe tener mas de 50 caracteres.').isString().isLength({max:50}),
-    body('DescripcionSubClasificacion', 'La Descripcion no debe tener mas de 150 caracteres.').isString().optional({nullable:true}),
+    body('NombreSubClasificacion','El nombre de la subclasificacion es requerido, y no debe tener mas de 50 caracteres.').isAscii().isLength({max:50}),
+    body('DescripcionSubClasificacion', 'La Descripcion no debe tener mas de 150 caracteres.').isAscii().optional({nullable:true}),
     body('IdClasificacion', 'Id de la clasificacion es requerido!').isInt(),
     sanitize('IdClasificacion').toInt(),
     sanitize('NombreSubClasificacion').toString()
@@ -233,8 +233,8 @@ exports.updateSubclasificacion = createSubclasificacion.concat([
 ]);
 
 var createSucursal =  [
-    body('NombreSucursal','El nombre de la subclasificacion es requerido, y no debe tener mas de 50 caracteres.').isString().isLength({max:50}),
-    body('Direccion', 'La Direccion no debe tener mas de 300 caracteres.').isString(),
+    body('NombreSucursal','El nombre de la subclasificacion es requerido, y no debe tener mas de 50 caracteres.').isAscii().isLength({max:50}),
+    body('Direccion', 'La Direccion no debe tener mas de 300 caracteres.').isAscii(),
     body('Telefono1','El telefono es requerido y debe tener 8 digitos.').isLength(8).isInt(),
     body('Telefono2','El telefono debe tener 8 digitos.').optional({nullable:true}),
     sanitize('NombreSucursal').toString(),
@@ -249,7 +249,7 @@ exports.updateSucursal = createSucursal.concat([
 ])
 
 var createRol = [
-    body('NombreRol', 'El nombre del rol es requerido').isString().isLength({max: 50}),
+    body('NombreRol', 'El nombre del rol es requerido').isAscii().isLength({max: 50}),
     body('DescripcionRol','La Descripcion debe tener un maximo de 150 caracteres!').isLength({max:150}).optional({nullable: true}),
     sanitize('NombreRol').toString(),
     sanitize('DescripcionRol').toString()
@@ -265,8 +265,8 @@ var createProducto = [
     body('IdProveedor', 'Selecciona Un proveedor.').isInt(),
     body('IdSubClasificacion', 'Selecciona Una SubClasificacion.').isInt(),
     body('IdEstado','Elige el estado del producto.').isInt(),
-    body('NombreProducto','Ingresa el Nombre del Producto.').isString(),
-    body('Descripcion','Ingresa la Descripcion del producto.').isString(),
+    body('NombreProducto','Ingresa el Nombre del Producto.').isAscii(),
+    body('Descripcion','Ingresa la Descripcion del producto.').isAscii(),
     body('Imagen','Ingresa el nombre de la Imagen.').optional({nullable:true}),
     body('IdEnvase').isInt().optional({nullable:true}),
     body('IdEmpaque', 'Debes seleccionar un empaque.').isInt().optional({nullable:true}),
@@ -275,12 +275,11 @@ var createProducto = [
     body('ValorUnidadMedida').exists(),
     body('DiasRotacion').isInt(),
     body('IdTipoInsumo').isInt(),
-    body('CodigoProducto').isString(),
+    body('CodigoProducto').optional({nullable:true}),
     body('CodigoInterno').optional({nullable:true}),
     body('CodigoBarra').optional({nullable:true}),
     sanitize('ValorUnidadMedida').toFloat(),
-    sanitize('DiasRotacion').toInt(),
-    sanitize('CodigoProducto').toString()
+    sanitize('DiasRotacion').toInt()
 ];
 exports.createProducto = createProducto;
 
@@ -290,8 +289,8 @@ exports.updateProducto = createProducto.concat([
 
 let createUnidadMedida = [
     body('IdClasificacionUnidadMedida','Seleccione la clasificacion de la unidad de medida.').isInt().toInt(),
-    body('NombreUnidad', 'Ingrese el nombre de la unidad de medida.').isString().isLength({max:50}),
-    body('Simbolo','Ingrese el Simbolo de la Unidad de Medida.').isString().isLength({max:3}).toString(),
+    body('NombreUnidad', 'Ingrese el nombre de la unidad de medida.').isAscii().isLength({max:50}),
+    body('Simbolo','Ingrese el Simbolo de la Unidad de Medida.').isAscii().isLength({max:3}).toString(),
     body('NImportancia','Ingrese el valor de Importancia de esta Unidad de Medida.').isInt()
 ];
 exports.createUnidadMedida = createUnidadMedida;
@@ -309,8 +308,8 @@ exports.changeStateGeneric = (nameIdParam) => {
     ]
 }
 let createTipoDocumento = [
-    body('NombreTD', 'Tipo de Documento necesario.').isString().isLength({min:2,max:50 }),
-    body('DescripcionTD','Es Necesaria la Descripcion del Tipo de Documento').isString().isLength({min:2, max:50}),
+    body('NombreTD', 'Tipo de Documento necesario.').isAscii().isLength({min:2,max:50 }),
+    body('DescripcionTD','Es Necesaria la Descripcion del Tipo de Documento').isAscii().isLength({min:2, max:50}),
     sanitize('NombreTD').toString(),
     sanitize('DescripcionTD').toString()
 ];
@@ -407,8 +406,8 @@ exports.getMenuesByRol = [
 
 var createTelefonoProveedor = [
     body('IdProveedor', 'Selecciona Un proveedor.').isInt(),
-    body('Telefono', 'Ingresa un telefono.').isString(),
-    body('Nombre','Ingresar un nombre.').isString(),
+    body('Telefono', 'Ingresa un telefono.').isAscii(),
+    body('Nombre','Ingresar un nombre.').isAscii(),
     body('Cargo').optional({nullable:true}),
     body('Titular').isInt(),
     sanitize('IdProveedor').toInt(),
