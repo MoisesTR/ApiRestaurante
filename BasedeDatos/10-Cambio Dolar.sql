@@ -1,3 +1,4 @@
+use pruebas_node;
 IF OBJECT_ID('dbo.VALOR_DOLAR_PARALELO') is not null 
 	drop table VALOR_DOLAR_PARALELO
 go

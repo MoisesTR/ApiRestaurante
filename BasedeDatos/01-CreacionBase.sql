@@ -356,6 +356,7 @@ GO
 
 INSERT INTO dbo.TIPO_INSUMO(Descripcion) VALUES ('Alimento')
 INSERT INTO dbo.TIPO_INSUMO(Descripcion) VALUES('Limpieza')
+INSERT INTO dbo.TIPO_INSUMO(Descripcion) VALUES('Utensilios')
 
 GO
 
@@ -372,7 +373,7 @@ CREATE TABLE dbo.PRODUCTO (
 	DiasRotacion		INT					NOT NULL,
     NombreProducto		NVARCHAR(50)		NOT NULL,
     Descripcion			NVARCHAR(200)		NOT NULL,
-	CodigoProducto		NVARCHAR(100)		NOT NULL,
+	CodigoProducto		NVARCHAR(100)		NULL,
 	CodigoInterno		NVARCHAR(100)		NULL,
 	CodigoBarra			NVARCHAR(100)		NULL,
 	IdTipoInsumo			INT				NOT NULL, 
@@ -396,8 +397,7 @@ CREATE TABLE dbo.PRODUCTO (
 		CONSTRAINT FL_Proveedor FOREIGN KEY(IdProveedor)  
 		REFERENCES dbo.PROVEEDOR(IdProveedor),
 	CONSTRAINT FL_TipoInsumoProducto FOREIGN KEY(IdTipoInsumo)  
-		REFERENCES dbo.TIPO_INSUMO(IdTipoInsumo),
-	CONSTRAINT UC_CodigoProducto UNIQUE (CodigoProducto),	
+		REFERENCES dbo.TIPO_INSUMO(IdTipoInsumo),	
 );
 
 CREATE UNIQUE NONCLUSTERED INDEX idx_CodigoBarra
@@ -407,6 +407,10 @@ WHERE CodigoBarra IS NOT NULL;
 CREATE UNIQUE NONCLUSTERED INDEX idx_CodigoInterno
 ON dbo.Producto(CodigoInterno)
 WHERE CodigoInterno IS NOT NULL;
+
+CREATE UNIQUE NONCLUSTERED INDEX idx_CodigoProducto
+ON dbo.Producto(CodigoProducto)
+WHERE CodigoProducto IS NOT NULL;
 
 GO
 CREATE TABLE PRODUCTO_PROVEEDOR (
