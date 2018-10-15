@@ -122,7 +122,7 @@ exports.crearFactura = [
 exports.detalleEntradaBodega = [
     check('IdEntradaBodegaAP').isInt(),
     check('IdProductoProveedor').isInt(),
-    check('Cantidad').isInt(),
+    check('Cantidad').isFloat(),
     check('PrecioUnitarioEntrada').isFloat(),
     check('DescuentoCalculado').isFloat()
 ];

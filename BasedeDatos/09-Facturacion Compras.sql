@@ -71,7 +71,7 @@ CREATE TABLE DETALLE_FACTURA_COMPRA(
 	IdFactura			INT NOT NULL,
 	IdProducto			INT NOT NULL,
 	PrecioUnitario		NUMERIC(14,2) NOT NULL CHECK(PrecioUnitario >= 0),
-	Cantidad			INT NOT NULL CHECK(Cantidad > 0),
+	Cantidad			NUMERIC(14,2) NOT NULL CHECK(Cantidad > 0),
 	GravadoIva			BIT NOT NULL,
 	SubTotal			NUMERIC(14,2),
 	SubTotal_Cal		AS CAST(ROUND((Cantidad * PrecioUnitario),2) AS NUMERIC(14,2)),
@@ -133,7 +133,7 @@ CREATE PROCEDURE USP_CREATE_DETALLE_FACTURA_COMPRA(
 	@IdFactura		INT ,
 	@IdProducto		INT ,
 	@PrecioUnitario NUMERIC(14,2),
-	@Cantidad		INT,
+	@Cantidad		NUMERIC(14,2),
 	@GravadoIva		BIT ,
 	@SubTotal		NUMERIC(14,2),
 	@Iva			NUMERIC(14,2),
@@ -199,7 +199,7 @@ AS BEGIN
 			AND FC.IdProveedor = @IdProveedor)
 			AND FC.IdEstadoFactura = ISNULL(@IdEstadoFactura,FC.IdEstadoFactura)
 			AND (( @IdFechaFiltro = 1 AND FC.FechaRecepcion BETWEEN ISNULL(@FechaInicio,FC.FechaRecepcion) AND ISNULL(@FechaFin,FC.FechaRecepcion))
-				OR @IdFechaFiltro = 2 AND FC.CreatedAt BETWEEN ISNULL(@FechaInicio,FC.FechaRecepcion) AND ISNULL(@FechaFin,FC.FechaRecepcion))
+				OR @IdFechaFiltro = 2 AND CONVERT(VARCHAR(8),FC.CreatedAt,112) BETWEEN ISNULL(@FechaInicio,FC.FechaRecepcion) AND ISNULL(@FechaFin,FC.FechaRecepcion))
 	ORDER BY CASE WHEN @IdFechaFiltro IS NULL THEN FC.FechaRecepcion 
 					WHEN @IdFechaFiltro = 1 THEN FC.FechaRecepcion 
 					WHEN @IdFechaFiltro = 2 THEN FC.FechaFactura

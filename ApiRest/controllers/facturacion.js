@@ -63,7 +63,7 @@ function createDetalleFacturaCompra(req, res) {
     db.pushAOJParam(aoj, 'IdFactura', sql.Int,data.IdFactura);
     db.pushAOJParam(aoj, 'IdProducto', sql.Int,data.IdProducto);
     db.pushAOJParam(aoj, 'PrecioUnitario', sql.Numeric(14,2),data.PrecioUnitario);
-    db.pushAOJParam(aoj, 'Cantidad', sql.Int,data.Cantidad);
+    db.pushAOJParam(aoj, 'Cantidad', sql.Numeric(14,2),data.Cantidad);
     db.pushAOJParam(aoj, 'GravadoIva', sql.Bit,data.GravadoIva);
     db.pushAOJParam(aoj, 'SubTotal', sql.Numeric(14,2),data.SubTotal);
     db.pushAOJParam(aoj, 'Iva', sql.Numeric(14,2),data.Iva);
@@ -85,7 +85,7 @@ function updateDetalleFacturaCompra(req, res) {
     db.pushAOJParam(aoj, 'IdFactura', sql.Int,data.IdFactura);
     db.pushAOJParam(aoj, 'IdProducto', sql.Int,data.IdProducto);
     db.pushAOJParam(aoj, 'PrecioUnitario', sql.Numeric(14,2),data.PrecioUnitario);
-    db.pushAOJParam(aoj, 'Cantidad', sql.Int,data.Cantidad);
+    db.pushAOJParam(aoj, 'Cantidad', sql.Numeric(14,2),data.Cantidad);
     db.pushAOJParam(aoj, 'GravadoIva', sql.Bit,data.GravadoIva);
     db.pushAOJParam(aoj, 'SubTotal', sql.Numeric(14,2),data.SubTotal);
     db.pushAOJParam(aoj, 'Iva', sql.Numeric(14,2),data.Iva);
