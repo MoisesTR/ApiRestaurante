@@ -12,13 +12,7 @@ CREATE TABLE PROCEDENCIA_PRODUCTO(
     constraint pk_Procedencia primary key(IdProcedencia)
 );
 GO
-INSERT INTO PROCEDENCIA_PRODUCTO(Nombre,Descripcion)
-VALUES	('Proveedor','Productos que ingresan directo del proveedor.')
-		,('Mercado','Productos que se compran en el mercado.')
-        ,('Bodega central','Productos que provienen de la bodega central.')
-        ,('Area de Produccion','Productos que se elabora en la planta de produccion.')
-        ,('Traslado Bodega Central','Productos que provienen de la Bodega central.');
-GO
+
 CREATE TABLE USO_PRODUCTO(
 	IdUso		INT IDENTITY(1,1),
     Nombre		NVARCHAR(50)		NOT NULL,
@@ -47,11 +41,7 @@ VALUES(1,'Cedula',NULL),(2,'Numero RUC', NULL)
 GO
 SET IDENTITY_INSERT dbo.TIPO_DOCUMENTO_IDENTIFICACION OFF;
 GO
-INSERT INTO USO_PRODUCTO(Nombre,Descripcion)
-VALUES	('Nuevo/Sin Usar','Producto que no se ha usado.')
-		,('En Uso','Producto que se esta usando.')
-        ,('Usado/Agotado','Producto que se uso hasta agotarse.');
-GO
+
 CREATE TABLE MOTIVO_BAJA_PRODUCTO(
 	IdMotivo		INT IDENTITY(1,1),
     Nombre			NVARCHAR(50)		NOT NULL,
@@ -62,13 +52,7 @@ CREATE TABLE MOTIVO_BAJA_PRODUCTO(
     CONSTRAINT PK_MOTIVO_BAJA_PRODUCTO PRIMARY KEY(IdMotivo)
 );
 GO
-INSERT INTO MOTIVO_BAJA_PRODUCTO(Nombre,Descripcion) 
-VALUES	('Extravio','El/Los productos se extraviaron')
-		,('Vencimiento','El/Los productos se vencieron.')
-        ,('Robo','El/Los productos fueron robados')
-        ,('Accidente','El/Los productos se hecho a perder en un accidente.')
-        ,('Venta','El/Los PRODUCTOs fueron vendidos.');
-GO
+
 CREATE TABLE CARGO(
     IdCargo				INT IDENTITY(1,1),
     NombreCargo			NVARCHAR(50)		NOT NULL,
@@ -79,13 +63,6 @@ CREATE TABLE CARGO(
     CONSTRAINT PK_IdCargo PRIMARY KEY (IdCargo)
 );
 GO
-INSERT INTO CARGO(NombreCargo,DescripcionCargo) 
-VALUES ('Propietario','Propietario del restaurante')
-		,('Gerente','')
-        ,('Chofer','')
-        ,('Bodeguero','Encargado del manejo de los inventarios.')
-        ,('Encargado de Sucursal','Encargado del funcionamiento de la Sucursal.');
-GO	
 CREATE TABLE PAIS(
 	IdPais				INT	IDENTITY(1,1),
 	NombrePais			NVARCHAR(50)		NOT NULL	UNIQUE,
@@ -94,9 +71,7 @@ CREATE TABLE PAIS(
 	CONSTRAINT	Pk_Pais	PRIMARY KEY(IdPais)
 )
 GO
-INSERT INTO PAIS(NombrePais, Abreviatura, PrefijoTelefonico)
-VALUES('Nicaragua', 'NIC','505'), ('China','CH','012')
-GO
+
 CREATE TABLE dbo.PROVEEDOR(
     IdProveedor			INT IDENTITY(1,1),
 	IdPais				INT					NOT NULL	DEFAULT 1, --Foraneo
@@ -144,16 +119,12 @@ GO
 ALTER TABLE PROVEEDOR
 	ADD CONSTRAINT DF_IdTipoNumeroRUC_Proveedor DEFAULT 2 FOR IdTipoDocumento
 GO
---ALTER TABLE PROVEEDOR
 
  --ADD CONSTRAINT U_NumeroRuc UNIQUE(Documento)
 CREATE UNIQUE NONCLUSTERED INDEX idx_NumeroRuc
 ON dbo.PROVEEDOR(Documento)
 WHERE Documento IS NOT NULL;
---INSERT INTO PROVEEDOR(NombreProveedor,Direccion,Email,Descripcion,NombreRepresentante,Telefono) 
---VALUES	('Cargil','de la uni 2c al sas','esteesun@correo.com','descripcion','Representante','87792956')
---		,('Monisa','Managua, asdasd asdas ','esteesun@correo.com','descripcion','Representante','87603420')
---		,('Insumos Chinos','asdasda sdasdsa asd','esteesun@correo.com','descripcion','Representante','87792987');
+
 GO
 CREATE TABLE CLASIFICACION_UNIDAD_MEDIDA (
     IdClasificacionUnidadMedida	INT IDENTITY(1,1),
@@ -165,10 +136,7 @@ CREATE TABLE CLASIFICACION_UNIDAD_MEDIDA (
     CONSTRAINT PK_ID_CLAS_UDM PRIMARY KEY (IdClasificacionUnidadMedida)
 );
 GO
-INSERT INTO CLASIFICACION_UNIDAD_MEDIDA(NombreClasificacion,Descripcion) 
-VALUES	('Masa','Miden el peso del producto.')
-		,('Volumen','Miden el espacio que ocupa el producto.');
-GO
+
 CREATE TABLE UNIDAD_MEDIDA (
     IdUnidadMedida				INT IDENTITY(1,1),
     IdClasificacionUnidadMedida INT,
@@ -183,14 +151,7 @@ CREATE TABLE UNIDAD_MEDIDA (
         REFERENCES dbo.CLASIFICACION_UNIDAD_MEDIDA (IdClasificacionUnidadMedida)
 );
 GO
-INSERT INTO UNIDAD_MEDIDA(IdClasificacionUnidadMedida,NombreUnidad,Simbolo, NImportancia) 
-VALUES	(1,'Libra','Lb', 1)
-		,(1,'Kilogramo','Kg',1)
-		,(2,'Litro','Lt', 2)
-		,(2,'Mililitro','Ml', 2)
-		,(1,'Miligramo','Mg', 3)
-		,(2,'Onza','Oz', 4);
-GO
+
 CREATE TABLE CLASIFICACION_UNIDAD_MEDIDA_FUNCIONAL(
 	IdClasificacionUdmF		INT IDENTITY(1,1),
 	NombreClasfUdmF			NVARCHAR(50)		NOT NULL	UNIQUE,
@@ -241,12 +202,8 @@ CREATE TABLE  CATEGORIA_PRODUCTO(
     CONSTRAINT U_NombreCategoria UNIQUE(NombreCategoria)
 );
 
-INSERT INTO  CATEGORIA_PRODUCTO(NombreCategoria,DescripcionCategoria) 
-VALUES	('Producto Seco','Todos aquellos productos que no necesitan refrigeracion.')
-		,('Carnes','Todas los tipos de carnes.'),('Salsas','Todos los tipos de salsas')
-		,('Bebidas','Todos los distintos tipos de bebidas y marcas.')
-		,('Verduras','Todos los distintos tipos de verduras.');
 GO
+
 CREATE TABLE CLASIFICACION_PRODUCTO (
     IdClasificacion				INT IDENTITY(1,1),
 	IdCategoria					INT					NOT NULL,
@@ -260,12 +217,7 @@ CREATE TABLE CLASIFICACION_PRODUCTO (
 	CONSTRAINT FK_CATEGORIA_DE_CLASIFICACION FOREIGN KEY(IdCategoria) REFERENCES CATEGORIA_PRODUCTO(IdCategoria)
 );
 GO
-INSERT INTO CLASIFICACION_PRODUCTO(IdCategoria, NombreClasificacion, DescripcionClasificacion) 
-VALUES	(2, 'Pollo','Las distintas cortes de pollo.')
-		,(1,'Pastas','Distintos tipos de pasta')
-		,(1, 'Granos Basicos',NULL)
-		,(4, 'Bebidas Artificiales',NULL)
-GO
+
 CREATE TABLE SUBCLASIFICACION_PRODUCTO (
     IdSubClasificacion			INT IDENTITY(1,1),
     IdClasificacion				INT,
@@ -280,12 +232,7 @@ CREATE TABLE SUBCLASIFICACION_PRODUCTO (
 	CONSTRAINT U_NombreSubClasi UNIQUE(NombreSubClasificacion)
 );
 GO
-INSERT INTO SUBCLASIFICACION_PRODUCTO(IdClasificacion,NombreSubClasificacion,DescripcionSubclasificacion) 
-VALUES (1,'Filete','Filete de pollo entero.')
-		,(1,'Tira','Pollo Cortado en tiras.')
-        ,(2,'Tallarin','Tallarin')
-		,(4, 'Gaseosas',NULL)
-GO
+
 CREATE TABLE ENVASE (
     IdEnvase			INT IDENTITY(1,1),
     NombreEnvase		NVARCHAR(50)		NOT NULL,
@@ -297,15 +244,7 @@ CREATE TABLE ENVASE (
     CONSTRAINT U_NombreEnvase UNIQUE(NombreEnvase)
 );
 GO
-INSERT INTO ENVASE(NombreEnvase,Descripcion) 
-VALUES	('Botella Plastica','una botella de plastico')
-		,('Bolsa Plastica','Bolsa de plastico')
-		,('Caja Plastica','Una caja de plastico')
-		,('Lata de aluminio','')
-		,('Frasco','')
-		,('Tarrro','')
-		,('Botella de vidrio','Una botella de vidrio.'); 
-GO
+
 CREATE TABLE EMPAQUE (
     IdEmpaque		INT IDENTITY(1,1),
     NombreEmpaque	NVARCHAR(50)			NOT NULL,
@@ -317,15 +256,7 @@ CREATE TABLE EMPAQUE (
     CONSTRAINT U_NombreEmpaque UNIQUE(NombreEmpaque)
 );
 GO
-INSERT INTO EMPAQUE(NombreEmpaque,Descripcion) 
-VALUES	('Caja Carton','')
-		,('Caja plastica','')
-		,('Bolsa Plastica','')
-		,('Bolsa Papel Craft','')
-		,('Cajilla Plastica','')
-		,('Cajilla Carton','')
-		,('Saco','');
-GO
+
 CREATE TABLE ESTADO_PRODUCTO(
 	IdEstado	INT IDENTITY(1,1),
     Nombre		NVARCHAR(50)		NOT NULL,
@@ -334,11 +265,7 @@ CREATE TABLE ESTADO_PRODUCTO(
     constraint pk_EstadoProducto primary key(IdEstado)
 );
 GO
-INSERT INTO ESTADO_PRODUCTO(Nombre,Descripcion)
-VALUES ('Sin Procesar','Producto que no se ha procesado')
-		,('Semiterminado','Producto que se esta procesando.')
-        ,('Terminado','Producto terminado.');
-GO
+
 
 --IF OBJECT_ID('dbo.TIPO_INSUMO') IS NOT NULL
 --	DROP TABLE dbo.TIPO_INSUMO
@@ -352,11 +279,6 @@ CREATE TABLE dbo.TIPO_INSUMO (
 
 	CONSTRAINT PK_ID_TIPO_INSUMO PRIMARY KEY (IdTipoInsumo)
 )
-GO
-
-INSERT INTO dbo.TIPO_INSUMO(Descripcion) VALUES ('Alimento')
-INSERT INTO dbo.TIPO_INSUMO(Descripcion) VALUES('Limpieza')
-INSERT INTO dbo.TIPO_INSUMO(Descripcion) VALUES('Utensilios')
 
 GO
 
@@ -446,11 +368,7 @@ CREATE TABLE ESTADO_EMPAQUE(
 	CONSTRAINT U_EstadoEmpaqueUnico UNIQUE(NombreEstado)
 );
 GO
-INSERT INTO ESTADO_EMPAQUE(NombreEstado) 
-VALUES	('Cerrado/Completo')
-		,('Abierto/Incompleto')
-		,('Sin EMPAQUE/No viene empacado');
-GO
+
 CREATE TABLE SUCURSAL (
     IdSucursal		INT IDENTITY(1,1),
     Principal		BIT					NOT NULL	DEFAULT 0,
@@ -466,9 +384,7 @@ CREATE TABLE SUCURSAL (
 GO
 ALTER TABLE SUCURSAL
 	ADD CONSTRAINT U_NombreSucursal UNIQUE(NombreSucursal)
-GO
-INSERT INTO SUCURSAL(NombreSucursal,Direccion,Telefono1) VALUES('Restaurante Familia Chang - Rubenia','Semforos de Rubenia 1 1/2c al La, frente al Hotel Estrella
-#Managua','22492774'),('Restaurante Familia Chang - Ciudad Jardin','Ciudad jardin','22492742');
+
 GO
 CREATE TABLE TELEFONO_SUCURSAL(
 	IdTelefonoSucursal	INT IDENTITY(1,1), 
@@ -531,17 +447,6 @@ CREATE TABLE TRABAJADOR (
 	CONSTRAINT CK_TelefonosDistintos CHECK(Telefono1 <> Telefono2)
 )
 GO
---CREATE TABLE TELEFONO_TRABAJADOR(
---	IdTelefoNOTrabajador INT IDENTITY(1,1), 
---	IdTrabajador INT NOT NULL,
---	NumeroTelefono NVARCHAR(20) NOT NULL,
---	Habilitado Bit DEFAULT 1 NOT NULL,
---    CreatedAt SMALLDATETIME NOT NULL DEFAULT GETDATE(),
---    UpdateAt SMALLDATETIME NULL,
---	CONSTRAINT PK_TELEFONO_TRABAJADOR PRIMARY KEY(IdTelefoNOTrabajador),
---	CONSTRAINT FK_TELEFONO_TRABAJADOR FOREIGN KEY(IdTrabajador) REFERENCES TRABAJADOR(IdTrabajador)
---)
---GO
 create TABLE AREA_PRODUCCION(
 	IdAreaProduccion	INT IDENTITY(1,1),
 	IdSucursal			INT					NOT NULL,
@@ -573,9 +478,7 @@ CREATE TABLE ESTADO_EDICION(
 	NombreEstado NVARCHAR(50) NOT NULL,
 	CONSTRAINT PK_ESTADO_EDICION PRIMARY KEY(IdEstadoEdicion)
 )
-GO
-INSERT INTO ESTADO_EDICION(NombreEstado)
-VALUES('Abierta'),('Cerrada')
+
 GO
 CREATE TABLE ENTRADA_BODEGA_AREA_PRODUCCION (
     IdEntradaBodegaAP			INT IDENTITY,
