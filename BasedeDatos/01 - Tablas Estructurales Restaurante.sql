@@ -132,8 +132,8 @@ CREATE TABLE	dbo.TELEFONO_PROVEEDOR (
 	IdTelefono			INT				IDENTITY(1,1),
 	IdProveedor			INT					NOT NULL,
 	NumTelefono			NVARCHAR(20)		NOT NULL,
-	Nombre				NVARCHAR(50)		NOT NULL,
-	Cargo				NVARCHAR(20)		NULL,
+	Cargo				NVARCHAR(25)		NULL,
+	NombPAsignado		NVARCHAR(50)		NOT NULL,
 	Titular				BIT					NOT NULL,
 	Habilitado			BIT					NOT NULL	DEFAULT 1,
 	CreatedAt			SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
@@ -225,14 +225,16 @@ CREATE TABLE	dbo.BODEGA_SUCURSAL (
 	NumBodega			INT					NOT NULL,
     NombBodega			NVARCHAR(100)		NOT NULL,
     DescLocal			NVARCHAR(200)		NULL,
+	[Login]				NVARCHAR(150)		NULL,
+	[WorkSpace]			NVARCHAR(150)		NULL,
     Habilitado			BIT 				NOT NULL	DEFAULT 1,
     CreatedAt			SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
     UpdatedAt			SMALLDATETIME		NULL,
     CONSTRAINT PK_Bodega_Sucursal		PRIMARY KEY (IdBodegaS),
-	CONSTRAINT FK_Sucursal_Bodega			FOREIGN KEY(IdSucursal)	
+	CONSTRAINT FK_Sucursal_Bodega						FOREIGN KEY(IdSucursal)	
 				REFERENCES	dbo.SUCURSAL_RESTAURANTE(IdSucursal),
-	CONSTRAINT FK_Tipo_Bodega_de_Sucursal	FOREIGN KEY(IdTipBode)
-				REFERENCES	dbo.
+	CONSTRAINT FK_Tipo_Bodega_de_Sucursal				FOREIGN KEY(IdTipBode)
+				REFERENCES	dbo.TIPO_BODEGA_SUCURSAL(IdTipBode)
 );
 GO
 

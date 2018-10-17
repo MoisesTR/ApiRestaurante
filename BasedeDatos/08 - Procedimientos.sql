@@ -302,3 +302,50 @@ AS BEGIN
 	UPDATE dbo.TIPO_DOCUMENTO_IDENTIFICACION SET Habilitado = @Habilitado , UpdatedAt = GETDATE()
 	WHERE	IdTipoDocumento = @IdTipoDocumento
 END
+
+GO
+IF OBJECT_ID('USP_CREATE_UNIDAD_MEDIDA', N'P') IS NOT NULL
+	DROP PROCEDURE USP_CREATE_UNIDAD_MEDIDA
+GO
+CREATE PROCEDURE USP_CREATE_UNIDAD_MEDIDA(
+	@IdUdmFuncional		INT				OUTPUT,
+	@IdUnidadMedida		INT,
+	@Nombre				NVARCHAR(50),
+	@Descripcion		NVARCHAR(50)	NULL,
+	@ValorUdm			NUMERIC(10,5)
+) AS BEGIN
+	INSERT INTO dbo.UNIDAD_MEDIDA_FUNCIONAL(IdUnidadMedida, Nombre, Descripcion, ValorUdm)
+	VALUES(@IdUnidadMedida, @Nombre, @Descripcion, @ValorUdm)
+	
+	SELECT @IdUdmFuncional = @@IDENTITY
+END
+GO
+INSERT INTO ENVASE(NombEnvase,Descripcion) 
+VALUES	('Botella Plastica','una botella de plastico')
+		,('Bolsa Plastica','Bolsa de plastico')
+		,('Caja Plastica','Una caja de plastico')
+		,('Lata de aluminio','')
+		,('Frasco','')
+		,('Tarrro','')
+		,('Botella de vidrio','Una botella de vidrio.'); 
+GO
+
+SET IDENTITY_INSERT dbo.TIPO_EMPAQUE_PRODUCTO ON
+GO
+INSERT INTO dbo.TIPO_EMPAQUE_PRODUCTO(IdTipoEmpaque, NombTipoEmpaque, DescTipoEmpaque)
+VALUES(1,'Empaque Pedido(Compra)',NULL), (2,'Empaque Envio',NULL), (3,'Empaque Venta',NULL), (4,'Empaque Almacenamiento',NULL)
+GO
+SET IDENTITY_INSERT dbo.TIPO_EMPAQUE_PRODUCTO OFF
+GO
+
+SET IDENTITY_INSERT dbo.EMPAQUE ON
+
+INSERT INTO EMPAQUE(NombreEmpaque,Descripcion) 
+VALUES	('Caja Carton')
+		,('Caja plastica')
+		,('Bolsa Plastica')
+		,('Bolsa Papel Craft')
+		,('Cajilla Plastica')
+		,('Cajilla Carton')
+		,('Saco');
+GO

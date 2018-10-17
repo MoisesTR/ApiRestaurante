@@ -92,3 +92,30 @@ INSERT INTO SUBCLASIFICACION_PRODUCTO(IdClasificacion,NombreSubClasificacion,Des
 VALUES (1,'Filete','Filete de pollo entero.')
 		,(1,'Tira','Pollo Cortado en tiras.')
         ,(2,'Tallarin','Tallarin');
+
+GO
+SET IDENTITY_INSERT dbo.UNIDAD_MEDIDA ON;
+GO
+INSERT INTO UNIDAD_MEDIDA(IdUnidadMedida, IdClasifUnidadMedida, NombUnidad,Simbolo, FactorConversion, IdUnidadMedidaBase) 
+VALUES	( 1, 1,'Libra',	'	Lb',	1,		NULL)
+		,(2, 1,'Gramo',		'g',	1,		NULL)
+		,(3, 1,'Kilogramo',	'Kg',	1000,	2)
+		,(6, 1,'Miligramo',	'Mg',	0.001,  2)
+		,(4, 2,'Litro',		'Lt',	1,		NULL)
+		,(5, 2,'Mililitro',	'Ml',	0.001,	4)
+GO
+SET IDENTITY_INSERT dbo.UNIDAD_MEDIDA OFF;
+
+GO
+INSERT INTO ESTADO_PRODUCTO(Nombre,Descripcion)
+VALUES ('Sin Procesar','Producto que no se ha procesado')
+		,('Semiterminado','Producto que se esta procesando.')
+        ,('Terminado','Producto terminado.');
+GO
+
+INSERT INTO ESTADO_EMPAQUE(NombreEstado) 
+VALUES	('Cerrado/Completo')
+		,('Abierto/Incompleto')
+		,('Sin EMPAQUE/No viene empacado');
+
+GO

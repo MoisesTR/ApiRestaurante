@@ -6,18 +6,19 @@ USE ATOMIC_RESTAURANTE;
 GO
 
 CREATE	TABLE	dbo.TIPO_SOLICITUD_UBICACION	(
-	IdTipSolUbic			INT				NOT NULL,
-	NombTipSol				NVARCHAR(50)	NOT NULL,
-	DescTipSol				NVARCHAR(150)	NULL,
-	Habilitado				BIT				NOT NULL	DEFAULT 1,
-	CreatedAt			SMALLDATETIME	NOT NULL		DEFAULT GETDATE(),
-	UpdatedAt			SMALLDATETIME	NOT NULL,
+	IdTipSolUbic			INT					NOT NULL,
+	NombTipSol				NVARCHAR(50)		NOT NULL,
+	DescTipSol				NVARCHAR(150)		NULL,
+	Habilitado				BIT					NOT NULL	DEFAULT 1,
+	CreatedAt				SMALLDATETIME		NOT NULL		DEFAULT GETDATE(),
+	UpdatedAt				SMALLDATETIME		NULL,
 	CONSTRAINT		PK_Id_Tipo_Solicitud_Ubicacion	PRIMARY KEY (IdTipSolUbic)
 );
 
 INSERT INTO		dbo.TIPO_SOLICITUD_UBICACION (IdTipSolUbic, NombTipSol)
-				VALUES(1, 'Creacion Ubicacion'), (2, 'Añadir Nivel a Ubicacion'), (3,'Añadir Casilla a Nivel de Ubicacion'), (3, 'Inhabilitar Ubicacion'), (4, 'Inhabilitar Nivel'), (5, 'Inhabilitar Casilla'), (6,'Habilitar Ubicacion'), (7,'Habiliar Nivel Ubicacion'), (8,'Habilitar Casilla'),
-				(9, 'Renombrar Ubicacion')
+				VALUES(1, 'Creacion Ubicacion'), (2, 'Añadir Nivel a Ubicacion'), (3,'Añadir Casilla a Nivel de Ubicacion'), (4, 'Inhabilitar Ubicacion'), 
+				(5, 'Inhabilitar Nivel'), (6, 'Inhabilitar Casilla'), ( 7,'Habilitar Ubicacion'), ( 8,'Habiliar Nivel Ubicacion'), (9,'Habilitar Casilla'),
+				(10, 'Renombrar Ubicacion')
 GO
 CREATE	TABLE	dbo.SOLICITUD_UBICACION_INSUMO (
 	NumSolicitud			INT			NOT NULL,
@@ -32,7 +33,7 @@ CREATE	TABLE	dbo.SOLICITUD_UBICACION_INSUMO (
 )
 
 GO
-CREATE TABLE dbo.DETALLE_SOLICITUD_UBICACION
+--CREATE TABLE dbo.DETALLE_SOLICITUD_UBICACION
 --CREATE TABLE	dbo.TIPO_UBICACION_INSUMO	(
 --	IdTipUbic		INT		IDENTITY(1,1),
 --	NombTipUbic		NVARCHAR(50)	NOT NULL,
@@ -43,6 +44,7 @@ CREATE TABLE dbo.DETALLE_SOLICITUD_UBICACION
 --	CONSTRAINT	PK_Tipo_Ubicacion_Insumo	PRIMARY KEY(IdTipUbic)
 --);
 --GO
+--	GO
 CREATE TABLE	dbo.UBICACION_INSUMO	(
 	IdUbicacion		INT			IDENTITY(1,1),
 	IdSucursal		INT				NOT NULL,
@@ -192,22 +194,10 @@ CREATE TABLE dbo.UNIDAD_MEDIDA (
     Habilitado					BIT DEFAULT 1		NOT NULL,
     CreatedAt					SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
     UpdatedAt					SMALLDATETIME		NULL,
-    CONSTRAINT PK_ID_UDM	PRIMARY KEY (IdUnidadMedida),
-    CONSTRAINT FK_CLAS_UDM	FOREIGN KEY (IdClasifUnidadMedida)
-        REFERENCES dbo.CLASIFICACION_UNIDAD_MEDIDA (IdClasificacionUnidadMedida)
+    CONSTRAINT PK_ID_UDM							PRIMARY KEY (IdUnidadMedida),
+    CONSTRAINT FK_Clasificacion_Unidad_Medida		FOREIGN KEY (IdClasifUnidadMedida)
+        REFERENCES dbo.CLASIFICACION_UNIDAD_MEDIDA (IdClasifUnidadMedida)
 );
-GO
-SET IDENTITY_INSERT dbo.UNIDAD_MEDIDA ON;
-GO
-INSERT INTO UNIDAD_MEDIDA(IdUnidadMedida, IdClasificacionUnidadMedida,NombUnidad,Simbolo, FactorConversion, IdUnidadMedidaBase) 
-VALUES	( 1, 1,'Libra',	'	Lb',	1,		NULL)
-		,(2, 1,'Gramo',		'g',	1,		NULL)
-		,(3, 1,'Kilogramo',	'Kg',	1000,	2)
-		,(6, 1,'Miligramo',	'Mg',	0.001,  2)
-		,(4, 2,'Litro',		'Lt',	1,		NULL)
-		,(5, 2,'Mililitro',	'Ml',	0.001,	4)
-GO
-SET IDENTITY_INSERT dbo.UNIDAD_MEDIDA OFF;
 GO
 CREATE TABLE CLASIFICACION_UNIDAD_MEDIDA_FUNCIONAL(
 	IdClasificacionUdmF		INT IDENTITY(1,1),
@@ -232,22 +222,6 @@ CREATE TABLE UNIDAD_MEDIDA_FUNCIONAL(
 	CONSTRAINT FK_UnidadDeMedidaFuncional	FOREIGN KEY(IdUnidadMedida) REFERENCES dbo.UNIDAD_MEDIDA(IdUnidadMedida),
 	CONSTRAINT FK_ClasificacionUdmFuncional FOREIGN KEY(IdClasificacionUdmF) REFERENCES dbo.CLASIFICACION_UNIDAD_MEDIDA_FUNCIONAL(IdClasificacionUdmF)
 )
-GO
-IF OBJECT_ID('USP_CREATE_UNIDAD_MEDIDA', N'P') IS NOT NULL
-	DROP PROCEDURE USP_CREATE_UNIDAD_MEDIDA
-GO
-CREATE PROCEDURE USP_CREATE_UNIDAD_MEDIDA(
-	@IdUdmFuncional		INT				OUTPUT,
-	@IdUnidadMedida		INT,
-	@Nombre				NVARCHAR(50),
-	@Descripcion		NVARCHAR(50)	NULL,
-	@ValorUdm			NUMERIC(10,5)
-) AS BEGIN
-	INSERT INTO dbo.UNIDAD_MEDIDA_FUNCIONAL(IdUnidadMedida, Nombre, Descripcion, ValorUdm)
-	VALUES(@IdUnidadMedida, @Nombre, @Descripcion, @ValorUdm)
-	
-	SELECT @IdUdmFuncional = @@IDENTITY
-END
 GO
 CREATE TABLE  CATEGORIA_PRODUCTO(
     IdCategoria				INT IDENTITY(1,1),
@@ -285,7 +259,7 @@ CREATE TABLE SUBCLASIFICACION_PRODUCTO (
     CONSTRAINT		Pk_IdSubClasfProdu	PRIMARY KEY ( IdSubClasificacion ),
     CONSTRAINT		FK_SUBCLAS_CLAS		FOREIGN KEY ( IdClasificacion )
 				REFERENCES CLASIFICACION_PRODUCTO	( IdClasificacion ),
-	CONSTRAINT		U_NombreSubClasi	UNIQUE		( NombreSubClasificacion )
+	CONSTRAINT		U_NombreSubClasi	UNIQUE		( NombSubClasificacion )
 );
 GO
 CREATE TABLE ENVASE (
@@ -299,15 +273,6 @@ CREATE TABLE ENVASE (
     CONSTRAINT U_NombreEnvase	UNIQUE(NombEnvase)
 );
 GO
-INSERT INTO ENVASE(NombEnvase,Descripcion) 
-VALUES	('Botella Plastica','una botella de plastico')
-		,('Bolsa Plastica','Bolsa de plastico')
-		,('Caja Plastica','Una caja de plastico')
-		,('Lata de aluminio','')
-		,('Frasco','')
-		,('Tarrro','')
-		,('Botella de vidrio','Una botella de vidrio.'); 
-GO
 CREATE TABLE dbo.TIPO_EMPAQUE_PRODUCTO ( 
 	IdTipoEmpaque		INT IDENTITY(1,1),
 	NombTipoEmpaque		NVARCHAR(50)	NOT NULL,
@@ -316,13 +281,6 @@ CREATE TABLE dbo.TIPO_EMPAQUE_PRODUCTO (
 	UpdatedAt			SMALLDATETIME	NULL,
 	CONSTRAINT PK_TipoEmpaqueProducto	PRIMARY KEY(IdTipoEmpaque)
 );
-GO
-SET IDENTITY_INSERT dbo.TIPO_EMPAQUE_PRODUCTO ON
-GO
-INSERT INTO dbo.TIPO_EMPAQUE_PRODUCTO(IdTipoEmpaque, NombTipoEmpaque, DescTipoEmpaque)
-VALUES(1,'Empaque Pedido(Compra)',NULL), (2,'Empaque Envio',NULL), (3,'Empaque Venta',NULL), (4,'Empaque Almacenamiento',NULL)
-GO
-SET IDENTITY_INSERT dbo.TIPO_EMPAQUE_PRODUCTO OFF
 GO
 CREATE TABLE	dbo.EMPAQUE (
     IdEmpaque		INT IDENTITY(1,1),
@@ -335,17 +293,6 @@ CREATE TABLE	dbo.EMPAQUE (
     CONSTRAINT U_Nombre_Empaque UNIQUE(NombreEmpaque)
 );
 GO
-SET IDENTITY_INSERT dbo.EMPAQUE ON
-
-INSERT INTO EMPAQUE(NombreEmpaque,Descripcion) 
-VALUES	('Caja Carton')
-		,('Caja plastica')
-		,('Bolsa Plastica')
-		,('Bolsa Papel Craft')
-		,('Cajilla Plastica')
-		,('Cajilla Carton')
-		,('Saco');
-GO
 CREATE TABLE ESTADO_PRODUCTO(
 	IdEstado			INT IDENTITY(1,1),
     NombEstado			NVARCHAR(50)		NOT NULL,
@@ -355,11 +302,7 @@ CREATE TABLE ESTADO_PRODUCTO(
     CONSTRAINT	pk_EstadoProducto PRIMARY KEY(IdEstado)
 );
 GO
-INSERT INTO ESTADO_PRODUCTO(Nombre,Descripcion)
-VALUES ('Sin Procesar','Producto que no se ha procesado')
-		,('Semiterminado','Producto que se esta procesando.')
-        ,('Terminado','Producto terminado.');
-GO
+
 CREATE TABLE dbo.PRODUCTO (
     IdProducto			INT IDENTITY(1,1),
     IdSubClasificacion	INT					NOT NULL,
@@ -423,12 +366,7 @@ CREATE TABLE dbo.ESTADO_EMPAQUE(
 	CONSTRAINT U_EstadoEmpaqueUnico		UNIQUE(NombreEstado)
 );
 GO
-INSERT INTO ESTADO_EMPAQUE(NombreEstado) 
-VALUES	('Cerrado/Completo')
-		,('Abierto/Incompleto')
-		,('Sin EMPAQUE/No viene empacado');
 
-GO
 CREATE TABLE ESTADO_EDICION(
 	IdEstadoEdicion INT IDENTITY(1,1),
 	NombreEstado NVARCHAR(50) NOT NULL,
@@ -447,6 +385,7 @@ CREATE TABLE ENTRADA_BODEGA_AREA_PRODUCCION (
 	IdEstadoEdicion				INT				NOT NULL	DEFAULT 1,
 	IdMoneda					INT				NOT NULL,
 	IdTipDesc					INT				NULL,
+	IdTrabajador				INT				NOT NULL,
 	NFactura					NVARCHAR(50)	NOT NULL,
 	RepresentanteProveedor		NVARCHAR(100)	NOT NULL,
 	PorcRetencion				NUMERIC(19,7)	NULL,
@@ -486,7 +425,7 @@ CREATE TABLE DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION (
     IdProducto					INT				NOT NULL,
 	IdProcedencia				INT				NOT NULL,
     Cantidad					NUMERIC(17,7)	NOT NULL,
-	Costo						NUMERIC(19,7)	NOT NULL	CHECK(PrecioUnitarioEntrada >=0),
+	Costo						NUMERIC(19,7)	NOT NULL,
 	CostoProm					NUMERIC(19,7)	NOT NULL,
 	PorcIva						NUMERIC(5,2)	NOT NULL,
 	Iva							NUMERIC(19,7)	NOT NULL,
@@ -497,10 +436,9 @@ CREATE TABLE DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION (
     UpdatedAt					SMALLDATETIME	NULL,
     CONSTRAINT Pk_DetalleEntradaInv			PRIMARY KEY ( IdDetalleEntradaAP , IdEntradaBodegaAP),
     CONSTRAINT FK_DetalleEntrada			FOREIGN KEY ( IdEntradaBodegaAP) 
-			REFERENCES ENTRADA_BODEGA_AREA_PRODUCCION(IdEntradaBodegaAP),
-    CONSTRAINT FK_Producto_EntradaInvent	FOREIGN KEY ( IdProductoProveedor) 
-			REFERENCES PRODUCTO_PROVEEDOR(IdProductoProveedor),
-	CONSTRAINT FK_Procedencia_Entrada		FOREIGN KEY ( IdProcedencia)
+			REFERENCES dbo.ENTRADA_BODEGA_AREA_PRODUCCION(IdEntradaBodegaAP),
+    CONSTRAINT FK_Producto_EntradaInvent	FOREIGN KEY ( IdProducto) 
+			REFERENCES dbo.PRODUCTO(IdProducto)
 );
 GO
 --NOMBRE ANTERIOR 
@@ -515,12 +453,13 @@ CREATE TABLE	dbo.DETALLE_BODEGA_AP	(
     FechaHoraIngreso	SMALLDATETIME		NOT NULL,
     FechaHoraProduccion SMALLDATETIME		NULL,
     Habilitado			BIT					NOT NULL	DEFAULT 1,
-    CONSTRAINT pk_IdDetalleBodega primary KEY(IdDetalle,IdBodegaAreaP),	
-    CONSTRAINT FK_BodegaDelleAP FOREIGN KEY(IdBodegaAreaP) 
-		REFERENCES BODEGA_AREA_PRODUCCION(IdBodegaAreaP),
-	CONSTRAINT FK_DetalleEntradaBodegaAP FOREIGN KEY(IdDetalleEntradaAP,IdEntradaBodegaAP) 
-		REFERENCES DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION(IdDetalleEntradaAP,IdEntradaBodegaAP),
-    CONSTRAINT FK_IdProducto FOREIGN KEY(IdProductoProveedor) REFERENCES dbo.PRODUCTO_PROVEEDOR(IdProductoProveedor),
+    CONSTRAINT pk_IdDetalleBodega			PRIMARY KEY(IdDetalle,IdBodegaAreaP),	
+    CONSTRAINT FK_BodegaDelleAP				FOREIGN KEY(IdBodegaAreaP) 
+					REFERENCES BODEGA_AREA_PRODUCCION(IdBodegaAreaP),
+	CONSTRAINT FK_DetalleEntradaBodegaAP	FOREIGN KEY(IdDetalleEntradaAP,IdEntradaBodegaAP) 
+					REFERENCES DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION(IdDetalleEntradaAP,IdEntradaBodegaAP),
+    CONSTRAINT FK_IdProducto				FOREIGN KEY(IdProductoProveedor) 
+					REFERENCES dbo.PRODUCTO(IdProducto),
 	CONSTRAINT FK_EstadoEmpaqueProductoBodega FOREIGN KEY(IdEstadoEmpaque) REFERENCES ESTADO_EMPAQUE(IdEstadoEmpaque)
 )
 
