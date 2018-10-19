@@ -30,7 +30,8 @@ GO
 create table DETALLE_BODEGA_AP(
 	IdDetalleBAp int IDENTITY(1,1),
 	IdBodegaAreaP int NOT NULL,
-    IdProductoProveedor int NOT NULL,
+    IdProducto
+	 int NOT NULL,
 	IdEntradaBodegaAP INT NOT NULL,
     Cantidad int NOT NULL,
     FechaHoraIngreso SMALLDATETIME NOT NULL,

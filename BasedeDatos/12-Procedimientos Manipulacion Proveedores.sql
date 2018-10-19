@@ -6,21 +6,22 @@ IF OBJECT_ID('dbo.USP_CREATE_TELEFONO_PROVEEDOR') IS NOT NULL
 	DROP PROCEDURE dbo.USP_CREATE_TELEFONO_PROVEEDOR
 GO
 CREATE PROCEDURE dbo.USP_CREATE_TELEFONO_PROVEEDOR (
-	@IdProveedor	INT, 
-	@Nombre			NVARCHAR(50), 
-	@Cargo			NVARCHAR(50), 
-	@Telefono		NVARCHAR(15),
-	@Titular		BIT
+	@IdProveedor INT 
+	, @Nombre NVARCHAR(50)
+	, @Cargo NVARCHAR(50)
+	, @Telefono NVARCHAR(15)
+	, @Titular BIT
 )
 AS	
 BEGIN
 
-	IF EXISTS (SELECT TOP 1 1 FROM dbo.TELEFONOS_PROVEEDOR WHERE	IdProveedor = @IdProveedor AND Telefono = @Telefono)
-	BEGIN
-		RAISERROR('Este telefono ya se encuentra registrado!', 16, 1)
-		RETURN
-	END
-	ELSE
+	--IF EXISTS (SELECT TOP 1 1 FROM dbo.
+	 WHERE	IdProveedor = @IdProveedor AND Telefono = @Telefono)
+	--BEGIN
+	--	RAISERROR('Este telefono ya se encuentra registrado!', 16, 1)
+	--	RETURN
+	--END
+	
 	BEGIN 
 		INSERT INTO dbo.TELEFONOS_PROVEEDOR(IdProveedor, Nombre, Cargo, Telefono,Titular) 
 		VALUES(@IdProveedor, @Nombre, @Cargo, @Telefono, @Titular)

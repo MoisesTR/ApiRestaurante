@@ -3,145 +3,16 @@
 *	@editor		Genaro Tinoco
 **/
 USE ATOMIC_RESTAURANTE;
-GO
 
-CREATE	TABLE	dbo.TIPO_SOLICITUD_UBICACION	(
-	IdTipSolUbic			INT					NOT NULL,
-	NombTipSol				NVARCHAR(50)		NOT NULL,
-	DescTipSol				NVARCHAR(150)		NULL,
-	Habilitado				BIT					NOT NULL	DEFAULT 1,
-	CreatedAt				SMALLDATETIME		NOT NULL		DEFAULT GETDATE(),
-	UpdatedAt				SMALLDATETIME		NULL,
-	CONSTRAINT		PK_Id_Tipo_Solicitud_Ubicacion	PRIMARY KEY (IdTipSolUbic)
-);
-
-INSERT INTO		dbo.TIPO_SOLICITUD_UBICACION (IdTipSolUbic, NombTipSol)
-				VALUES(1, 'Creacion Ubicacion'), (2, 'Añadir Nivel a Ubicacion'), (3,'Añadir Casilla a Nivel de Ubicacion'), (4, 'Inhabilitar Ubicacion'), 
-				(5, 'Inhabilitar Nivel'), (6, 'Inhabilitar Casilla'), ( 7,'Habilitar Ubicacion'), ( 8,'Habiliar Nivel Ubicacion'), (9,'Habilitar Casilla'),
-				(10, 'Renombrar Ubicacion')
 GO
-CREATE	TABLE	dbo.SOLICITUD_UBICACION_INSUMO (
-	NumSolicitud			INT			NOT NULL,
-	IdSucursal				INT			NOT NULL,
-	IdTrabajador			INT			NOT NULL,
-	IdTipSolUbic			TINYINT		NOT NULL,
-	IdEstadoSolic			TINYINT		NOT NULL,
-	IdUbicacion				INT			NULL,
-	Habilitado				BIT			NOT NULL DEFAULT 1,
-	CreatedAt			SMALLDATETIME	NOT NULL DEFAULT GETDATE(),
-	UpdatedAt			SMALLDATETIME	NOT NULL,
+CREATE TABLE dbo.TIPO_INSUMO (
+	IdTipInsumo			TINYINT IDENTITY(1,1),
+	Descripcion			VARCHAR(200),
+	Habilitado			BIT					DEFAULT 1,
+	CreatedAt			SMALLDATETIME		NOT NULL DEFAULT GETDATE(),
+    UpdateAt			SMALLDATETIME		NULL,
+	CONSTRAINT PK_ID_TIPO_INSUMO PRIMARY KEY (IdTipInsumo)
 )
-
-GO
---CREATE TABLE dbo.DETALLE_SOLICITUD_UBICACION
---CREATE TABLE	dbo.TIPO_UBICACION_INSUMO	(
---	IdTipUbic		INT		IDENTITY(1,1),
---	NombTipUbic		NVARCHAR(50)	NOT NULL,
---	DescTipUbic		NVARCHAR(150)	NULL,
---	Habilitado		BIT				NOT NULL	DEFAULT 1,
---	CreatedAt		SMALLDATETIME	NOT NULL	DEFAULT GETDATE(),
---	UpdatedAt		SMALLDATETIME	NULL,
---	CONSTRAINT	PK_Tipo_Ubicacion_Insumo	PRIMARY KEY(IdTipUbic)
---);
---GO
---	GO
-CREATE TABLE	dbo.UBICACION_INSUMO	(
-	IdUbicacion		INT			IDENTITY(1,1),
-	IdSucursal		INT				NOT NULL,
-	IdBodega		INT				NOT NULL,
-	EsRefrigerada	BIT				NOT NULL	DEFAULT 0,
-	CodBarUbic		VARCHAR(25)		NOT NULL	UNIQUE,
-	NumUbic			TINYINT			NOT NULL,
-	NombUbic		NVARCHAR(50)	NOT NULL,
-	Habilitado		BIT				NOT NULL	DEFAULT 1,
-	CreatedAt		SMALLDATETIME	NOT NULL	DEFAULT GETDATE(),
-	UpdatedAt		SMALLDATETIME	NULL,
-	CONSTRAINT	PK_Ubicacion_Insumo		PRIMARY KEY(IdUbicacion)
-)
-
-GO
-CREATE TABLE	dbo.NIVEL_UBICACION_INSUMO	(
-	IdNivelUbic		INT		IDENTITY(1,1),
-	IdUbicacion		INT				NOT NULL,
-	NumNivelUbic	TINYINT			NOT NULL,
-	Habilitado		BIT				NOT NULL	DEFAULT	1,
-	CreatedAt		SMALLDATETIME	NOT NULL	DEFAULT GETDATE(),
-	UpdatedAt		SMALLDATETIME	NULL,
-	CONSTRAINT	PK_Nivel_Ubicacion_Insumo	PRIMARY KEY(IdNivelUbic)
-);
-GO
-CREATE TABLE dbo.CASILLA_UBICACION_INSUMO (
-	IdCasillaUbic	INT		IDENTITY(1,1),
-	IdNivelUbic		INT				NOT NULL,
-	CodBarCasUbic	VARCHAR(25)		NOT NULL,
-	NumCasillaUbic	TINYINT			NOT NULL,
-	Habilitado		BIT				NOT NULL	DEFAULT 1,
-	CreatedAt		SMALLDATETIME	NOT NULL	DEFAULT GETDATE(),
-	UpdatedAt		SMALLDATETIME	NULL,
-	CONSTRAINT	PK_Casilla_Ubicacion_Insumo		PRIMARY KEY(IdCasillaUbic),	
-	CONSTRAINT	FK_Nivel_de_Casilla_Ubic_Insumo	FOREIGN KEY(IdNivelUbic)
-				REFERENCES	dbo.NIVEL_UBICACION_INSUMO(IdNivelUbic),
-	CONSTRAINT	U_Codigo_de_Barra_Casilla		UNIQUE(CodBarCasUbic)
-);
-GO
-
-CREATE	TABLE	dbo.TIPO_MOVIMIENTO_UBICACION_INSUMO (
-	IdTipMov			TINYINT			NOT NULL,
-	NombTipMov			VARCHAR(50)		NOT NULL,
-	DescTipMov			VARCHAR(50)		NULL,
-	Habilitado			BIT				NOT NULL	DEFAULT 1,
-	CreatedAt			SMALLDATETIME	NOT NULL	DEFAULT GETDATE(),
-	UpdatedAt			SMALLDATETIME	NULL,
-	CONSTRAINT	PK_Tipo_Mov_Log_Ubicaciones_Insumo	PRIMARY KEY(IdTipMov)
-);
-
-INSERT INTO dbo.TIPO_MOVIMIENTO_UBICACION_INSUMO(IdTipMov, NombTipMov)
-VALUES(1,'Creacion Ubicacion Insumos'), (2,'Edicion Ubicacion Insumos'), (3,'Inhabilitacion Ubicacion'), (4,'Habilitacion Ubicacion')
-
-INSERT INTO dbo.TIPO_MOVIMIENTO_UBICACION_INSUMO(IdTipMov, NombTipMov)
-VALUES(5,'Creacion Nivel Ubicacion'),(6, 'Edicion Nivel Ubicacion'), (7, 'Inhabilitacion Nivel Ubicacion'), (8, 'Habilitacion Nivel Ubicacion')
-
-INSERT INTO dbo.TIPO_MOVIMIENTO_UBICACION_INSUMO(IdTipMov, NombTipMov)
-VALUES(9,'Creacion Casilla Ubicacion'), (10, 'Edicion Casilla Ubicacion'), (11, 'Inhabilitacion Casilla Ubicacion'), (12, 'Habilitacion Casilla Ubicacion')
-
-GO	
-CREATE	NONCLUSTERED	INDEX	IDX_Casilla_Codigo_de_Barra_Casilla
-ON dbo.CASILLA_UBICACION_INSUMO(IdCasillaUbic, CodBarCasUbic)
-GO
-
-CREATE	TABLE	dbo.LOG_CASILLAS_UBICACION_INSUMO (
-	IdLogCasUbic		INT		IDENTITY(1,1),
-	IdUbicacion			INT				NULL,
-	IdNivelUbic			INT				NULL,
-	IdCasillaUbic		INT				NULL,
-	IdTipMov			TINYINT			NOT NULL,
-	CreatedAt			SMALLDATETIME	NOT NULL	DEFAULT GETDATE(),
-	CONSTRAINT	FK_Ubicacion_Insumo_Log		FOREIGN KEY (IdUbicacion)
-			REFERENCES	dbo.UBICACION_INSUMO				( IdUbicacion ),
-	CONSTRAINT	FK_Nivel_Insumo_Log			FOREIGN KEY ( IdNivelUbic)
-			REFERENCES	dbo.NIVEL_UBICACION_INSUMO				( IdNivelUbic ),
-	CONSTRAINT	FK_Casilla_Ubic_Insumo_Log	FOREIGN	KEY ( IdCasillaUbic)
-			REFERENCES	dbo.CASILLA_UBICACION_INSUMO			( IdCasillaUbic ),
-	CONSTRAINT	FK_Tipo_Mov_Log_Ubic_Insumo	FOREIGN KEY	( IdTipMov )
-			REFERENCES	dbo.TIPO_MOVIMIENTO_UBICACION_INSUMO	( IdTipMov),
-	CONSTRAINT	PK_Log_Casillas_Ubicacion_Insumo	PRIMARY KEY ( IdLogCasUbic)
-)	
-
-GO
-
-CREATE TABLE dbo.TIPO_DE_DESCUENTO (
-	IdTipDesc		INT				NOT NULL,
-	NombTipDesc		VARCHAR(50)		NOT NULL,
-	DescTipDesc		VARCHAR(150)	NULL,
-	Habilitado		BIT				NOT NULL	DEFAULT 1,
-	CreatedAt		SMALLDATETIME	NOT NULL	DEFAULT GETDATE(),
-	CONSTRAINT		PK_Tipo_de_Descuento	PRIMARY KEY (IdTipDesc)
-)
-GO
-
-
-INSERT INTO TIPO_DE_DESCUENTO(IdTipDesc, NombTipDesc)
-VALUES(1, 'Descuento porcentual por Item'),(2, 'Descuento monetario por Item'), (3, 'Descuento porcentual sobre la transaccion.'),  (4, 'Descuento monetario sobre la transaccion.')
 
 GO
 CREATE TABLE dbo.PROCEDENCIA_PRODUCTO(
@@ -166,13 +37,6 @@ CREATE TABLE MOTIVO_BAJA_PRODUCTO(
 );
 GO
 
---Por default es 2 por que hasta el momento es 2 el id del tipo numero RUC
-ALTER TABLE PROVEEDOR
-	ADD CONSTRAINT DF_IdTipoNumeroRUC_Proveedor DEFAULT 2 FOR IdTipoDocumento
-GO
-ALTER TABLE PROVEEDOR
-	ADD CONSTRAINT U_NumeroRuc UNIQUE(Documento)
-GO
 CREATE TABLE CLASIFICACION_UNIDAD_MEDIDA (
     IdClasifUnidadMedida		INT IDENTITY(1,1),
     NombClasificacion			NVARCHAR(50)		NOT NULL,
@@ -258,11 +122,11 @@ CREATE TABLE SUBCLASIFICACION_PRODUCTO (
     UpdatedAt					SMALLDATETIME	NULL,
     CONSTRAINT		Pk_IdSubClasfProdu	PRIMARY KEY ( IdSubClasificacion ),
     CONSTRAINT		FK_SUBCLAS_CLAS		FOREIGN KEY ( IdClasificacion )
-				REFERENCES CLASIFICACION_PRODUCTO	( IdClasificacion ),
+						REFERENCES CLASIFICACION_PRODUCTO	( IdClasificacion ),
 	CONSTRAINT		U_NombreSubClasi	UNIQUE		( NombSubClasificacion )
 );
 GO
-CREATE TABLE ENVASE (
+CREATE TABLE dbo.ENVASE (
     IdEnvase			INT IDENTITY(1,1),
     NombEnvase			NVARCHAR(50)		NOT NULL,
     Descripcion			NVARCHAR(150)		NULL,
@@ -311,6 +175,7 @@ CREATE TABLE dbo.PRODUCTO (
     IdEmpaque			INT					NULL, --id del empaque si es que tiene
 	IdUnidadMedida		INT					NOT NULL,
 	IdProveedor			INT					NOT NULL,
+	IdTipInsumo			TINYINT				NOT NULL,
 	CodProd				VARCHAR(25)			NOT NULL	UNIQUE,
 	CodOriginal			VARCHAR(25)			NULL,
 	CodBarra			VARCHAR(25)			NOT NULL,
@@ -338,7 +203,9 @@ CREATE TABLE dbo.PRODUCTO (
 	CONSTRAINT	FK_Empaque_Producto				FOREIGN KEY(IdEmpaque)  
 				REFERENCES		dbo.EMPAQUE(IdEmpaque),
 	CONSTRAINT	FK_Proveedor_Producto			FOREIGN KEY(IdProveedor)
-				REFERENCES		dbo.PROVEEDOR(IdProveedor)
+				REFERENCES		dbo.PROVEEDOR(IdProveedor),
+	CONSTRAINT	FK_Tipo_de_Insumo_Producto		FOREIGN KEY(IdTipInsumo)
+				REFERENCES		dbo.TIPO_INSUMO (IdTipInsumo)
 );
 
 GO
@@ -384,7 +251,7 @@ CREATE TABLE ENTRADA_BODEGA_AREA_PRODUCCION (
 	IdProveedor					INT				NOT NULL,
 	IdEstadoEdicion				INT				NOT NULL	DEFAULT 1,
 	IdMoneda					INT				NOT NULL,
-	IdTipDesc					INT				NULL,
+	IdTipDesc					TINYINT				NULL,
 	IdTrabajador				INT				NOT NULL,
 	NFactura					NVARCHAR(50)	NOT NULL,
 	RepresentanteProveedor		NVARCHAR(100)	NOT NULL,
@@ -463,36 +330,6 @@ CREATE TABLE	dbo.DETALLE_BODEGA_AP	(
 	CONSTRAINT FK_EstadoEmpaqueProductoBodega FOREIGN KEY(IdEstadoEmpaque) REFERENCES ESTADO_EMPAQUE(IdEstadoEmpaque)
 )
 
-GO
-
-
-CREATE TABLE USO_PRODUCTO(
-	IdUso		INT IDENTITY(1,1),
-    Nombre		NVARCHAR(50)		NOT NULL,
-    Descripcion NVARCHAR(150)		NULL,
-    Habilitado	BIT DEFAULT 1		NOT NULL,
-    CreatedAt	SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
-    UpdateAt	SMALLDATETIME		NULL,
-    constraint pk_USO_PRODUCTO primary key(IdUso),
-    CONSTRAINT U_USO_PRODUCTO UNIQUE(Nombre)
-);
-
-INSERT INTO USO_PRODUCTO(Nombre,Descripcion)
-VALUES	('Nuevo/Sin Usar','Producto que no se ha usado.')
-		,('En Uso','Producto que se esta usando.')
-        ,('Usado/Agotado','Producto que se uso hasta agotarse.');
-GO
-
-
-CREATE TABLE dbo.TIPO_INSUMO (
-	IdTipoInsumo INT IDENTITY(1,1),
-	Descripcion VARCHAR(200),
-	Habilitado	BIT DEFAULT 1,
-	CreatedAt			SMALLDATETIME		NOT NULL DEFAULT GETDATE(),
-    UpdateAt			SMALLDATETIME		NULL,
-
-	CONSTRAINT PK_ID_TIPO_INSUMO PRIMARY KEY (IdTipoInsumo)
-)
 GO
 
 INSERT INTO dbo.TIPO_INSUMO(Descripcion) VALUES ('Alimento')

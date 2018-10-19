@@ -1,0 +1,37 @@
+USE  ATOMIC_RESTAURANTE;
+
+GO
+--Tabla de Roles de Usuario dentro de la Aplicacion
+CREATE TABLE	dbo.ROL_USUARIO			(
+	IdRol			TINYINT			IDENTITY(1,1), 
+	NombRol			NVARCHAR(50)		NOT NULL,
+	DescRol			NVARCHAR(150)		NULL,
+	Habilitado		BIT					NOT NULL	DEFAULT 1,
+	CreatedAt		SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
+	UpdatedAt		SMALLDATETIME		NULL,
+	CONSTRAINT PK_ROL_USUARIO	PRIMARY KEY(IdRol),
+	CONSTRAINT U_NOMBRE_ROL 	UNIQUE(NombRol)
+)
+GO
+
+--// Tabla de Informacion del Usuario
+--//	Dependencias 
+--// *ROL_USUARIO, *TRABAJADOR
+CREATE TABLE	dbo.USUARIO	(
+	IdUsuario		INT			IDENTITY(1,1),
+	IdRol			TINYINT			NOT NULL,
+	IdTrabajador	INT				NULL,
+	Username		NVARCHAR(50)	NOT NULL,
+	Email			NVARCHAR(100)	NULL,
+	Imagen			NVARCHAR(100)	NOT NULL,--DEFAULT 'nodisponible.png',
+	Password		NVARCHAR(100)	NOT NULL,
+	Habilitado		BIT				NOT NULL DEFAULT 1,
+	CreatedAt		SMALLDATETIME	NOT NULL DEFAULT GETDATE(),
+	UpdatedAt		SMALLDATETIME	NULL,
+	CONSTRAINT pk_Usuario_Sistema		PRIMARY KEY(IdUsuario),
+	CONSTRAINT FK_Rol_del_Usuario		FOREIGN KEY(IdRol) REFERENCES dbo.ROL_USUARIO(IdRol),
+	CONSTRAINT FK_USUARIO_TRABAJADOR	FOREIGN KEY(IdTrabajador) REFERENCES TRABAJADOR(IdTrabajador)
+)
+
+GO
+USE master;

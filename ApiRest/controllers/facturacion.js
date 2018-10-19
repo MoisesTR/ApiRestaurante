@@ -26,9 +26,7 @@ function createFacturaCompra(req, res) {
     .then((result) => {
         res.status(200).json({IdFactura: result.output.IdFactura})
     })
-    .catch((err) => {
-        res.status(500).json(mssqlErrors(err))
-    })
+    .catch( err => res.status(500).json( mssqlErrors(err) ) )
 }
 
 function updateFacturaCompra(req, res) {
@@ -50,9 +48,7 @@ function updateFacturaCompra(req, res) {
     .then((result) => {
         res.status(200).json({IdFactura: result.output.IdFactura})
     })
-    .catch((err) => {
-        res.status(500).json(mssqlErrors(err))
-    })
+    .catch(err  => res.status(500).json (mssqlErrors(err) ))
 }
 
 
@@ -96,10 +92,12 @@ function updateDetalleFacturaCompra(req, res) {
     .then((result) => {
         res.status(200).json({IdDetalle: result.output.IdDetalle})
     })
+    
     .catch((err) => {
         res.status(500).json(mssqlErrors(err))
     })
 }
+
 
 function getFacturaById(req, res ) {
     let aoj = [];
@@ -114,10 +112,12 @@ function getFacturaById(req, res ) {
         res.status(200).json({factura:jsonString.Factura[0]})
     })
     .catch((err) =>  {
+        
         console.log(err)
         res.status(500).json(mssqlErrors(err))
     })
 }
+
 
 function getCambiosFacturaById(req, res ) {
     let aoj = [];
@@ -128,10 +128,7 @@ function getCambiosFacturaById(req, res ) {
     .then((result) => {
         res.status(200).json({cambios:result.recordset})
     })
-    .catch((err) =>  {
-        console.log(err)
-        res.status(500).json(mssqlErrors(err))
-    })
+    .catch( err =>   res.status(500).json( mssqlErrors(err) )  )
 }
 
 
@@ -139,11 +136,13 @@ function obtenerFacturasCompra(req, res ) {
     let aoj = [];
     let data = matchedData(req,{locations:['params','query','body']});
     console.log(data);
-    db.pushAOJParam(aoj, 'IdFechaFiltro', sql.Int,data.IdFechaFiltro);
-    db.pushAOJParam(aoj, 'FechaInicio', sql.Date,data.FechaInicio);
-    db.pushAOJParam(aoj, 'FechaFin', sql.Date,data.FechaFin);
-    db.pushAOJParam(aoj, 'IdProveedor', sql.Int,data.IdProveedor);
-    db.pushAOJParam(aoj, 'IdEstadoFactura', sql.Int,data.IdEstadoFactura);
+    let {IdFechaFiltro, FechaInicio, FechaFin, IdProveedor, IdEstadoFactura} = data;
+    
+    db.pushAOJParam(aoj, 'IdFechaFiltro',   sql.Int,        IdFechaFiltro);
+    db.pushAOJParam(aoj, 'FechaInicio',     sql.Date,       FechaInicio);
+    db.pushAOJParam(aoj, 'FechaFin',        sql.Date,       FechaFin);
+    db.pushAOJParam(aoj, 'IdProveedor',     sql.Int,        IdProveedor);
+    db.pushAOJParam(aoj, 'IdEstadoFactura', sql.Int,        IdEstadoFactura);
     db.storedProcExecute('USP_GET_FACTURAS_COMPRA',aoj)
     .then((result) => {
         res.status(200).json({facturas:result.recordset})
@@ -152,7 +151,9 @@ function obtenerFacturasCompra(req, res ) {
         console.log(err)
         res.status(500).json(mssqlErrors(err))
     })
+    
 }
+
 
 module.exports = {
     createFacturaCompra, 

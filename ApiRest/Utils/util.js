@@ -10,6 +10,7 @@ function postValidator(req, res, next) {
 }
 
 function mssqlErrors(err) {
+    console.error(err);
     return {
         "showMessage" : (err.number == 50000) ? true : false,
         "code": err.code,

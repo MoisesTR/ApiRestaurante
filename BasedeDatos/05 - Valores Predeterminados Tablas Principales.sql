@@ -119,3 +119,12 @@ VALUES	('Cerrado/Completo')
 		,('Sin EMPAQUE/No viene empacado');
 
 GO
+
+INSERT INTO dbo.TIPO_MOVIMIENTO_UBICACION_INSUMO(IdTipMov, NombTipMov)
+VALUES(1,'Creacion Ubicacion Insumos'), (2,'Edicion Ubicacion Insumos'), (3,'Inhabilitacion Ubicacion'), (4,'Habilitacion Ubicacion')
+
+INSERT INTO dbo.TIPO_MOVIMIENTO_UBICACION_INSUMO(IdTipMov, NombTipMov)
+VALUES(5,'Creacion Nivel Ubicacion'),(6, 'Edicion Nivel Ubicacion'), (7, 'Inhabilitacion Nivel Ubicacion'), (8, 'Habilitacion Nivel Ubicacion')
+
+INSERT INTO dbo.TIPO_MOVIMIENTO_UBICACION_INSUMO(IdTipMov, NombTipMov)
+VALUES(9,'Creacion Casilla Ubicacion'), (10, 'Edicion Casilla Ubicacion'), (11, 'Inhabilitacion Casilla Ubicacion'), (12, 'Habilitacion Casilla Ubicacion')

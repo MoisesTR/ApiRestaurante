@@ -102,51 +102,6 @@ CREATE TABLE TIPO_DOCUMENTO_IDENTIFICACION(
 	UpdatedAt			SMALLDATETIME		NULL,
 	CONSTRAINT PK_TIPO_DOCUMENTO_IDENTIFICACION PRIMARY KEY(IdTipoDocumento)
 )
-GO
---// Tabla de almacenar los proveedores
-CREATE TABLE dbo.PROVEEDOR(
-    IdProveedor			INT IDENTITY(1,1),
-	IdPais				INT					NOT NULL, --Foraneo
-	IdTipoDocumento		INT					NOT NULL,  -- Foraneo
-	IsMercado			BIT					NOT NULL,
-	CodProveedor		VARCHAR(10)			NOT NULL,
-    NombreProveedor		NVARCHAR(50)		NOT NULL,
-    Direccion			NVARCHAR(200)		NOT NULL,
-    Email				NVARCHAR(100)		NULL,
-	Imagen				NVARCHAR(50)		NOT NULL	DEFAULT 'proveedor.png',
-    Descripcion			NVARCHAR(200)		NULL,
-    NombRepresentante	NVARCHAR(100)		NOT NULL,
-	Documento			NVARCHAR(50)		NOT NULL,
-    Retencion2			BIT					NOT NULL	DEFAULT 0,
-	Habilitado			BIT					NOT NULL	DEFAULT 1,
-    CreatedAt			SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
-    UpdatedAt			SMALLDATETIME		NULL,
-    CONSTRAINT PK_IdProveedor	PRIMARY KEY (IdProveedor),
-	CONSTRAINT FK_PAIS_PROVEEDOR			FOREIGN KEY(IdPais) 
-				REFERENCES dbo.PAIS(IdPais),
-	CONSTRAINT FK_TIPO_DOCUMENTO_PROVEEDOR	FOREIGN KEY(IdTipoDocumento) 
-				REFERENCES dbo.TIPO_DOCUMENTO_IDENTIFICACION(IdTipoDocumento)
-);
-GO
-CREATE TABLE	dbo.TELEFONO_PROVEEDOR (
-	IdTelefono			INT				IDENTITY(1,1),
-	IdProveedor			INT					NOT NULL,
-	NumTelefono			NVARCHAR(20)		NOT NULL,
-	Cargo				NVARCHAR(25)		NULL,
-	NombPAsignado		NVARCHAR(50)		NOT NULL,
-	Titular				BIT					NOT NULL,
-	Habilitado			BIT					NOT NULL	DEFAULT 1,
-	CreatedAt			SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
-	UpdatedAt			SMALLDATETIME		NULL,
-	CONSTRAINT	FK_Proveedor_numero_de_Telefono			FOREIGN KEY(IdProveedor)
-				REFERENCES			dbo.PROVEEDOR(IdProveedor),
-	CONSTRAINT	PK_Telefono_Proveedor	
-				PRIMARY  KEY(IdTelefono, IdProveedor)
-)
-GO
-CREATE NONCLUSTERED INDEX IDX_TELEFO_PROVEEDOR_NUMERO
-ON dbo.TELEFONO_PROVEEDOR (NumTelefono)
-INCLUDE (NombPAsignado)
 
 GO
 CREATE TABLE dbo.RESTAURANTE (
@@ -263,6 +218,20 @@ CREATE TABLE	dbo.CARGO_TRABAJADOR(
     CONSTRAINT PK_IdCargo PRIMARY KEY (IdCargo)
 );
 GO
+
+CREATE TABLE dbo.TIPO_DE_DESCUENTO (
+	IdTipDesc		TINYINT			NOT NULL,
+	NombTipDesc		VARCHAR(50)		NOT NULL,
+	DescTipDesc		VARCHAR(150)	NULL,
+	Habilitado		BIT				NOT NULL	DEFAULT 1,
+	CreatedAt		SMALLDATETIME	NOT NULL	DEFAULT GETDATE(),
+	CONSTRAINT		PK_Tipo_de_Descuento	PRIMARY KEY (IdTipDesc)
+)
+
+INSERT INTO TIPO_DE_DESCUENTO(IdTipDesc, NombTipDesc)
+VALUES(1, 'Descuento porcentual por Item'),(2, 'Descuento monetario por Item'), (3, 'Descuento porcentual sobre la transaccion.'),  (4, 'Descuento monetario sobre la transaccion.')
+
+GO
 CREATE TABLE	dbo.TRABAJADOR (
     IdTrabajador		INT IDENTITY(1,1),
     IdSucursal			INT					NULL,
@@ -307,3 +276,6 @@ CREATE TABLE dbo.BODEGA_AREA_PRODUCCION(
 	CONSTRAINT FK_BODEGA_AREA_PRODUCCION FOREIGN KEY(IdAreaProduccion) REFERENCES AREA_PRODUCCION(IdAreaProduccion),
 	CONSTRAINT U_BODEA_PARA_AP UNIQUE(IdAreaProduccion)
 )
+
+GO
+USE master

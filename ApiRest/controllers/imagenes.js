@@ -10,7 +10,8 @@ function getImageFile(req, res) {
         if (exists) {
             res.sendFile(path.resolve(path_file));
         } else {
-            res.status(404).send({ message: 'La imagen no existe' });
+            res.status(404)
+                .json({ message: 'La imagen no existe' });
         }
     });
 
@@ -39,10 +40,11 @@ function deleteImage(req,res) {
      var tiposValidos = ['productos', 'trabajadores', 'usuarios','temp'];
 
      if (tiposValidos.indexOf(tipo) < 0) {
-         return res.status(400).json({
-            "ok": false,
-             "message": 'Carpeta no encontrada'
-         });
+         return res.status(400)
+            .json({
+                "ok": false,
+                "message": 'Carpeta no encontrada'
+            });
      }
 
      var path = `./uploads/${ tipo }/${ img }`;
