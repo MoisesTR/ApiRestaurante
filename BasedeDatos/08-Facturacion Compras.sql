@@ -166,7 +166,9 @@ AS BEGIN
 	
 	IF (@CodFactura <> 'null')
 	BEGIN
-		SELECT IdFactura
+		SELECT
+			IdPaginacion = ROW_NUMBER() OVER(ORDER BY(SELECT NULL)) 
+			, IdFactura
 			, NumRefFactura
 			, FC.IdProveedor
 			, FC.IdTipoMoneda
@@ -200,7 +202,9 @@ AS BEGIN
 	END
 	ELSE 
 	BEGIN 
-		SELECT IdFactura
+		SELECT 
+				IdPaginacion = ROW_NUMBER() OVER(ORDER BY(SELECT NULL)) 
+				, IdFactura
 				, NumRefFactura
 				, FC.IdProveedor
 				, FC.IdTipoMoneda
