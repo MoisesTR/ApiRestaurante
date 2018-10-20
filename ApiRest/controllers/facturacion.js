@@ -142,6 +142,7 @@ function obtenerFacturasCompra(req, res ) {
     db.pushAOJParam(aoj, 'IdFechaFiltro', sql.Int,data.IdFechaFiltro);
     db.pushAOJParam(aoj, 'FechaInicio', sql.Date,data.FechaInicio);
     db.pushAOJParam(aoj, 'FechaFin', sql.Date,data.FechaFin);
+    db.pushAOJParam(aoj, 'CodFactura', sql.NVarChar(100),data.CodFactura);
     db.pushAOJParam(aoj, 'IdProveedor', sql.Int,data.IdProveedor);
     db.pushAOJParam(aoj, 'IdEstadoFactura', sql.Int,data.IdEstadoFactura);
     db.storedProcExecute('USP_GET_FACTURAS_COMPRA',aoj)

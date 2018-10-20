@@ -381,7 +381,7 @@ CREATE PROCEDURE USP_DISP_PROVEEDOR(
 	UPDATE dbo.PROVEEDOR SET Habilitado = @Habilitado, UpdateAt=GETDATE() 
 	WHERE IdProveedor = @IdProveedor;
 END
-GO
+GO 
 IF OBJECT_ID('USP_GET_PROVEEDORES','P') IS NOT NULL
 	DROP PROCEDURE USP_GET_PROVEEDORES
 GO
@@ -390,30 +390,54 @@ CREATE PROCEDURE USP_GET_PROVEEDORES
 AS BEGIN
 	IF @Habilitado IS NULL
 		BEGIN
-			SELECT IdProveedor
-				, NombreProveedor
-				, Direccion
-				, Email
-				, Descripcion
-				, NombreRepresentante
-				, Documento
-				, Retencion2 
-				, Mercado
-			FROM	dbo.PROVEEDOR;
+			SELECT PRO.IdProveedor
+					, PRO.NombreProveedor
+					, PRO.Direccion
+					, PRO.Email
+					, PRO.Descripcion
+					, PRO.NombreRepresentante
+					, PRO.Documento
+					, PRO.Retencion2 
+					, PRO.Mercado
+					, Telefonos = (
+						SELECT	TEL.Nombre
+								, TEL.Telefono
+								, TEL.Titular
+								, TEL.Cargo
+								, TEL.CreatedAt
+								, TEL.UpdateAt
+						FROM	dbo.TELEFONOS_PROVEEDOR TEL
+						WHERE	TEL.IdProveedor = PRO.IdProveedor
+						FOR JSON PATH		
+					)
+			FROM	dbo.PROVEEDOR PRO
+			FOR JSON PATH , ROOT('proveedores')
 		END
 	ELSE
 		BEGIN
-			SELECT IdProveedor
-				, NombreProveedor
-				, Direccion
-				, Email
-				, Descripcion
-				, NombreRepresentante
-				, Documento
-				, Retencion2 
-				, Mercado
-			FROM	dbo.PROVEEDOR
-			WHERE Habilitado = @Habilitado;
+			SELECT PRO.IdProveedor
+					, PRO.NombreProveedor
+					, PRO.Direccion
+					, PRO.Email
+					, PRO.Descripcion
+					, PRO.NombreRepresentante
+					, PRO.Documento
+					, PRO.Retencion2 
+					, PRO.Mercado
+					, Telefonos = (
+						SELECT	TEL.Nombre
+								, TEL.Telefono
+								, TEL.Titular
+								, TEL.Cargo
+								, TEL.CreatedAt
+								, TEL.UpdateAt
+						FROM	dbo.TELEFONOS_PROVEEDOR TEL
+						WHERE	TEL.IdProveedor = PRO.IdProveedor
+						FOR JSON PATH		
+					)
+			FROM	dbo.PROVEEDOR PRO
+			WHERE Habilitado = @Habilitado
+			FOR JSON PATH , ROOT('proveedores')
 		END
 END
 GO

@@ -158,12 +158,15 @@ CREATE PROCEDURE dbo.USP_GET_FACTURAS_COMPRA (
 	@IdFechaFiltro		INT --1 Fecha Recepcion, 2-Fecha Ingreso--
 	, @FechaInicio		SMALLDATETIME
 	, @FechaFin			SMALLDATETIME
+	, @CodFactura		NVARCHAR(100)
 	, @IdProveedor		INT NULL
 	, @IdEstadoFactura	INT NULL
 )
 AS BEGIN
-
-	SELECT IdFactura
+	
+	IF (@CodFactura <> 'null')
+	BEGIN
+		SELECT IdFactura
 			, NumRefFactura
 			, FC.IdProveedor
 			, FC.IdTipoMoneda
@@ -184,27 +187,61 @@ AS BEGIN
 			, FC.Habilitado
 			, FechaIngreso = FC.CreatedAt 
 			, HoraIngreso = CONVERT(VARCHAR(10),FC.CreatedAt,108) + ' ' + RIGHT(CONVERT(VARCHAR(30), FC.CreatedAt , 9), 2) 
-	FROM	dbo.FACTURA_COMPRA FC
+		FROM	dbo.FACTURA_COMPRA FC
 			INNER JOIN dbo.ESTADO_FACTURA EF
 				ON FC.IdEstadoFactura = EF.IdEstadoFactura
 			INNER JOIN dbo.PROVEEDOR PRO
 				ON FC.IdProveedor = PRO.IdProveedor
 			INNER JOIN dbo.TRABAJADOR TRA
 				ON FC.IdTrabajador = TRA.IdTrabajador
-	WHERE	(@IdFechaFiltro IS NULL 
-			AND FC.IdProveedor = @IdProveedor)
-			AND FC.IdEstadoFactura = ISNULL(@IdEstadoFactura,FC.IdEstadoFactura)
-			OR 
-			(@IdFechaFiltro IS NOT NULL 
-			AND FC.IdProveedor = @IdProveedor)
-			AND FC.IdEstadoFactura = ISNULL(@IdEstadoFactura,FC.IdEstadoFactura)
-			AND (( @IdFechaFiltro = 1 AND FC.FechaRecepcion BETWEEN ISNULL(@FechaInicio,FC.FechaRecepcion) AND ISNULL(@FechaFin,FC.FechaRecepcion))
-				OR @IdFechaFiltro = 2 AND CONVERT(VARCHAR(8),FC.CreatedAt,112) BETWEEN ISNULL(@FechaInicio,FC.FechaRecepcion) AND ISNULL(@FechaFin,FC.FechaRecepcion))
-	ORDER BY CASE WHEN @IdFechaFiltro IS NULL THEN FC.FechaRecepcion 
-					WHEN @IdFechaFiltro = 1 THEN FC.FechaRecepcion 
-					WHEN @IdFechaFiltro = 2 THEN FC.FechaFactura
-					END ASC
+		WHERE	FC.IdProveedor = 1
+				AND FC.NumRefFactura = @CodFactura
+				AND FC.IdEstadoFactura = ISNULL(@IdEstadoFactura,FC.IdEstadoFactura)
+	END
+	ELSE 
+	BEGIN 
+		SELECT IdFactura
+				, NumRefFactura
+				, FC.IdProveedor
+				, FC.IdTipoMoneda
+				, FC.IdFormaPago
+				, PRO.NombreProveedor
+				, TRA.IdTrabajador
+				, TRA.Nombres +' ' + TRA.Apellidos AS [TrabajadorIngreso]
+				, FC.IdEstadoFactura
+				, NombVendedor
+				, FechaFactura = CONVERT(VARCHAR(10),FC.FechaFactura,126)
+				, FechaRecepcion = CONVERT(VARCHAR(10),FC.FechaRecepcion,126)
+				, FC.SubTotal
+				, FC.TotalIva
+				, FC.CambioActual
+				, FC.TotalDescuento
+				, FC.TotalCordobas
+				, FC.TotalOrigenFactura
+				, FC.Habilitado
+				, FechaIngreso = FC.CreatedAt 
+				, HoraIngreso = CONVERT(VARCHAR(10),FC.CreatedAt,108) + ' ' + RIGHT(CONVERT(VARCHAR(30), FC.CreatedAt , 9), 2) 
+		FROM	dbo.FACTURA_COMPRA FC
+				INNER JOIN dbo.ESTADO_FACTURA EF
+					ON FC.IdEstadoFactura = EF.IdEstadoFactura
+				INNER JOIN dbo.PROVEEDOR PRO
+					ON FC.IdProveedor = PRO.IdProveedor
+				INNER JOIN dbo.TRABAJADOR TRA
+					ON FC.IdTrabajador = TRA.IdTrabajador
+		WHERE	(@IdFechaFiltro IS NULL 
+				AND FC.IdProveedor = @IdProveedor)
+				AND FC.IdEstadoFactura = ISNULL(@IdEstadoFactura,FC.IdEstadoFactura)
+				OR 
+				(@IdFechaFiltro IS NOT NULL 
+				AND FC.IdProveedor = @IdProveedor)
+				AND FC.IdEstadoFactura = ISNULL(@IdEstadoFactura,FC.IdEstadoFactura)
+				AND (( @IdFechaFiltro = 1 AND FC.FechaRecepcion BETWEEN ISNULL(@FechaInicio,FC.FechaRecepcion) AND ISNULL(@FechaFin,FC.FechaRecepcion))
+					OR @IdFechaFiltro = 2 AND CONVERT(VARCHAR(8),FC.CreatedAt,112) BETWEEN ISNULL(@FechaInicio,FC.FechaRecepcion) AND ISNULL(@FechaFin,FC.FechaRecepcion))
+		ORDER BY CASE WHEN @IdFechaFiltro IS NULL THEN FC.FechaRecepcion 
+						WHEN @IdFechaFiltro = 1 THEN FC.FechaRecepcion 
+						WHEN @IdFechaFiltro = 2 THEN FC.FechaFactura
+						END ASC
+	END
 END
-
 
 
