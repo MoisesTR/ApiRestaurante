@@ -394,9 +394,11 @@ exports.obtenerFacturasC = [
     check('FechaFin').toDate().optional({nullable:true}),
     check('IdProveedor').isInt().optional({nullable:true}),
     check('IdEstadoFactura').isInt().optional({nullable:true}),
+    check('CodFactura').toString().optional({nullable:true}),
     sanitize('IdFechaFiltro', 'La fecha filtro enviada no es una fecha valida.').toInt(),
     sanitize('FechaInicio', 'La fecha Inicio enviada no es una fecha valida.').toDate(),
-    sanitize('FechaFin', 'La Fecha Fin Enviada no es una fecha valida').toDate()
+    sanitize('FechaFin', 'La Fecha Fin Enviada no es una fecha valida').toDate(),
+    sanitize('CodFactura', 'La Fecha Fin Enviada no es una fecha valida').toString()
 ];
 
 exports.getMenuesByRol = [
