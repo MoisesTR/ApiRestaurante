@@ -27,7 +27,7 @@ CREATE PROCEDURE USP_UPDATE_CARGO(
     @DescripcionCargo NVARCHAR(150)
 )
 AS BEGIN
-	UPDATE CARGO SET NombreCargo=@NombreCargo,DescripcionCargo=@DescripcionCargo, UpdateAt = GETDATE()
+	UPDATE CARGO SET NombreCargo=@NombreCargo,DescripcionCargo=@DescripcionCargo, UpdatedAt = GETDATE()
 	WHERE IdCargo = @IdCargo
 END
 GO
@@ -38,7 +38,7 @@ CREATE PROCEDURE USP_GET_CARGO(
 	@IdCargo INT
 )
 AS BEGIN
-	SELECT IdCargo,NombreCargo,DescripcionCargo,Habilitado,CreatedAt,UpdateAt 
+	SELECT IdCargo,NombreCargo,DescripcionCargo,Habilitado,CreatedAt,UpdatedAt 
 	FROM CARGO WHERE IdCargo = @IdCargo
 END
 go
@@ -51,11 +51,11 @@ CREATE PROCEDURE USP_GET_CARGOS(
 AS BEGIN
 	IF @Habilitado IS NULL
 		BEGIN
-			SELECT IdCargo,NombreCargo,DescripcionCargo,Habilitado,CreatedAt,UpdateAt FROM CARGO
+			SELECT IdCargo,NombreCargo,DescripcionCargo,Habilitado,CreatedAt,UpdatedAt FROM CARGO
 		END
 	ELSE
 		BEGIN
-			SELECT IdCargo,NombreCargo,DescripcionCargo,Habilitado,CreatedAt,UpdateAt FROM CARGO
+			SELECT IdCargo,NombreCargo,DescripcionCargo,Habilitado,CreatedAt,UpdatedAt FROM CARGO
 			WHERE Habilitado=@Habilitado
 		END
 END
@@ -67,7 +67,7 @@ CREATE PROCEDURE USP_DISP_CARGO(
 	@IdCargo	INT,
 	@Habilitado BIT
 ) AS BEGIN
-	UPDATE dbo.CARGO SET Habilitado = @Habilitado, UpdateAt = GETDATE() 
+	UPDATE dbo.CARGO SET Habilitado = @Habilitado, UpdatedAt = GETDATE() 
 	WHERE IdCargo=@IdCargo
 END
 GO
@@ -81,9 +81,9 @@ AS BEGIN
 	SELECT T.IdTrabajador, T.IdSucursal, S.NombreSucursal, T.IdCargo, C.NombreCargo,
 			T.Nombres, T.Apellidos, T.IdTipoDocumento, T.Documento, T.Imagen,
 			T.FechaNacimiento, T.Direccion, T.Telefono1, T.Telefono2, T.FechaIngreso,
-			T.Habilitado, T.CreatedAt,T.UpdateAt
+			T.Habilitado, T.CreatedAt,T.UpdatedAt
 	FROM dbo.TRABAJADOR T 
-	INNER JOIN dbo.SUCURSAL S ON T.IdSucursal= S.IdSucursal
+	INNER JOIN dbo.SUCURSAL_RESTAURANTE S ON T.IdSucursal= S.IdSucursal
 	INNER JOIN dbo.CARGO C ON T.IdCargo = C.IdCargo
 	WHERE T.IdTrabajador = @IdTrabajador
 END
@@ -101,7 +101,7 @@ AS BEGIN
 				T.Apellidos,U.Username,T.IdTipoDocumento,T.Documento, T.Imagen, FechaNacimiento,T.Direccion, 
 				T.Telefono1, T.Telefono2,T.FechaIngreso,T.Habilitado,T.CreatedAt
 		FROM dbo.TRABAJADOR T 
-		INNER JOIN dbo.SUCURSAL S ON T.IdSucursal= S.IdSucursal
+		INNER JOIN dbo.SUCURSAL_RESTAURANTE S ON T.IdSucursal= S.IdSucursal
 		INNER JOIN dbo.CARGO C ON T.IdCargo = C.IdCargo
 		LEFT  JOIN dbo.USUARIO	U ON T.IdTrabajador = U.IdTrabajador
 		WHERE T.IdSucursal = ISNULL(@IdSucursal, T.IdSucursal)
@@ -110,7 +110,7 @@ AS BEGIN
 				T.Apellidos,U.Username,T.IdTipoDocumento,T.Documento, T.Imagen, FechaNacimiento,T.Direccion, 
 				T.Telefono1, T.Telefono2,T.FechaIngreso,T.Habilitado,T.CreatedAt
 		FROM dbo.TRABAJADOR T 
-		INNER JOIN dbo.SUCURSAL S ON T.IdSucursal= S.IdSucursal
+		INNER JOIN dbo.SUCURSAL_RESTAURANTE S ON T.IdSucursal= S.IdSucursal
 		INNER JOIN dbo.CARGO C ON T.IdCargo = C.IdCargo
 		LEFT  JOIN dbo.USUARIO U ON T.IdTrabajador = U.IdTrabajador
 		WHERE T.Habilitado = @Habilitado
@@ -124,7 +124,7 @@ CREATE PROCEDURE USP_DISP_TRABAJADOR(
 	@IdTrabajador	INT,
 	@Habilitado		BIT
 ) AS BEGIN
-	UPDATE dbo.TRABAJADOR SET Habilitado = @Habilitado,UpdateAt=GETDATE() 
+	UPDATE dbo.TRABAJADOR SET Habilitado = @Habilitado,UpdatedAt=GETDATE() 
 	WHERE IdTrabajador = @IdTrabajador
 END
 GO
@@ -136,11 +136,11 @@ GO
 --	@Habilitado BIT
 --) AS BEGIN
 --	IF @Habilitado IS NULL
---		SELECT IdTelefoNOTrabajador,IdTrabajador,NumeroTelefono,TT.Habilitado,TT.CreatedAt,TT.UpdateAt 
+--		SELECT IdTelefoNOTrabajador,IdTrabajador,NumeroTelefono,TT.Habilitado,TT.CreatedAt,TT.UpdatedAt 
 --		FROM TELEFONO_TRABAJADOR TT
 --		WHERE TT.IdTrabajador= @IdTrabajador
 --	ELSE
---		SELECT IdTelefoNOTrabajador,IdTrabajador,NumeroTelefono,TT.Habilitado,TT.CreatedAt,TT.UpdateAt 
+--		SELECT IdTelefoNOTrabajador,IdTrabajador,NumeroTelefono,TT.Habilitado,TT.CreatedAt,TT.UpdatedAt 
 --		FROM TELEFONO_TRABAJADOR TT
 --		WHERE TT.IdTrabajador= @IdTrabajador AND TT.Habilitado= @Habilitado
 --END
@@ -152,8 +152,8 @@ CREATE PROCEDURE USP_GET_DETALLE_BODEGA_AP
 	@IdBodegaAreaP INT
 AS BEGIN
 	SELECT	IdDetalle,	IdBodegaAreaP,	IdDetalleEntradaAP,	IdEntradaBodegaAP,	PP.IdProveedor,	
-			DAP.IdProductoProveedor,	P.IdProducto, P.NombreProducto,	CP.IdCategoria,	C.NombreCategoria,
-			P.IdSubClasificacion,	SP.NombreSubClasificacion,	SP.IdClasificacion,	CP.NombreClasificacion,
+			DAP.IdProductoProveedor,	P.IdProducto, P.NombProducto,	CP.IdCategoria,	C.NombCategoria,
+			P.IdSubClasificacion,	SP.NombSubClasificacion,	SP.IdClasificacion,	CP.NombClasificacion,
 			Cantidad,	FechaHoraIngreso,	FechaHoraProduccion,	DAP.Habilitado 
 	FROM dbo.DETALLE_BODEGA_AP DAP
 	INNER JOIN PRODUCTO_PROVEEDOR PP 
@@ -215,30 +215,7 @@ GO
 CREATE PROCEDURE USP_GENERAR_FACTURA
 	@IdEntradaBodegaAP INT
 AS BEGIN
-	UPDATE ENTRADA_BODEGA_AREA_PRODUCCION SET IdEstadoEdicion = 2,UpdateAt=GETDATE() WHERE IdEntradaBodegaAP = @IdEntradaBodegaAP
-END
-GO
-IF OBJECT_ID('USP_GET_CLASIFICACION_UDM','P') IS NOT NULL
-	DROP PROCEDURE USP_GET_CLASIFICACION_UDM
-GO
---Nombre anterior GetClasificacion
-CREATE PROCEDURE USP_GET_CLASIFICACION_UDM(
-	@IdClasificacionUnidadMedida INT
-) AS BEGIN 
-	SELECT IdClasificacionUnidadMedida,NombreClasificacion,Descripcion,Habilitado FROM CLASIFICACION_UNIDAD_MEDIDA WHERE IdClasificacionUnidadMedida = @IdClasificacionUnidadMedida;
-END
-GO
-IF OBJECT_ID('USP_GET_CLASIFICACIONES_UDM','P') IS NOT NULL
-	DROP PROCEDURE USP_GET_CLASIFICACIONES_UDM
-GO
-CREATE PROCEDURE USP_GET_CLASIFICACIONES_UDM
-	@Habilitado BIT NULL
-AS BEGIN
-	IF @Habilitado IS NULL
-		SELECT IdClasificacionUnidadMedida,NombreClasificacion,Descripcion,Habilitado FROM CLASIFICACION_UNIDAD_MEDIDA;
-	ELSE
-		SELECT IdClasificacionUnidadMedida,NombreClasificacion,Descripcion,Habilitado FROM CLASIFICACION_UNIDAD_MEDIDA
-		WHERE Habilitado= @Habilitado
+	UPDATE ENTRADA_BODEGA_AREA_PRODUCCION SET IdEstadoEdicion = 2,UpdatedAt=GETDATE() WHERE IdEntradaBodegaAP = @IdEntradaBodegaAP
 END
 GO
 IF OBJECT_ID('dbo.USP_INSERT_TIPO_DOCUMENTO_IDENTIFICACION') IS NOT NULL

@@ -14,7 +14,7 @@ SET IDENTITY_INSERT dbo.PAIS ON
 GO
 
 --// Paises Contenidos por defecto en el Sistema
-INSERT INTO PAIS(IdPais,IdMoneda, NombrePais, CodigoAlfa3, CodigoNumerico, PrefijoTelefonico)
+INSERT INTO PAIS(IdPais,IdMoneda, NombPais, CodigoAlfa3, CodigoNumerico, PrefijoTelefonico)
 VALUES(1, 1,'Nicaragua', 'NIC',558, '505'),(2,2,'Estados Unidos','USA',840,'001'), (3,5,'Taiwán (República de China)','TWN',158,'886'),(4,4,'China','CHN', 156, '086'),
 	(5,6,'Costa Rica','CRI', 188,'506'),(6,7,'Honduras','HND',340,'504'),(7,8,'Guatemala','GTM',320,'502')
 GO
@@ -63,7 +63,7 @@ VALUES	('Extravio','El/Los productos se extraviaron')
 GO
 SET IDENTITY_INSERT dbo.CLASIFICACION_UNIDAD_MEDIDA ON;
 GO
-INSERT INTO CLASIFICACION_UNIDAD_MEDIDA(NombreClasificacion,Descripcion) 
+INSERT INTO CLASIFICACION_UNIDAD_MEDIDA(NombClasificacion,Descripcion) 
 VALUES	(1,'Masa','Miden el peso del producto.')
 		,(2,'Volumen','Miden el espacio que ocupa el producto.');
 GO
@@ -71,7 +71,7 @@ SET IDENTITY_INSERT dbo.CLASIFICACION_UNIDAD_MEDIDA OFF;
 GO
 SET IDENTITY_INSERT dbo.CATEGORIA_PRODUCTO ON;
 GO
-INSERT INTO  CATEGORIA_PRODUCTO(IdCategoria,NombreCategoria,DescripcionCategoria) 
+INSERT INTO  CATEGORIA_PRODUCTO(IdCategoriaNombCategoria,DescCategoria) 
 VALUES	(1,'Producto Seco','Todos aquellos productos que no necesitan refrigeracion.')
 		,(2,'Carnes','Todas los tipos de carnes.'),(3,'Salsas','Todos los tipos de salsas')
 		,(4,'Bebidas','Todos los distINTos tipos de bebidas y marcas.')
@@ -81,14 +81,14 @@ SET IDENTITY_INSERT dbo.CATEGORIA_PRODUCTO OFF;
 GO
 SET IDENTITY_INSERT dbo.CLASIFICACION_PRODUCTO ON;
 GO
-INSERT INTO CLASIFICACION_PRODUCTO(IdCategoria, NombreClasificacion, DescripcionClasificacion) 
+INSERT INTO CLASIFICACION_PRODUCTO(IdCategoria, NombClasificacion, DescripcionClasificacion) 
 VALUES	(2, 'Pollo','Las distINTas cortes de pollo.')
 		,(1,'Pastas','DistINTos tipos de pasta')
 		,(1, 'Granos Basicos',NULL)
 GO
 SET IDENTITY_INSERT dbo.CLASIFICACION_PRODUCTO OFF;
 GO
-INSERT INTO SUBCLASIFICACION_PRODUCTO(IdClasificacion,NombreSubClasificacion,DescripcionSubclasificacion) 
+INSERT INTO SUBCLASIFICACION_PRODUCTO(IdClasificacion,NombSubClasificacion,DescSubclasificacion) 
 VALUES (1,'Filete','Filete de pollo entero.')
 		,(1,'Tira','Pollo Cortado en tiras.')
         ,(2,'Tallarin','Tallarin');

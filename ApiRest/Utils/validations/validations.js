@@ -1,64 +1,18 @@
 const { query,param,body,check, validationResult } = require('express-validator/check');
 const { matchedData, sanitize } = require('express-validator/filter');
+const generic   = require('./genericValidations');
 
-exports.validsParams = (req, res, next) => {
-    let errors = validationResult(req);
-    (!errors.isEmpty()) ? res.status(400).json(errors.array()): next();
-}
+Object.assign(exports, generic);
 
-exports.userSignUpValidation = [
-        body('IdRol', 'IdRol es requerido y debe ser un entero').isInt(),
-        body('IdTrabajador', 'IdTrabajador es requerido y debe ser un entero').isInt(),
-        body('Username', 'username debe tener un minimo de 5 caracteres y maximo 40.').isLength({ min: 5, max: 40 }),
-        body('Email', 'Campo email debe ser un Email').isEmail().optional({ nullable: true }),
-        body('Imagen', 'Imagen debe ser un archivo').optional({ nullable: true }),
-        body('Password', 'El password debe tener una longitud minima de 5 y maxima de 20').isLength({ min: 5, max: 20 }),
-        sanitize('IdRol').toInt(),
-        sanitize('IdTrabajador').toInt()
-    ];
-
-exports.userSignUpValidationAdmin = [
-    body('Username', 'username debe tener un minimo de 5 caracteres y maximo 40.').isLength({ min: 5, max: 40 }),
-    body('Email', 'Campo email debe ser un Email').isEmail().optional({ nullable: true }),
-    body('Imagen', 'Imagen debe ser un archivo').optional({ nullable: true }),
-    body('Password', 'El password debe tener una longitud minima de 5 y maxima de 20').isLength({ min: 5, max: 20 }),
-    sanitize('username').toString(),
-    sanitize('email').toString(), 
-    sanitize('password').toString()
-];
 exports.getTelefonoSucursal = [
     param('IdTelefonoSucursal').isInt(),
     check('IdSucursal', 'IdSucursal es requerido.').isInt(),
     sanitize('IdSucursal').toInt()
 ]
-exports.userFindUsername = [
-        body('Username', 'username debe tener un minimo de 5 caracteres y maximo 40.').isLength({ min: 5, max: 40 })
-    ];
-
-exports.userFindEmail = [
-        check('Email', 'Campo Email no es una direccion de correo electronico valida!').isEmail()
-    ];
     
-exports.userSignInValidation = [
-        check('Username', 'username debe tener un minimo de 5 caracteres y maximo 40.').isLength({ min: 5, max: 40 }),
-        check('Password', 'El password debe tener una longitud minima de 5 y maxima de 20').isLength({ min: 5, max: 20 }),
-        check('gettoken', 'gettoken debe ser un boleano').isBoolean().optional({ nullable: true }),
-        sanitize('gettoken').toBoolean(),
-        sanitize('Username').toString(),
-        sanitize('Password').toString()
-    ];
-
-exports.userUpdate = [
-        check('IdUsuario', 'IdUsuario debe ser un Entero!').isInt().optional({ nullable: false }),
-        check('Username', 'username debe tener un minimo de 5 caracteres').isLength({ min: 5, max: 50 }),
-        check('Password', 'password es requerido!').exists(),
-        check('Password', 'El password debe tener una longitud minima de 8 y maxima de 20').isLength({ min: 4, max: 20 }),
-        check('IdRol').optional({ nullable: true })
-    ];
-
 var createCategoria = [
-        body('NombreCategoria', 'El nombre de la categoria es requerido').exists(),
-        body('DescripcionCategoria', 'La descripcion de la categoria es requerida!').exists()
+        body('NombCategoria', 'El nombre de la categoria es requerido').exists(),
+        body('DescCategoria', 'La descripcion de la categoria es requerida!').exists()
     ];
 
 exports.createCategoria = createCategoria;
@@ -69,9 +23,9 @@ exports.updateCategoria = createCategoria.concat([
     ]);
 
 var createCargo = [
-    check('NombreCargo', 'El nombre del cargo es requerido!').exists(),
-    check('DescripcionCargo', 'La descripcion del cargo es requerida!').exists(),
-    sanitize('NombreCargo').toString()
+    check('NombCargo', 'El nombre del cargo es requerido!').exists(),
+    check('DescCargo', 'La descripcion del cargo es requerida!').exists(),
+    sanitize('NombCargo').toString()
 ];
 exports.createCargo = createCargo;
 
@@ -142,10 +96,10 @@ function isDate(nombreCampo ) {
 }
 
 var createEnvase = [
-    body('NombreEnvase', 'El nombre de envase es requerido!').isString().isLength({min: 3, max:50}),
-    body('Descripcion', 'La descripcion debe tener una longitud maxima de 150 caracteres.').isString().optional({nullable:true}).isLength({max:150}),
-    sanitize('NombreEnvase').toString(),
-    sanitize('Descripcion').toString()
+    body('NombEnvase', 'El nombre de envase es requerido!').isString().isLength({min: 3, max:50}),
+    body('DescEnvase', 'La descripcion debe tener una longitud maxima de 150 caracteres.').isString().optional({nullable:true}).isLength({max:150}),
+    sanitize('NombEnvase').toString().trim(),
+    sanitize('DescEnvase').toString().trim()
 ];
 exports.createEnvase = createEnvase;
 
@@ -154,10 +108,6 @@ exports.updateEnvase = createEnvase.concat([
     sanitize('IdEnvase').toInt()
 ]); 
 
-exports.Habilitado = [
-    query('Habilitado','Habilitado debe ser booleano.').optional({nullable:true}).isBoolean(),
-    sanitize('Habilitado').toBoolean()
-]
 exports.IdSucursal = [
     check('IdSucursal','Ingresa un Numero Valido').isInt().optional({nullable:true}),
     sanitize('IdSucursal').toInt()
@@ -190,10 +140,10 @@ exports.updateTrabajador = [
 ];
 
 var createEmpaque = [
-    body('NombreEmpaque', 'Nombre de Empaque requerido').isString(),
-    body('Descripcion'  , 'La descripcion debe ser texto!').isString().optional({nullable: true}),
-    sanitize('NombreEmpaque').toString(),
-    sanitize('Descripcion').toString()
+    body('NombEmpaque', 'Nombre de Empaque requerido').isString(),
+    body('DescEmpaque'  , 'La descripcion debe ser texto!').isString().optional({nullable: true}),
+    sanitize('NombEmpaque').toString(),
+    sanitize('DescEmpaque').toString()
 ];
 
 exports.createEmpaque = createEmpaque;
@@ -204,11 +154,11 @@ exports.updateEmpaque = createEmpaque.concat([
 ]);
 
 var createClasificacion =  [
-    body('NombreClasificacion','El nombre de la clasificacion es requerido, y no debe tener mas de 50 caracteres.').isString().isLength({max:50}),
-    body('DescripcionClasificacion', 'La Descripcion no debe tener mas de 150 caracteres.').isString().optional({nullable:true}),
+    body('NombClasificacion','El nombre de la clasificacion es requerido, y no debe tener mas de 50 caracteres.').isString().isLength({max:50}),
+    body('DescClasificacion', 'La Descripcion no debe tener mas de 150 caracteres.').isString().optional({nullable:true}),
     body('IdCategoria', 'Id de la categoria es requerido!').isInt(),
     sanitize('IdCategoria').toInt(),
-    sanitize('NombreClasificacion').toString()
+    sanitize('NombClasificacion').toString()
 ];
 exports.createClasificacion = createClasificacion;
 
@@ -265,8 +215,8 @@ var createProducto = [
     body('IdProveedor', 'Selecciona Un proveedor.').isInt(),
     body('IdSubClasificacion', 'Selecciona Una SubClasificacion.').isInt(),
     body('IdEstado','Elige el estado del producto.').isInt(),
-    body('NombreProducto','Ingresa el Nombre del Producto.').isString(),
-    body('Descripcion','Ingresa la Descripcion del producto.').isString(),
+    body('NombProducto','Ingresa el Nombre del Producto.').isString(),
+    body('DescProducto','Ingresa la Descripcion del producto.').isString(),
     body('Imagen','Ingresa el nombre de la Imagen.').optional({nullable:true}),
     body('IdEnvase').isInt().optional({nullable:true}),
     body('IdEmpaque', 'Debes seleccionar un empaque.').isInt().optional({nullable:true}),
@@ -408,13 +358,13 @@ exports.getMenuesByRol = [
 var createTelefonoProveedor = [
     body('IdProveedor', 'Selecciona Un proveedor.').isInt(),
     body('Telefono', 'Ingresa un telefono.').isString(),
-    body('Nombre','Ingresar un nombre.').isString(),
+    body('NombPAsignada','Ingresa un nombre.').isString(),
     body('Cargo').optional({nullable:true}),
-    body('Titular').isInt(),
+    body('IsTitular').isInt(),
     sanitize('IdProveedor').toInt(),
     sanitize('Telefono').toString(),
-    sanitize('Nombre').toString(),
-    sanitize('Titular').toInt()
+    sanitize('NombPAsignada').toString(),
+    sanitize('IsTitular').toInt()
 ];
 
 exports.createTelefonoProveedor = createTelefonoProveedor;

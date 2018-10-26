@@ -44,7 +44,7 @@ BEGIN
 	
 	UPDATE	T
 	SET		T.Habilitado = 0
-			, T.UpdateAt = GETDATE() 
+			, T.UpdatedAt = GETDATE() 
 	FROM	dbo.TELEFONOS_PROVEEDOR T
 	WHERE	T.IdTelefono = @IdTelefono 
 

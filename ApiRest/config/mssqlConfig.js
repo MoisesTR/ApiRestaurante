@@ -4,7 +4,7 @@ const config = {
     user: 'usuario_node',
     password: 'node123',
     server: 'localhost',
-    database: 'pruebas_node',
+    database: 'ATOMIC_RESTAURANTE',
     port: '1433',
     parseJSON: true,
     options: {

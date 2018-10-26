@@ -7,34 +7,34 @@ CREATE VIEW dbo.V_ProductosDetallados
 AS
 SELECT	p.IdProducto
 		, p.IdProveedor
-		, p.NombreProducto
+		, p.NombProducto
 		, p.Descripcion
 		, cl.IdCategoria
-		, cp.NombreCategoria
+		, cp.NombCategoria
 		, p.IdSubClasificacion
-		, sp.NombreSubClasificacion
+		, sp.NombSubClasificacion
 		, cl.IdClasificacion
-		, cl.NombreClasificacion
+		, cl.NombClasificacion
 		, p.IdEnvase
-		, e.NombreEnvase
+		, e.NombEnvase
 		, p.IdEmpaque
 		, em.NombreEmpaque
 		, p.CantidadEmpaque
 		, p.Imagen
 		, p.IdUnidadMedida
-		, um.NombreUnidad
+		, um.NombUnidad
 		, p.ValorUnidadMedida
 		, p.IdEstado
 		, ep.Nombre
 		, p.Habilitado
 		, P.DiasRotacion
-		, im.IdTipoInsumo 
+		, im.IdTipInsumo 
 		, DescripcionInsumo = im.Descripcion
-		, p.CodigoProducto
+		, p.CodProd
 		, p.CodigoInterno
-		, p.CodigoBarra
+		, p.CodBarra
 		, P.CreatedAt
-		, P.UpdateAt
+		, P.UpdatedAt
     FROM Producto p 
     INNER JOIN SUBCLASIFICACION_PRODUCTO sp 
 		ON	p.IdSubClasificacion = sp.IdSubClasificacion
@@ -51,7 +51,7 @@ SELECT	p.IdProducto
     INNER JOIN ESTADO_PRODUCTO ep 
 		ON	p.IdEstado = ep.IdEstado
 	INNER JOIN dbo.TIPO_INSUMO im
-		ON	p.IdTipoInsumo = im.IdTipoInsumo
+		ON	p.IdTipInsumo = im.IdTipInsumo
 		
 GO
 IF OBJECT_ID('V_SUBCLASIFICACIONES','V') IS NOT NULL
@@ -61,10 +61,10 @@ CREATE VIEW V_SUBCLASIFICACIONES
 AS
 SELECT 
 		s.IdSubClasificacion
-		, s.NombreSubClasificacion
+		, s.NombSubClasificacion
 		, s.DescripcionSubClasificacion
 		, s.IdClasificacion
-		, c.NombreClasificacion
+		, c.NombClasificacion
 		, s.Habilitado 
 FROM	SUBCLASIFICACION_PRODUCTO s
 		INNER JOIN CLASIFICACION_PRODUCTO c 
@@ -76,11 +76,11 @@ IF OBJECT_ID('dbo.V_ProductosDetallados','V') IS NOT NULL
 GO
 CREATE VIEW dbo.V_ProductosDetallados
 AS
-SELECT	p.IdProducto,	p.NombreProducto,	p.Descripcion,	cl.IdCategoria,	cp.NombreCategoria,
-		p.IdSubClasificacion,	sp.NombreSubClasificacion,	cl.IdClasificacion,		cl.NombreClasificacion,
-		p.IdEnvase,	e.NombreEnvase,		p.IdEmpaque,	em.NombreEmpaque,    p.CantidadEmpaque,
-		p.Imagen,	p.IdUnidadMedida,	um.NombreUnidad,	p.ValorUnidadMedida,	p.IdEstado,
-		ep.Nombre,	p.Habilitado,		P.DiasCaducidad,	P.CreatedAt,P.UpdateAt
+SELECT	p.IdProducto,	p.NombProducto,	p.Descripcion,	cl.IdCategoria,	cp.NombCategoria,
+		p.IdSubClasificacion,	sp.NombSubClasificacion,	cl.IdClasificacion,		cl.NombClasificacion,
+		p.IdEnvase,	e.NombEnvase,		p.IdEmpaque,	em.NombreEmpaque,    p.CantidadEmpaque,
+		p.Imagen,	p.IdUnidadMedida,	um.NombUnidad,	p.ValorUnidadMedida,	p.IdEstado,
+		ep.Nombre,	p.Habilitado,		P.DiasCaducidad,	P.CreatedAt,P.UpdatedAt
     FROM Producto p 
     INNER JOIN SUBCLASIFICACION_PRODUCTO sp 
 		ON	p.IdSubClasificacion = sp.IdSubClasificacion
@@ -102,6 +102,6 @@ IF OBJECT_ID('V_SUBCLASIFICACIONES','V') IS NOT NULL
 GO
 CREATE VIEW V_SUBCLASIFICACIONES
 AS
-SELECT s.IdSubClasificacion,s.NombreSubClasificacion,s.DescripcionSubClasificacion,s.IdClasificacion,c.NombreClasificacion,s.Habilitado FROM SUBCLASIFICACION_PRODUCTO s
+SELECT s.IdSubClasificacion,s.NombSubClasificacion,s.DescripcionSubClasificacion,s.IdClasificacion,c.NombClasificacion,s.Habilitado FROM SUBCLASIFICACION_PRODUCTO s
     INNER JOIN CLASIFICACION_PRODUCTO c ON s.IdClasificacion = c.IdClasificacion;
 GO

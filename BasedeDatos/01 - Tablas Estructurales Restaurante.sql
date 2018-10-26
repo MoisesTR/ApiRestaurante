@@ -9,10 +9,23 @@ ELSE
 GO
 USE ATOMIC_RESTAURANTE;
 GO
+--//Tabla Catalogo de paises, para su posterior uso en compras, monedas, etc
+CREATE TABLE dbo.PAIS(
+	IdPais				TINYINT		IDENTITY(1,1),
+	NombPais			NVARCHAR(50)		NOT NULL	UNIQUE,
+	CodAlfa3			NVARCHAR(3)			NOT NULL	UNIQUE,
+	CodNumerico			NVARCHAR(3)			NOT NULL	UNIQUE,
+	PrefijoTelefonico	NVARCHAR(4)			NOT NULL	UNIQUE,
+	CreatedAt			SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
+	CONSTRAINT	Pk_Pais	PRIMARY KEY(IdPais)
+)
+GO
+
 --// Tabla Para almacenar las Monedas de posible uso dentro del Sistema
 CREATE TABLE dbo.FACTURACION_MONEDA (
-	IdMoneda		INT				NOT NULL IDENTITY(1,1),
-	Principal		BIT				NOT NULL,
+	IdMoneda		TINYINT			NOT NULL IDENTITY(1,1),
+	IdPais			TINYINT			NOT NULL,
+	IsPrincipal		BIT				NOT NULL,
 	NombMoneda		NVARCHAR(50)	NOT NULL,
 	CodigoIso		NVARCHAR(3)		NOT NULL,
 	Simbolo			NVARCHAR(3)		NOT NULL,
@@ -24,29 +37,15 @@ CREATE TABLE dbo.FACTURACION_MONEDA (
 	CONSTRAINT		U_Codigo_Iso_Moneda			UNIQUE	(CodigoIso)
 )
 GO
---//Tabla Catalogo de paises, para su posterior uso en compras, monedas, etc
-CREATE TABLE dbo.PAIS(
-	IdPais				INT	IDENTITY(1,1),
-	IdMoneda			INT					NULL,
-	NombrePais			NVARCHAR(50)		NOT NULL	UNIQUE,
-	CodigoAlfa3			NVARCHAR(3)			NOT NULL	UNIQUE,
-	CodigoNumerico		NVARCHAR(3)			NOT NULL	UNIQUE,
-	PrefijoTelefonico	NVARCHAR(4)			NOT NULL	UNIQUE,
-	CreatedAt			SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
-	CONSTRAINT	Pk_Pais	PRIMARY KEY(IdPais),
-	CONSTRAINT	Fk_Moneda_de_Pais	FOREIGN KEY(IdMoneda)	REFERENCES dbo.FACTURACION_MONEDA(IdMoneda)
-)
-GO
-
-CREATE NONCLUSTERED INDEX IDX_PAIS_MONEDA_NOMBRE_CODIGO
-ON	dbo.PAIS(IdMoneda, IdPais)
-INCLUDE(NombrePais, CodigoAlfa3, CodigoNumerico, PrefijoTelefonico)
+CREATE NONCLUSTERED INDEX IDX_PAIS_NOMBRE_CODIGO
+ON	dbo.PAIS( IdPais, CodAlfa3)
+INCLUDE(NombPais, CodNumerico, PrefijoTelefonico)
 
 GO
 --// Tabla para almacenar el tipo de cambio oficial y paralelo de la moneda
 CREATE TABLE dbo.FACTURACION_TIPO_CAMBIO_MONEDA (
-	IdMonedaPrincipal		INT			NOT NULL,
-	IdMonedaCambio			INT			NOT NULL,
+	IdMonedaPrincipal		TINYINT				NOT NULL,
+	IdMonedaCambio			TINYINT				NOT NULL,
 	ValorMonedaPrincipal	NUMERIC(19,7)		NOT NULL,
 	ValorCambioOficial		NUMERIC(19,7)		NOT NULL,
 	ValorCambioParalelo		NUMERIC(19,7)		NOT NULL,
@@ -54,15 +53,17 @@ CREATE TABLE dbo.FACTURACION_TIPO_CAMBIO_MONEDA (
 	Habilitado				BIT				NOT NULL	DEFAULT 1,
 	CreatedAt				SMALLDATETIME	NOT NULL DEFAULT GETDATE(),
 	UpdatedAt				SMALLDATETIME	NULL,
-	CONSTRAINT FK_IdMoneda_Principal	FOREIGN KEY(IdMonedaPrincipal)	REFERENCES dbo.FACTURACION_MONEDA(IdMoneda),
-	CONSTRAINT FK_IdMoneda_Cambio		FOREIGN KEY(IdMonedaCambio)		REFERENCES dbo.FACTURACION_MONEDA(IdMoneda)
+	CONSTRAINT FK_IdMoneda_Principal	FOREIGN KEY(IdMonedaPrincipal)	
+				REFERENCES dbo.FACTURACION_MONEDA(IdMoneda),
+	CONSTRAINT FK_IdMoneda_Cambio		FOREIGN KEY(IdMonedaCambio)		
+				REFERENCES dbo.FACTURACION_MONEDA(IdMoneda)
 )
 GO
 --// Tabla para almacenar los Bancos disponibles en el sistema
 --// en esta solo se almacenara informacion de la casa matriz
 CREATE TABLE dbo.FACTURACION_BANCOS ( 
 	IdBanco			INT				NOT NULL IDENTITY(1,1),
-	IdPais			INT				NOT NULL,
+	IdPais			TINYINT			NOT NULL,
 	Banco			NVARCHAR(50)	NOT NULL,
 	Siglas			NVARCHAR(10)	NOT NULL,
 	Direccion		NVARCHAR(250)	NOT NULL,
@@ -88,27 +89,27 @@ CREATE TABLE dbo.FACTURACION_CUENTA_BANCO (
 	CONSTRAINT PK_Cuenta_Banco				PRIMARY KEY(IdCuentaB),
 	CONSTRAINT FK_Banco_que_pertenece_la_Cuenta			FOREIGN KEY(IdBanco)	
 					REFERENCES dbo.FACTURACION_BANCOS(IdBanco),
-	CONSTRAINT U_Numero_De_Cuenta_Banco			UNIQUE(NumCuenta)
+	CONSTRAINT U_Numero_De_Cuenta_Banco					UNIQUE(NumCuenta)
 )
 GO
 --// Tabla para almacenar los tipos de Documento de Identificacion
 --// de personas y/o empresas
 CREATE TABLE TIPO_DOCUMENTO_IDENTIFICACION(
-	IdTipoDocumento		INT IDENTITY(1,1),
-	NombreTD			NVARCHAR(50)		NOT NULL	UNIQUE,
-	DescripcionTD		NVARCHAR(150)		NULL,
+	IdTipDoc			INT IDENTITY(1,1),
+	NombTipDoc			NVARCHAR(50)		NOT NULL	UNIQUE,
+	DesTipDoc			NVARCHAR(150)		NULL,
 	Habilitado			BIT					NOT NULL	DEFAULT 1,
 	CreatedAt			SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
 	UpdatedAt			SMALLDATETIME		NULL,
-	CONSTRAINT PK_TIPO_DOCUMENTO_IDENTIFICACION PRIMARY KEY(IdTipoDocumento)
+	CONSTRAINT PK_TIPO_DOCUMENTO_IDENTIFICACION		PRIMARY KEY(IdTipDoc)
 )
 
 GO
 CREATE TABLE dbo.RESTAURANTE (
 	IdRestaurante			INT,
-	IdMoneda				INT				NOT NULL,
-	IdPais					INT				NOT NULL,
-	IdMonedaFacturacion		INT				NOT NULL,
+	IdMoneda				TINYINT			NOT NULL,
+	IdPais					TINYINT			NOT NULL,
+	IdMonedaFacturacion		TINYINT			NOT NULL,
 	IsAutoBackup			BIT				NOT NULL DEFAULT 1,
 	IsCuotaFija				BIT				NOT NULL,
 	NombRestaurante			NVARCHAR(100)	NOT NULL,
@@ -236,11 +237,11 @@ CREATE TABLE	dbo.TRABAJADOR (
     IdTrabajador		INT IDENTITY(1,1),
     IdSucursal			INT					NULL,
     IdCargo				INT					NOT NULL,
-	IdPais				INT					NOT NULL,
+	IdPais				TINYINT				NOT NULL,
 	CodTrabajador		NVARCHAR(10)		NULL,
     Nombres				NVARCHAR(50)		NOT NULL,
     Apellidos			NVARCHAR(50)		NOT NULL,
-	IdTipoDocumento		INT					NOT NULL	DEFAULT 1,
+	IdTipDoc			INT					NOT NULL	DEFAULT 1,
     Documento			NVARCHAR(50)		NOT NULL,
 	Imagen				NVARCHAR(50)		NOT NULL,
     FechaNacimiento		DATE				NOT NULL,
@@ -256,10 +257,10 @@ CREATE TABLE	dbo.TRABAJADOR (
         REFERENCES		dbo.CARGO_TRABAJADOR (IdCargo),
     CONSTRAINT FK_Sucursal_Trabajador				FOREIGN KEY (IdSucursal)
         REFERENCES		dbo.SUCURSAL_RESTAURANTE (IdSucursal),
-	CONSTRAINT FK_Tipo_Doc_Identificacion_Empleado	FOREIGN KEY(IdTipoDocumento)
-		REFERENCES		dbo.TIPO_DOCUMENTO_IDENTIFICACION(IdTipoDocumento),
-	CONSTRAINT U_Numero_Cedula			UNIQUE(Documento),
-	CONSTRAINT CK_Telefonos_Trabajador_DistINTos CHECK(Telefono1 <> Telefono2)
+	CONSTRAINT FK_Tipo_Doc_Identificacion_Empleado	FOREIGN KEY(IdTipDoc)
+		REFERENCES		dbo.TIPO_DOCUMENTO_IDENTIFICACION	(IdTipDoc),
+	CONSTRAINT U_Numero_Cedula						UNIQUE(Documento),
+	CONSTRAINT CK_Telefonos_Trabajador_DistINTos	CHECK(Telefono1 <> Telefono2)
 )
 GO
 
@@ -272,9 +273,10 @@ CREATE TABLE dbo.BODEGA_AREA_PRODUCCION(
     Habilitado				BIT DEFAULT 1		NOT NULL,
 	CreateAt				SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
 	UpdatedAt				SMALLDATETIME		NULL,
-    CONSTRAINT pk_IdBodegaAP primary KEY(IdBodegaAreaP),
-	CONSTRAINT FK_BODEGA_AREA_PRODUCCION FOREIGN KEY(IdAreaProduccion) REFERENCES AREA_PRODUCCION(IdAreaProduccion),
-	CONSTRAINT U_BODEA_PARA_AP UNIQUE(IdAreaProduccion)
+    CONSTRAINT pk_IdBodegaAP			PRIMARY KEY(IdBodegaAreaP),
+	CONSTRAINT FK_BODEGA_AREA_PRODUCCION	FOREIGN KEY(IdAreaProduccion) 
+				REFERENCES AREA_PRODUCCION(IdAreaProduccion),
+	CONSTRAINT U_BODEA_Para_AreaProd		UNIQUE(IdAreaProduccion)
 )
 
 GO

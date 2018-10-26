@@ -1,13 +1,13 @@
 const {mssqlErrors} =  require('../Utils/util');
-const db = require('../services/database');
-const sql = require('mssql')
 const {matchedData} = require('express-validator/filter');
+const ClasificacionUdmModel = require('../models/ClasificacionUdm');
+const ClasificacionUdm = new ClasificacionUdmModel();
 
 function getClasificacionesUdm(req,res){
     let data = matchedData(req,{locations:['query']});
-    var aoj = [];
-    db.pushAOJParam(aoj,'Habilitado',sql.Int,+data.Habilitado)
-    db.storedProcExecute('USP_GET_CLASIFICACIONES_UDM',aoj).then((results) => {
+    
+    ClasificacionUdm.getClasificaciones( data )
+    .then((results) => {
         res.status(200).json({
             clasificaciones:results.recordset
         })
@@ -18,13 +18,16 @@ function getClasificacionesUdm(req,res){
 
 function getClasificacionUdmById(req,res){
     var data = req.params;
-    var aoj=[];
-    db.pushAOJParam(aoj,'IdClasificacionUnidadMedida',sql.Int,data.IdClasificacionUnidadMedida)
-    db.storedProcExecute('USP_GET_CLASIFICACION_UDM',aoj)
+    
+    ClasificacionUdm.getClasificacion( data.IdClasifUDM )
     .then((results) => {
-        res.status(200).json({clasificacion:results.recordset[0]}) 
+        res.status(200)
+            .json({
+                    clasificacion:results.recordset[0]
+                }); 
     }).catch((err) => {
-        res.status(500).json( mssqlErrors(err) );
+        res.status(500)
+            .json( mssqlErrors(err) );
     });
 }
 

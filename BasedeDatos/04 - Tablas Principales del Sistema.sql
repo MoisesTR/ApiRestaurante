@@ -10,7 +10,7 @@ CREATE TABLE dbo.TIPO_INSUMO (
 	Descripcion			VARCHAR(200),
 	Habilitado			BIT					DEFAULT 1,
 	CreatedAt			SMALLDATETIME		NOT NULL DEFAULT GETDATE(),
-    UpdateAt			SMALLDATETIME		NULL,
+    UpdatedAt			SMALLDATETIME		NULL,
 	CONSTRAINT PK_ID_TIPO_INSUMO PRIMARY KEY (IdTipInsumo)
 )
 
@@ -38,20 +38,20 @@ CREATE TABLE MOTIVO_BAJA_PRODUCTO(
 GO
 
 CREATE TABLE CLASIFICACION_UNIDAD_MEDIDA (
-    IdClasifUnidadMedida		INT IDENTITY(1,1),
+    IdClasifUDM					INT IDENTITY(1,1),
     NombClasificacion			NVARCHAR(50)		NOT NULL,
-    Descripcion					NVARCHAR(150)		NULL,
+    DescClasificacion			NVARCHAR(150)		NULL,
     Habilitado					BIT								DEFAULT 1,
     CreatedAt					SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
     UpdatedAt					SMALLDATETIME		NULL,
-    CONSTRAINT PK_ID_CLAS_UDM PRIMARY KEY (IdClasifUnidadMedida)
+    CONSTRAINT PK_ID_CLAS_UDM PRIMARY KEY (IdClasifUDM)
 );
 GO
 
 CREATE TABLE dbo.UNIDAD_MEDIDA (
     IdUnidadMedida				INT IDENTITY(1,1),
-    IdClasifUnidadMedida		INT,
-	IdUnidadMedidaBase			INT,
+    IdClasifUDM					INT,
+	IdUDMBase					INT,
     NombUnidad					NVARCHAR(50)		NOT NULL,
     Simbolo						NVARCHAR(3)			NULL,
 	FactorConversion			NUMERIC(10,5)		NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE dbo.UNIDAD_MEDIDA (
     CreatedAt					SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
     UpdatedAt					SMALLDATETIME		NULL,
     CONSTRAINT PK_ID_UDM							PRIMARY KEY (IdUnidadMedida),
-    CONSTRAINT FK_Clasificacion_Unidad_Medida		FOREIGN KEY (IdClasifUnidadMedida)
+    CONSTRAINT FK_Clasificacion_Unidad_Medida		FOREIGN KEY (IdClasifUDM)
         REFERENCES dbo.CLASIFICACION_UNIDAD_MEDIDA (IdClasifUnidadMedida)
 );
 GO
@@ -94,47 +94,47 @@ CREATE TABLE  CATEGORIA_PRODUCTO(
     Habilitado				BIT DEFAULT 1		NOT NULL,
     CreatedAt				SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
     UpdatedAt				SMALLDATETIME		NULL,
-    CONSTRAINT Pk_CategoriaProducto PRIMARY KEY (IdCategoria),
-    CONSTRAINT U_NombreCategoria UNIQUE(NombCategoria)
+    CONSTRAINT Pk_Categoria_Producto PRIMARY KEY (IdCategoria),
+    CONSTRAINT U_Nombre_Categoria UNIQUE(NombCategoria)
 );
 GO
 CREATE TABLE CLASIFICACION_PRODUCTO (
     IdClasificacion				INT IDENTITY(1,1),
 	IdCategoria					INT					NOT NULL,
-    NombreClasificacion			NVARCHAR(50)		NOT NULL,
-    DescripcionClasificacion	NVARCHAR(100),
+    NombClasificacion			NVARCHAR(50)		NOT NULL,
+    DescClasificacion			NVARCHAR(100),
     Habilitado					BIT					NOT NULL	DEFAULT 1,
     CreatedAt					SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
     UpdatedAt					SMALLDATETIME		NULL,
     CONSTRAINT		PK_CLASIFPRODUCT				PRIMARY KEY (	IdClasificacion ),
-    CONSTRAINT		U_NOMBRECLASIF					UNIQUE (		NombreClasificacion ),
+    CONSTRAINT		U_NOMBRECLASIF					UNIQUE (		NombClasificacion ),
 	CONSTRAINT		FK_CATEGORIA_DE_CLASIFICACION	FOREIGN KEY (	IdCategoria )
 				REFERENCES			CATEGORIA_PRODUCTO ( IdCategoria )
 );
 GO
 CREATE TABLE SUBCLASIFICACION_PRODUCTO (
     IdSubClasificacion			INT IDENTITY(1,1),
-    IdClasificacion				INT,
+    IdClasificacion				INT				NOT NULL,
     NombSubClasificacion		NVARCHAR(50)	NOT NULL,
     DescSubclasificacion		NVARCHAR(150),
     Habilitado					BIT				NOT NULL	DEFAULT 1,
     CreatedAt					SMALLDATETIME	NOT NULL	DEFAULT GETDATE(),
     UpdatedAt					SMALLDATETIME	NULL,
-    CONSTRAINT		Pk_IdSubClasfProdu	PRIMARY KEY ( IdSubClasificacion ),
-    CONSTRAINT		FK_SUBCLAS_CLAS		FOREIGN KEY ( IdClasificacion )
+    CONSTRAINT		Pk_IdSubClasificacion_Producto			PRIMARY KEY ( IdSubClasificacion ),
+    CONSTRAINT		FK_Clasificacion_de_SubClasificaion		FOREIGN KEY ( IdClasificacion )
 						REFERENCES CLASIFICACION_PRODUCTO	( IdClasificacion ),
-	CONSTRAINT		U_NombreSubClasi	UNIQUE		( NombSubClasificacion )
+	CONSTRAINT		U_Nombre_SubClasificaion	UNIQUE		( NombSubClasificacion )
 );
 GO
 CREATE TABLE dbo.ENVASE (
     IdEnvase			INT IDENTITY(1,1),
     NombEnvase			NVARCHAR(50)		NOT NULL,
-    Descripcion			NVARCHAR(150)		NULL,
+    DescEnvase			NVARCHAR(150)		NULL,
     Habilitado			BIT					NOT NULL	DEFAULT 1,
     CreatedAt			SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
     UpdatedAt			SMALLDATETIME		NULL,
     CONSTRAINT PK_Envase		PRIMARY KEY (IdEnvase),
-    CONSTRAINT U_NombreEnvase	UNIQUE(NombEnvase)
+    CONSTRAINT U_NombEnvase	UNIQUE(NombEnvase)
 );
 GO
 CREATE TABLE dbo.TIPO_EMPAQUE_PRODUCTO ( 
@@ -148,13 +148,13 @@ CREATE TABLE dbo.TIPO_EMPAQUE_PRODUCTO (
 GO
 CREATE TABLE	dbo.EMPAQUE (
     IdEmpaque		INT IDENTITY(1,1),
-    NombreEmpaque	NVARCHAR(50)			NOT NULL,
-    Descripcion		NVARCHAR(200),
+    NombEmpaque		NVARCHAR(50)			NOT NULL,
+    DescEmpaque		NVARCHAR(200),
     Habilitado		BIT									DEFAULT 1,
     CreatedAt		SMALLDATETIME			NOT NULL	DEFAULT GETDATE(),
     UpdatedAt		SMALLDATETIME			NULL,
     CONSTRAINT PK_Empaque		PRIMARY KEY (IdEmpaque),
-    CONSTRAINT U_Nombre_Empaque UNIQUE(NombreEmpaque)
+    CONSTRAINT U_Nombre_Empaque UNIQUE(NombEmpaque)
 );
 GO
 CREATE TABLE ESTADO_PRODUCTO(
