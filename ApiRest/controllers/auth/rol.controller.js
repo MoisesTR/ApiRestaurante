@@ -1,7 +1,7 @@
 const { mssqlErrors }   = require('../../Utils/util');
 const { matchedData}    = require('express-validator/filter');
-import  RolModel from '../../models/Rol';
-const   Rol = new RolModel();
+const   RolModel    = require('../../models/Rol');
+const   Rol         = new RolModel();
 
 function createRol(req,res){ 
     let data = matchedData(req, {locations: ['body']});

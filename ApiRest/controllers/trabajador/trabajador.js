@@ -1,4 +1,4 @@
-const {mssqlErrors, matchedData, sanitize, db, sql} = require('../defaultImports.js')
+const {mssqlErrors, matchedData, sanitize, db, sql} = require('../../Utils/defaultImports.js')
 
 function getTrabajadorById(req, res) {
     var data = req.params;

@@ -8,6 +8,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "~1.18.2",
+    "compression": "^1.7.3",
     "connect-multiparty": "^2.1.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
@@ -31,6 +32,6 @@
     "yarn": "^1.10.1"
   },
   "devDependencies": {
-    "nodemon": "^1.17.5"
+    "nodemon": "^1.18.6"
   }
 }

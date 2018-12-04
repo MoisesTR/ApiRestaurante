@@ -14,7 +14,7 @@ exports.postValidator = (req, res, next) => {
  * @param {number: Number} err 
  */
 exports.mssqlErrors = (err) => {
-    console.error(err);
+    // console.error(err);
     return {
         "showMessage" : (err.number == 50000) ? true : false,
         "code": err.code,
@@ -25,7 +25,7 @@ exports.mssqlErrors = (err) => {
 }
 
 exports.existParam = ( param ) => {
-    return (param !== undefined)
+    return !!param;
 } 
 
 exports.addLikeParamInFilter =  (filter, param ) => {

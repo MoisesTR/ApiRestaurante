@@ -1,5 +1,6 @@
-const db = require('../services/database');
-const sql = require('mssql');
+const baseSelect = `SELECT IdProveedor,IdPais,IsProvServicio,NombProveedor,Direccion,Email,Imagen,DescProveedor,NombRepresentante,IdTipDoc,Documento,Abreviatura,Retencion2,IsMercado,Habilitado,CreatedAt,UpdatedAt
+FROM PROVEEDOR`;
+const { sql, pushAOJParam, queryExecute, storedProcExecute } = require('../Utils/defaultImports')
 
 class ProveedorModel {
     constructor() {
@@ -8,75 +9,83 @@ class ProveedorModel {
     
     async getProveedorById( IdProveedor ) {
         this.aoj    = [];
+        let filter  = ' WHERE IdProveedor = @IdProveedor';
 
-        db.pushAOJParam(aoj, 'IdProveedor', sql.Int,    IdProveedor)
-        return db.storedProcExecute('USP_GET_PROVEEDOR', aoj)
+        pushAOJParam(this.aoj, 'IdProveedor', sql.Int,    IdProveedor)
+        return queryExecute(baseSelect+ filter, this.aoj)
     }
     
     async getProveedores( Habilitado ) {
-        this.aoj = [];
+        this.aoj    = [];
+        let filter  = '';
     
-        db.pushAOJParam(aoj, 'Habilitado',  sql.Int,    +Habilitado)
-        return db.storedProcExecute('USP_GET_PROVEEDORES', aoj)
+        existParam( Habilitado ) && pushAOJParam(this.aoj, 'Habilitado',  sql.Int,    +Habilitado)
+
+        return queryExecute(baseSelect + filter, this.aoj)
     }
     
     async createProveedor( data ) {
         this.aoj = [];
 
-        db.pushAOJParam(aoj, 'NombProveedor',       sql.NVarChar(50),   data.NombreProveedor);
-        db.pushAOJParam(aoj, 'Direccion',           sql.NVarChar(200),  data.Direccion);
-        db.pushAOJParam(aoj, 'Email',               sql.NVarChar(100),  data.Email);
-        db.pushAOJParam(aoj, 'DescProveedor',       sql.NVarChar(200),  data.Descripcion)
-        db.pushAOJParam(aoj, 'NombRepresentante',   sql.NVarChar(200),  data.NombreRepresentante)
-        db.pushAOJParam(aoj, 'Documento',           sql.NVarChar(50),   data.Documento)
-        db.pushAOJParam(aoj, 'Telefono2',           sql.NVarChar(20),   data.Telefono2)
-        db.pushAOJParam(aoj, 'Telefono1',           sql.NVarChar(20),   data.Telefono1)
-        db.pushAOJParam(aoj, 'Retencion2',          sql.Bit,            data.Retencion2)
-        db.pushAOJParam(aoj, 'IsMercado',           sql.Bit,            data.Mercado)
-        return db.storedProcExecute('USP_CREATE_PROVEEDOR', aoj)
+        pushAOJParam(this.aoj, 'IdPais',                sql.Int,            data.IdPais);
+        pushAOJParam(this.aoj, 'IsProvServicio',        sql.Bit,            data.IsProvServicio);
+        pushAOJParam(this.aoj, 'NombProveedor',         sql.NVarChar(50),   data.NombProveedor);
+        pushAOJParam(this.aoj, 'Direccion',             sql.NVarChar(200),  data.Direccion);
+        pushAOJParam(this.aoj, 'Email',                 sql.NVarChar(100),  data.Email);
+        pushAOJParam(this.aoj, 'Imagen',                sql.NVarChar(50),   data.Imagen);
+        pushAOJParam(this.aoj, 'DescProveedor',         sql.NVarChar(200),  data.DescProveedor);
+        pushAOJParam(this.aoj, 'NombRepresentante',     sql.NVarChar(200),  data.NombRepresentante)
+        pushAOJParam(this.aoj, 'IdTipDoc',              sql.Int,            data.IdTipDoc);
+        pushAOJParam(this.aoj, 'Documento',             sql.NVarChar(50),   data.Documento)
+        pushAOJParam(this.aoj, 'Abreviatura',           sql.NVarChar(20),   data.Abreviatura);
+        pushAOJParam(this.aoj, 'Retencion2',            sql.Bit,            data.Retencion2)
+        pushAOJParam(this.aoj, 'IsMercado',             sql.Bit,            data.IsMercado)
+        return storedProcExecute('USP_CREATE_PROVEEDOR', this.aoj)
     }
     
     async updateProveedor( data ) {
         this.aoj = [];
 
-        db.pushAOJParam(aoj, 'IdProveedor',         sql.Int, data.IdProveedor)
-        db.pushAOJParam(aoj, 'NombreProveedor',     sql.NVarChar(50), data.NombreProveedor);
-        db.pushAOJParam(aoj, 'Direccion',           sql.NVarChar(200), data.Direccion);
-        db.pushAOJParam(aoj, 'Email',               sql.NVarChar(100), data.Email);
-        db.pushAOJParam(aoj, 'Descripcion',         sql.NVarChar(200), data.Descripcion)
-        db.pushAOJParam(aoj, 'NombreRepresentante', sql.NVarChar(200), data.NombreRepresentante)
-        db.pushAOJParam(aoj, 'Documento',           sql.NVarChar(20), data.Documento)
-        db.pushAOJParam(aoj, 'Telefono1',           sql.NVarChar(200), data.Telefono1)
-        db.pushAOJParam(aoj, 'Telefono2',           sql.NVarChar(200), data.Telefono2)
-        db.pushAOJParam(aoj, 'Retencion2',          sql.Int, data.Retencion2)
-        return db.storedProcExecute('USP_UPDATE_PROVEEDOR', aoj);
+        pushAOJParam(this.aoj, 'IdProveedor',           sql.Int(),          data.IdProveedor);
+        pushAOJParam(this.aoj, 'IdPais',                sql.Int,            data.IdPais);
+        pushAOJParam(this.aoj, 'IsMercado',             sql.Bit,            data.IsMercado)
+        pushAOJParam(this.aoj, 'NombProveedor',         sql.NVarChar(50),   data.NombProveedor);
+        pushAOJParam(this.aoj, 'Direccion',             sql.NVarChar(200),  data.Direccion);
+        pushAOJParam(this.aoj, 'Email',                 sql.NVarChar(100),  data.Email);
+        pushAOJParam(this.aoj, 'DescProveedor',         sql.NVarChar(200),  data.DescProveedor);
+        pushAOJParam(this.aoj, 'NombRepresentante',     sql.NVarChar(200),  data.NombRepresentante)
+        pushAOJParam(this.aoj, 'IdTipDoc',              sql.Int,            data.IdTipDoc);
+        pushAOJParam(this.aoj, 'Documento',             sql.NVarChar(50),   data.Documento)
+        pushAOJParam(this.aoj, 'Abreviatura',           sql.NVarChar(20),   data.Abreviatura);
+        pushAOJParam(this.aoj, 'Retencion2',            sql.Bit,            data.Retencion2)
+        return storedProcExecute('USP_UPDATE_PROVEEDOR', this.aoj);
     }
     
     async changeStateProveedor( IdProveedor, Habilitado ) {
         this.aoj = [];
 
-        db.pushAOJParam(aoj, 'IdProveedor',     sql.Int(),  IdProveedor);
-        db.pushAOJParam(aoj, 'Habilitado',      sql.Bit(), +Habilitado);
-        return db.storedProcExecute('USP_DISP_PROVEEDOR', aoj);
+        pushAOJParam(this.aoj, 'IdProveedor',       sql.Int(),      IdProveedor);
+        pushAOJParam(this.aoj, 'Habilitado',        sql.Bit(),      +Habilitado);
+        return storedProcExecute('USP_DISP_PROVEEDOR', this.aoj);
     }
     
     async createTelefonoProveedor( data ) {
         this.aoj = [];
 
-        db.pushAOJParam(aoj, 'IdProveedor', sql.Int(), data.IdProveedor);
-        db.pushAOJParam(aoj, 'Nombre',      sql.NVarChar(50), data.Nombre);
-        db.pushAOJParam(aoj, 'Cargo',       sql.NVarChar(50), data.Cargo);
-        db.pushAOJParam(aoj, 'Telefono',    sql.NVarChar(15), data.Telefono);
-        db.pushAOJParam(aoj, 'Titular',     sql.Bit, data.Titular);
-        return db.storedProcExecute('USP_CREATE_TELEFONO_PROVEEDOR', aoj);
+        pushAOJParam(this.aoj, 'IdProveedor', sql.Int(),         data.IdProveedor);
+        pushAOJParam(this.aoj, 'Nombre',      sql.NVarChar(50),  data.Nombre);
+        pushAOJParam(this.aoj, 'Cargo',       sql.NVarChar(50),  data.Cargo);
+        pushAOJParam(this.aoj, 'Telefono',    sql.NVarChar(15),  data.Telefono);
+        pushAOJParam(this.aoj, 'Titular',     sql.Bit,           data.Titular);
+        return storedProcExecute('USP_CREATE_TELEFONO_PROVEEDOR', this.aoj);
     }
     
     async changeStateTelefonoProveedor( IdTelefono, Habilitado ) {
         this.aoj = [];
 
-        db.pushAOJParam(aoj, 'IdTelefono', sql.Int(),   IdProveedor);
-        db.pushAOJParam(aoj, 'Habilitado', sql.Bit(),   +Habilitado);
-        return db.storedProcExecute('USP_DISP_TELEFONO_PROVEEDOR', aoj);
+        pushAOJParam(this.aoj, 'IdTelefono', sql.Int(),   IdProveedor);
+        pushAOJParam(this.aoj, 'Habilitado', sql.Bit(),   +Habilitado);
+        return storedProcExecute('USP_DISP_TELEFONO_PROVEEDOR', this.aoj);
     }
 }
 

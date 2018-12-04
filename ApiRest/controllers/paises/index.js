@@ -1,4 +1,7 @@
-import './moneda';
-import './paises';
+const  moneda = require('./moneda');
+const pais = require('./pais');
 
-export default this;
+module.exports = {
+    ...pais,
+    ...moneda
+}

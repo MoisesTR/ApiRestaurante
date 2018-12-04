@@ -1,8 +1,7 @@
-const db    = require('../services/database');
-const sql   = require('mssql');
-const {existParam}      = require('../Utils/util')
-const baseSelect        = 'SELECT IdEnvase,NombEnvase,DescEnvase,Habilitado FROM ENVASE';
-const baseSelectMinified = 'SELECT IdEnvase,Nombenvase, DescEnvase FROM ENVASE';
+const baseSelect        = 'SELECT IdEnvase,NombEnvase,DescEnvase,Habilitado,createdAt,updatedAt FROM ENVASE';
+const baseSelectMinified = 'SELECT IdEnvase,NombEnvase, DescEnvase FROM ENVASE';
+const { sql, pushAOJParam, storedProcExecute, queryExecute } = require('../Utils/defaultImports');
+
 
 class EnvaseModel {
     constructor() {
@@ -11,47 +10,49 @@ class EnvaseModel {
 
     async getEnvaseById( IdEnvase ) {
         this.aoj    = [];
-        db.pushAOJParam(aoj, 'IdEnvase',    sql.Int,   IdEnvase);
-        return  db.queryExecute(baseSelect+' WHERE IdEnvase = @IdEnvase', aoj)
+
+        pushAOJParam(this.aoj, 'IdEnvase',    sql.Int,   IdEnvase);
+        return  queryExecute(baseSelect+' WHERE IdEnvase = @IdEnvase', this.aoj)
     }
     
     async getEnvases( {NombEnvase, Habilitado} = {}) {
         this.aoj     = [];
         let     filters = '';
     
-        if ( existParam( NombEnvase ) ) {
-            db.pushAOJParam(aoj, 'NombEnvase', sql.NVarChar(),  data.NombEnvase)
+        if ( !!NombEnvase ) {
+            pushAOJParam(this.aoj, 'NombEnvase', sql.NVarChar(),  NombEnvase)
             filters = ' WHERE NombEnvase = @NombEnvase'
         }
-        if ( existParam(Habilitado) ) {
-            db.pushAOJParam(aoj, 'Habilitado', sql.Bit(),       +data.Habilitado);
+        if ( !!Habilitado ) {
+            pushAOJParam(this.aoj, 'Habilitado', sql.Bit(),       +Habilitado);
             filters = (filters === '') ? ' WHERE Habilitado = @Habilitado' : ' AND Habilitado = @Habilitado';
         }
-        return  db.queryExecute(baseSelect + filters, aoj)
+        return  queryExecute(baseSelect + filters, this.aoj)
     }
     
     async createEnvase( NombEnvase, DescEnvase ) {
         this.aoj    = [];
-        db.pushAOJParam(aoj, 'NombEnvase', sql.NVarChar(50),    NombEnvase)
-        db.pushAOJParam(aoj, 'DescEnvase', sql.NVarChar(150),   DescEnvase)
-        return  db.storedProcExecute('USP_CREATE_ENVASE', aoj)
+        
+        pushAOJParam(this.aoj, 'NombEnvase', sql.NVarChar(50),    NombEnvase)
+        pushAOJParam(this.aoj, 'DescEnvase', sql.NVarChar(150),   DescEnvase)
+        return  storedProcExecute('USP_CREATE_ENVASE', this.aoj)
     }
     
     async updateEnvase( IdEnvase, NombEnvase, DescEnvase ) {
         this.aoj    = [];
 
-        db.pushAOJParam(aoj, 'IdEnvase',    sql.Int,            IdEnvase);
-        db.pushAOJParam(aoj, 'NombEnvase',  sql.NVarChar(50),   NombEnvase);
-        db.pushAOJParam(aoj, 'DescEnvase',  sql.NVarChar(150),  DescEnvase);
-        return  db.storedProcExecute('dbo.USP_UPDATE_ENVASE', aoj)
+        pushAOJParam(this.aoj, 'IdEnvase',    sql.Int,            IdEnvase);
+        pushAOJParam(this.aoj, 'NombEnvase',  sql.NVarChar(50),   NombEnvase);
+        pushAOJParam(this.aoj, 'DescEnvase',  sql.NVarChar(150),  DescEnvase);
+        return  storedProcExecute('dbo.USP_UPDATE_ENVASE', this.aoj)
     }
 
     async changeStateEnvase( IdEnvase, Habilitado ){
         this.aoj = [];
 
-        db.pushAOJParam(aoj, 'IdEnvase',    sql.Int(),      IdEnvase);
-        db.pushAOJParam(aoj, 'Habilitado',  sql.Bit(),      +Habilitado);
-        return  db.storedProcExecute('dbo.USP_DISP_ENVASE', aoj)
+        pushAOJParam(this.aoj, 'IdEnvase',    sql.Int(),      IdEnvase);
+        pushAOJParam(this.aoj, 'Habilitado',  sql.Bit(),      +Habilitado);
+        return  storedProcExecute('dbo.USP_DISP_ENVASE', this.aoj)
     }
 }
 

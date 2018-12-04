@@ -4,10 +4,10 @@ const ClasificacionModel = require('../models/Clasificacion')
 const Clasificacion = new ClasificacionModel();
 
 function createClasificacion(req, res) {
-    let data = matchedData(req, {locations:'body'});
+    const data = matchedData(req, {locations:'body'});
     console.log(data);
     
-    Clasificacion.createClasificacion(data.NombCategoria, data.DescCategoria)
+    Clasificacion.createClasificacion(data.IdCategoria,data.NombClasificacion, data.DescClasificacion)
     .then((results) => {
         res.status(201)
             .json(results.recordset[0])

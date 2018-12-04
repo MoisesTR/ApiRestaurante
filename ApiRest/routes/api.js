@@ -11,8 +11,7 @@ const ImagenController          = require('../controllers/imagenes');
 const UploadController          = require('../controllers/upload');
 const SucursalController        = require('../controllers/sucursal')
 const UnidadMedidaController    = require('../controllers/catalogos/unidadmedida');
-const RoleController            = require('../controllers/rol');
-const ProdProvController = require('../controllers/producto_proveedor')
+const RoleController            = require('../controllers/auth/rol.controller');
 const TrabajadorController      = require('../controllers/trabajador/trabajador');
 const CargoController           = require('../controllers/trabajador/cargo')
 const clasifUDMController       = require('../controllers/clasificacionudm')
@@ -20,7 +19,6 @@ const bodegaApController        = require('../controllers/bodegaAp');
 const menuController            = require('../controllers/menu');
 const validations               = require('../Utils/validations/validations');
 const jwt                       = require('../services/jwt');
-const TipoDocIdentController    = require('../controllers/tipo_documento');
 let   FactCompController        = require('../controllers/facturacion');
 let   {validsParams, Habilitado : habilitadoValid,changeStateGeneric}    = validations;
 var Router = express.Router();
@@ -98,14 +96,6 @@ Router
     .post('/unidadmedida',                          validations.createUnidadMedida,         validsParams,   UnidadMedidaController.createUnidadMedida)
     .put('/unidadmedida/:IdUnidadMedida(\\d+)',     validations.updateUnidadMedida,         validsParams,   UnidadMedidaController.updateUnidadMedida)
     .delete('/unidadmedida/:IdUnidadMedida(\\d+)',  changeStateGeneric('IdUnidadMedida'),   validsParams,   UnidadMedidaController.changeStateUnidadMedida)
-    //Rutas para Producto Proveedor
-    .get('/productos/proveedores',                                      habilitadoValid,validsParams,               ProdProvController.getProductosProveedores)
-    .get('/producto/proveedor/:IdProductoProveedor(\\d+)',              ProdProvController.getProductoProveedorById)
-    .get('/productos/proveedor/:IdProveedor(\\d+)',                     ProdProvController.getProductosByProveedorId)
-    .get('/productos/proveedor/:IdProveedor(\\d+)/:IdFactura(\\d+)',    ProdProvController.getProductosByProveedorIdFiltrado)
-    .get('/producto/proveedores/:IdProducto(\\d+)',                     ProdProvController.getProveedoresOfProducto)
-    .delete('/producto/proveedor/:IdProductoProveedor(\\d+)',           changeStateGeneric('IdProductoProveedor'),  validsParams,   ProdProvController.changeStateProductoProveedor)
-    //.delete('/producto/proveedor')
     //Rutas para Rol Controller
     .post('/rol',               validations.createRol,      validsParams,       RoleController.createRol)
     .get('/roles',              habilitadoValid,            validsParams,       RoleController.getRoles)
@@ -121,11 +111,6 @@ Router
     .get('/trabajador/:IdTrabajador(\\d+)',     TrabajadorController.getTrabajadorById)
     .put('/trabajador/:IdTrabajador(\\d+)',     validations.createTrabajador.concat(validations.updateTrabajador),  validsParams,       TrabajadorController.updateTrabajador)
     .delete('/trabajador/:IdTrabajador(\\d+)',  changeStateGeneric('IdTrabajador'),             validsParams,       TrabajadorController.changeStateTrabajador)
-    //Obtener tipos de documento
-    .get('/tiposDocumento',                             habilitadoValid,validsParams,           TipoDocIdentController.getTiposDocumento)
-    .post('/tipoDocumento',                             validations.createTipoDocumentoI,       validsParams,       TipoDocIdentController.createTipoDocumento)
-    .put('/tipoDocumento/:IdTipDoc(\\d+)',              validations.updateTipoDocumentoI,       validsParams,       TipoDocIdentController.updateTipoDocumento)
-    .delete('/tipoDocumento/:IdTipoDocumento(\\d+)',    changeStateGeneric('IdTipoDocumento'),  validsParams,       TipoDocIdentController.changeStateTipoDocumento)
     //Rutas Para Cargo Controller
     .get('/cargos',                     habilitadoValid,validsParams,   CargoController.getCargos)
     .post('/cargo',                     validations.createCargo,        validsParams,       CargoController.createCargo)

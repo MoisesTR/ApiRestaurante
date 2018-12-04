@@ -1,12 +1,11 @@
-
 'use strict';
-const {matchedData, db, sql, mssqlErrors} = require('../Utils/defaultImports')
-const baseSelect = 'SELECT IdMoneda, IdPais, IsPrincipal, NombMoneda, CodigoIso,Simbolo, Habilitado, CreatedAt, UpdatedAt FROM FACTURACION_MONEDA';
-import { existParam, addLikeParamInFilter, addEqualParamInFilter } from '../Utils/util';
-import { param } from 'express-validator/check';
+const baseSelect    = 'SELECT IdMoneda, IdPais, IsPrincipal, NombMoneda, CodigoIso,Simbolo, Habilitado, CreatedAt, UpdatedAt FROM FACTURACION_MONEDA';
+const { addLikeParamInFilter, addEqualParamInFilter }   =  require( '../Utils/util');
+const { param }     = require('express-validator/check');
+const { sql, pushAOJParam, queryExecute } = require('../Utils/defaultImports')
 
 
-export default class MonedaModel {
+class MonedaModel {
 
     async createMoneda() {
         throw new ReferenceError('Funcion no implementada');
@@ -20,11 +19,12 @@ export default class MonedaModel {
      * @name _getAMoneda
      * @param filter String 
      */
-    _getAMoneda = ( paranName, type,  value ) => {
+    async _getAMoneda( paranName, type,  value ) {
         this.aoj    = [];
         let filter  = ` WHERE ${paranName}  = @${paranName};`
-        db.pushAOJParam( aoj, paranName, type, value);
-        return db.queryExecute( baseSelect + filter, aoj)
+        
+        pushAOJParam( this.aoj, paranName, type, value);
+        return await queryExecute( baseSelect + filter, this.aoj)
     }
 
     async getMonedaById( IdMoneda) {
@@ -44,20 +44,23 @@ export default class MonedaModel {
     }
     async getMonedas( params ) { 
         let filter  = '';
-        let aoj     = [];
+        this.aoj     = [];
         
-        if ( existParam(params.CodigoIso) ) {
+        if ( !!params.CodigoIso ) {
             filter = addLikeParamInFilter( filter, 'CodigoIso');
-            db.pushAOJParam( aoj,   'CodigoIso',    sql.NVarChar(3),    CodigoIso);
+            pushAOJParam( this.aoj,   'CodigoIso',    sql.NVarChar(3),    CodigoIso);
         }
-        if ( existParam( params.NombMoneda ) ) {
+        if ( !!params.NombMoneda ) {
             filter = addLikeParamInFilter( filter, 'NombMoneda');
-            db.pushAOJParam( aoj,   'NombMoneda',   sql.NVarChar(50),   NombMoneda);
+            pushAOJParam( this.aoj,   'NombMoneda',   sql.NVarChar(50),   NombMoneda);
         }
-        if ( existParam( param.Habilitado ) ) {
+        if ( !!param.Habilitado ) {
             filter = addEqualParamInFilter( filter, 'Habilitado');
-            db.pushAOJParam( aoj,   'Habilitado',   sql.Bit,            Habilitado);
+            pushAOJParam( this.aoj,   'Habilitado',   sql.Bit,            Habilitado);
         }
-        return db.queryExecute( baseSelect + filter, aoj );
+       
+        return queryExecute( baseSelect + filter, this.aoj );
     }
 }
+
+module.exports = MonedaModel;

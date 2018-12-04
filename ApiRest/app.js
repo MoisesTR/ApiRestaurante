@@ -1,15 +1,21 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var serveIndex = require('serve-index');
+const express = require('express');
+const path = require('path');
+const compression = require('compression');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const serveIndex = require('serve-index');
 const fileUpload = require('express-fileupload');
 
-var api = require('./routes/api')
-var reports = require('./routes/reports')
-var app = express();
+const api = require('./routes/api')
+const catalogRoutes = require('./routes/catalogosRoutes');
+
+const reports = require('./routes/reports')
+const app = express();
+
+// Comprime todas las respuestas
+app.use(compression())
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -40,6 +46,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/api', api);
+app.use('/api', catalogRoutes)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

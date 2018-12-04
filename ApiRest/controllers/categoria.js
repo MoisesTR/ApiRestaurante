@@ -1,4 +1,4 @@
-const {matchedData, mssqlErrors, existParam} = require('../Utils/defaultImports')
+const {matchedData, mssqlErrors} = require('../Utils/defaultImports')
 let CategoriaModel = require('../models/Categoria');
 let Categoria = new CategoriaModel();
 

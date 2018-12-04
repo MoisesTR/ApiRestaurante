@@ -448,49 +448,6 @@ BEGIN
 	ELSE
 		SELECT IdSucursal,NombSucursal,Direccion, Telefono1, Telefono2, Habilitado from dbo.SUCURSAL_RESTAURANTE WHERE Habilitado = @Habilitado
 END
---IF OBJECT_ID('USP_CREATE_PRODUCTO_PROVEEDOR','P') IS NOT NULL
---	DROP PROCEDURE USP_CREATE_PRODUCTO_PROVEEDOR
---GO
---CREATE PROCEDURE USP_CREATE_PRODUCTO_PROVEEDOR(
---	@IdProducto		INT,
---	@IdProveedor	INT
---) AS BEGIN
-
---	IF NOT EXISTS(SELECT IdProductoProveedor FROM dbo.PRODUCTO_PROVEEDOR WHERE IdProducto = @IdProducto AND IdProveedor = @IdProveedor AND Habilitado = 1)
---	BEGIN
---		BEGIN TRANSACTION miTran;
---		BEGIN TRY
---			IF NOT EXISTS(SELECT IdProveedor FROM PROVEEDOR WHERE IdProveedor = @IdProveedor) BEGIN
---			RAISERROR('El proveedor Seleccionado no existe',16,1)
---			END
---		IF NOT EXISTS(SELECT IdProducto FROM dbo.PRODUCTO WHERE IdProducto  = @IdProducto) BEGIN
---			RAISERROR('El producto seleccionado no existe.',16,2)
---		END
---			INSERT INTO dbo.PRODUCTO_PROVEEDOR(IdProducto,IdProveedor)
---			VALUES(@IdProducto,@IdProveedor)
---			SELECT @@IDENTITY AS IdProductoProveedor
---			COMMIT TRANSACTION miTran
---		END TRY
---		BEGIN CATCH
---			ROLLBACK TRANSACTION miTran;
---			THROW;
---		END CATCH
---	END
---	ELSE BEGIN
---		RAISERROR('Ya existe una relacion Producto Proveedor Activa.',16,3)
---	END
---END 
---GO
---IF OBJECT_ID('USP_DISP_PRODUCTO_PROVEEDOR','P') IS NOT NULL
---	DROP PROCEDURE USP_DISP_PRODUCTO_PROVEEDOR
---GO
---CREATE PROCEDURE USP_DISP_PRODUCTO_PROVEEDOR(
---	@IdProductoProveedor INT,
---	@Habilitado BIT
---) AS BEGIN
---	UPDATE dbo.PRODUCTO_PROVEEDOR set Habilitado = @Habilitado,UpdatedAt=GETDATE() Where IdProductoProveedor = @IdProductoProveedor;
---END 
---GO
 GO
 IF OBJECT_ID('USP_CREATE_TRABAJADOR','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_TRABAJADOR
@@ -523,7 +480,7 @@ AS BEGIN
 		RETURN
 	END
 
-	INSERT INTO TRABAJADOR(IdSucursal,IdCargo,Nombres,Apellidos,IdTipoDocumento, Documento, Imagen, FechaNacimiento,Direccion, Telefono1,Telefono2,FechaIngreso)
+	INSERT INTO TRABAJADOR(IdSucursal,IdCargo,Nombres,Apellidos,IdTipDoc, Documento, Imagen, FechaNacimiento,Direccion, Telefono1,Telefono2,FechaIngreso)
 	VALUES(@IdSucursal,@IdCargo,@Nombres,@Apellidos,ISNULL(@IdTipoDocumento,1),@Documento, @Imagen, @FechaNacimiento,@Direccion,@Telefono1, @Telefono2,@FechaIngreso)
 	SELECT @@IDENTITY AS IdTrabajador
 END

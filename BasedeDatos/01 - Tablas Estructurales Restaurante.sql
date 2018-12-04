@@ -9,23 +9,11 @@ ELSE
 GO
 USE ATOMIC_RESTAURANTE;
 GO
---//Tabla Catalogo de paises, para su posterior uso en compras, monedas, etc
-CREATE TABLE dbo.PAIS(
-	IdPais				TINYINT		IDENTITY(1,1),
-	NombPais			NVARCHAR(50)		NOT NULL	UNIQUE,
-	CodAlfa3			NVARCHAR(3)			NOT NULL	UNIQUE,
-	CodNumerico			NVARCHAR(3)			NOT NULL	UNIQUE,
-	PrefijoTelefonico	NVARCHAR(4)			NOT NULL	UNIQUE,
-	CreatedAt			SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
-	CONSTRAINT	Pk_Pais	PRIMARY KEY(IdPais)
-)
-GO
-
 --// Tabla Para almacenar las Monedas de posible uso dentro del Sistema
 CREATE TABLE dbo.FACTURACION_MONEDA (
 	IdMoneda		TINYINT			NOT NULL IDENTITY(1,1),
-	IdPais			TINYINT			NOT NULL,
-	IsPrincipal		BIT				NOT NULL,
+	--IdPais			TINYINT			NOT NULL,
+	IsPrincipal		BIT				NULL,
 	NombMoneda		NVARCHAR(50)	NOT NULL,
 	CodigoIso		NVARCHAR(3)		NOT NULL,
 	Simbolo			NVARCHAR(3)		NOT NULL,
@@ -36,7 +24,24 @@ CREATE TABLE dbo.FACTURACION_MONEDA (
 	CONSTRAINT		U_Nombre_de_Moneda			UNIQUE	(NombMoneda),
 	CONSTRAINT		U_Codigo_Iso_Moneda			UNIQUE	(CodigoIso)
 )
+
 GO
+--//Tabla Catalogo de paises, para su posterior uso en compras, monedas, etc
+CREATE TABLE dbo.PAIS(
+	IdPais				TINYINT		IDENTITY(1,1),
+	IdMoneda			TINYINT				NOT NULL,
+	NombPais			NVARCHAR(50)		NOT NULL	UNIQUE,
+	CodAlfa3			NVARCHAR(3)			NOT NULL	UNIQUE,
+	CodNumerico			NVARCHAR(3)			NOT NULL	UNIQUE,
+	PrefijoTelefonico	NVARCHAR(4)			NOT NULL	UNIQUE,
+	CreatedAt			SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
+	UpdatedAt			SMALLDATETIME		NULL,	
+	CONSTRAINT	Pk_Pais	PRIMARY KEY(IdPais),
+	CONSTRAINT	FK_Moneda_Curso_Legal		FOREIGN KEY (IdMoneda)
+			REFERENCES dbo.FACTURACION_MONEDA (IdMoneda)
+)
+GO
+
 CREATE NONCLUSTERED INDEX IDX_PAIS_NOMBRE_CODIGO
 ON	dbo.PAIS( IdPais, CodAlfa3)
 INCLUDE(NombPais, CodNumerico, PrefijoTelefonico)

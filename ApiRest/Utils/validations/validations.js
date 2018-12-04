@@ -1,5 +1,5 @@
-const { query,param,body,check, validationResult } = require('express-validator/check');
-const { matchedData, sanitize } = require('express-validator/filter');
+const { query,param,check,body } = require('express-validator/check');
+const { sanitize } = require('express-validator/filter');
 const generic   = require('./genericValidations');
 
 Object.assign(exports, generic);
@@ -11,8 +11,8 @@ exports.getTelefonoSucursal = [
 ]
     
 var createCategoria = [
-        body('NombCategoria', 'El nombre de la categoria es requerido').exists(),
-        body('DescCategoria', 'La descripcion de la categoria es requerida!').exists()
+        body('NombCategoria', 'El nombre de la categoria es requerido').isString(),
+        body('DescCategoria', 'La descripcion de la categoria es requerida!').isString()
     ];
 
 exports.createCategoria = createCategoria;
@@ -23,28 +23,36 @@ exports.updateCategoria = createCategoria.concat([
     ]);
 
 var createCargo = [
-    check('NombCargo', 'El nombre del cargo es requerido!').exists(),
-    check('DescCargo', 'La descripcion del cargo es requerida!').exists(),
+    check('NombCargo', 'El nombre del cargo es requerido!').isString(),
+    check('DescCargo', 'La descripcion del cargo es requerida!').isString(),
     sanitize('NombCargo').toString()
 ];
 exports.createCargo = createCargo;
 
 
 exports.updateCargo = createCargo.concat([
-    check('IdCargo').exists().isInt(),
+    check(      'IdCargo').isInt(),
+    sanitize(   'IdCargo').toInt()
 ]);
 
 var createProveedor = [
-    body('NombreProveedor').exists(),
-    body('NombreProveedor', 'Ingrese el Nombre del proveedor.').exists(),
+    body('IdPais').isInt(),
+    body('IsProvServicio').isInt().isIn([0,1]),
+    body('NombProveedor', 'Ingrese el Nombre del proveedor.').isString(),
     body('Direccion', 'Ingrese la direccion del proveedor.').isString().trim(),
     body('Email','Ingrese el Email del Proveedor.').isEmail(),
+    body('Imagen').isString().optional({nullable: true}),
     body('Descripcion').optional({nullable:true}),
-    body('NombreRepresentante','Ingrese el Nombre del representante.').exists(),
+    body('NombRepresentante','Ingrese el Nombre del representante.').isString(),
+    body('IdTipDoc').isInt(),
     body('Documento','El campo de Ruc es requerido!.'),
-    body('Retencion2','El campo de retencion es requerido.').exists(),
-    body('Mercado','El campo de mercado es requerido.').exists()
-    
+    body('Abreviatura').isString().isLength({min:2, max:15}),
+    body('Retencion2','El campo de retencion es requerido.').isInt(),
+    body('IsMercado','El campo de mercado es requerido.').isInt(),
+    sanitize('IdPais').toInt(),
+    sanitize('IsProvServicio').toInt(),
+    sanitize('IdTipDoc').toInt(),
+    sanitize('IsMercado').toInt()
 ];
 exports.createProveedor = createProveedor;
 
@@ -56,17 +64,16 @@ exports.createEntradaBodegaAP = [
     body('IdBodegaAreaP', 'Selecciona una Bodega de Area de Produccion').isInt(),
     body('IdTrabajador', 'Seleccione un Trabajador para ingresar la Factura.').isInt(),
     body('IdProveedor', 'Seleccione el Proveedor de la Factura.').isInt(),
-    //check('IdEstadoEdicion').isInt(),
-    body('NFactura').exists(),
-    body('RepresentanteProveedor').exists(),
+    body('NFactura').isString(),
+    body('RepresentanteProveedor').isString(),
     body('PorcRetencion').isInt(),
     body('PorcIva').isInt(),
     body('PorcDescuento').isInt(),
-    body('FechaHora').exists()
+    isDate('FechaHora')
 ];
 
 exports.editEntradaBodegaAP = [
-    check('IdEntradaBodegaAP').isInt()
+    param('IdEntradaBodegaAP').isInt()
 ];
 
 exports.crearFactura = [
@@ -80,8 +87,9 @@ exports.detalleEntradaBodega = [
     check('PrecioUnitarioEntrada').isFloat(),
     check('DescuentoCalculado').isFloat()
 ];
+
 function isDate(nombreCampo ) {
-    return check(nombreCampo,nombreCampo + '  es requerido.').exists()
+    return check(nombreCampo, nombreCampo + '  es requerido.').exists()
     .custom((value) => {
         console.log('Valor sin formatear: ' +value);
         let date = new Date(value);
@@ -122,12 +130,12 @@ exports.createTrabajador = [
     body('Apellidos', 'Apellidos debe tener un minimo de 4 y un maximo de 50').isLength({ min: 4, max: 50 }),
     body('IdTipoDocumento', 'IdDocumento es requerido y debe ser entero').isInt(),
     body('Documento', 'Documento es necesario').isLength({ min: 4, max: 50 }),
-    body('Imagen', 'Imagen es requerida').exists(),
-    body('FechaNacimiento', 'FechaNacimiento debe ser una fecha').exists(),
+    body('Imagen', 'Imagen es requerida').isString(),
+    isDate('FechaNacimiento'),
     body('Direccion', 'Direccion debe tener un minimo de 10 y un maximo de 300').isLength({ min: 10, max: 300 }),
     body('Telefono1', 'EL primer telefono es requerido y debe tener 8 digitos!').isLength(8).isInt(),
     body('Telefono2', 'El Telefono2 debe tener una longitud de 8 digitos y ser numerico!').optional({nullable:true}),
-    body('FechaIngreso', 'FechaIngreso es requerida!').exists(),
+    isDate('FechaIngreso'),
     sanitize('IdSucursal', 'IdSucursal debe ser entero').toInt(),
     sanitize('IdCargo', 'IdCargo debe ser entero').toInt(),
     sanitize('FechaNacimiento').toDate(),
@@ -135,7 +143,7 @@ exports.createTrabajador = [
 ];
 
 exports.updateTrabajador = [
-    check('IdTrabajador', 'IdTrabajador debe ser un entero!').exists().isInt(),
+    check('IdTrabajador', 'IdTrabajador debe ser un entero!').isInt(),
     sanitize('IdTrabajador').toInt()
 ];
 
@@ -154,22 +162,22 @@ exports.updateEmpaque = createEmpaque.concat([
 ]);
 
 var createClasificacion =  [
+    body('IdCategoria', 'Id de la categoria es requerido!').isInt(),
     body('NombClasificacion','El nombre de la clasificacion es requerido, y no debe tener mas de 50 caracteres.').isString().isLength({max:50}),
     body('DescClasificacion', 'La Descripcion no debe tener mas de 150 caracteres.').isString().optional({nullable:true}),
-    body('IdCategoria', 'Id de la categoria es requerido!').isInt(),
     sanitize('IdCategoria').toInt(),
     sanitize('NombClasificacion').toString()
 ];
 exports.createClasificacion = createClasificacion;
 
 exports.updateClasificacion = createClasificacion.concat([
-    param('IdClasificacion').toInt().exists(),
-    sanitize('IdClasificacion').toInt()
+    param(      'IdClasificacion'   ).isInt(),
+    sanitize(   'IdClasificacion'   ).toInt()
 ]);
 
 var createSubclasificacion =  [
-    body('NombreSubClasificacion','El nombre de la subclasificacion es requerido, y no debe tener mas de 50 caracteres.').isString().isLength({max:50}),
-    body('DescripcionSubClasificacion', 'La Descripcion no debe tener mas de 150 caracteres.').isString().optional({nullable:true}),
+    body('NombSubClasificacion','El nombre de la subclasificacion es requerido, y no debe tener mas de 50 caracteres.').isString().isLength({max:50}),
+    body('DescSubClasificacion', 'La Descripcion no debe tener mas de 150 caracteres.').isString().optional({nullable:true}),
     body('IdClasificacion', 'Id de la clasificacion es requerido!').isInt(),
     sanitize('IdClasificacion').toInt(),
     sanitize('NombreSubClasificacion').toString()
@@ -178,7 +186,7 @@ var createSubclasificacion =  [
 exports.createSubclasificacion = createSubclasificacion;
 
 exports.updateSubclasificacion = createSubclasificacion.concat([
-    param('IdSubClasificacion').toInt().exists(),
+    param('IdSubClasificacion').isInt(),
     sanitize('IdSubClasificacion').toInt()
 ]);
 
@@ -222,7 +230,7 @@ var createProducto = [
     body('IdEmpaque', 'Debes seleccionar un empaque.').isInt().optional({nullable:true}),
     body('CantidadEmpaque').optional({nullable:true}),
     body('IdUnidadMedida','Debes seleccionar una unidad de medida.').isInt(),
-    body('ValorUnidadMedida').exists(),
+    body('ValorUnidadMedida').isNumeric(),
     body('DiasRotacion').isInt(),
     body('IdTipoInsumo').isInt(),
     body('CodigoProducto').isString(),
@@ -273,21 +281,24 @@ exports.updateTipoDocumentoI = createTipoDocumento.concat([
 ])
 
 exports.createFacturaCompra  = [
-    body('NumRefFactura').exists(),
-    body('IdProveedor').exists(),
-    body('IdTrabajador').exists(),
-    body('IdTipoMoneda').exists(),
-    body('IdFormaPago').exists(),
-    body('NombVendedor').exists(),
+    body('NumRefFactura').isString(),
+    body('IdProveedor'  ).isInt(),
+    body('IdTrabajador' ).isInt(),
+    body('IdTipoMoneda' ).isInt(),
+    body('IdFormaPago'  ).isInt(),
+    body('NombVendedor' ).isString(),
     isDate('FechaFactura'),
     isDate('FechaRecepcion'),
-    body('SubTotal').exists(),
-    body('TotalIva').exists(),
-    body('CambioActual').exists(),
-    body('TotalDescuento').exists(),
-    body('TotalCordobas').exists(),
-    body('TotalOrigenFactura').exists(),
-    body('Retencion').exists()
+    body('SubTotal').isFloat(),
+    body('TotalIva').isFloat(),
+    body('CambioActual').isFloat(),
+    body('TotalDescuento').isFloat(),
+    body('TotalCordobas').isFloat(),
+    body('TotalOrigenFactura').isFloat(),
+    body('Retencion').isFloat(),
+    sanitize('IdProveedor'  ).toInt(),
+    sanitize('IdTrabajador' ).toInt(),
+    sanitize('IdTipoMoneda' ).toInt(),
 ];
 
 exports.updateFacturaCompra  = [
@@ -303,29 +314,38 @@ exports.updateFacturaCompra  = [
 ];
 
 exports.createDetalleFacturaCompra = [
-    body('IdFactura').isInt().exists(),
-    body('IdProducto').exists(),
-    body('PrecioUnitario').exists(),
-    body('Cantidad').exists(),
-    body('GravadoIva').exists(),
-    body('SubTotal').exists(),
-    body('Iva').exists(),
-    body('Descuento').exists(),
-    body('TotalDetalle').exists(),
-    body('Bonificacion').isInt().optional({nullable:true})
+    body('IdFactura'    ).isInt(),
+    body('IdProducto'   ).isInt(),
+    body('PrecioUnitario').isNumeric(),
+    body('Cantidad'     ).isNumeric(),
+    body('GravadoIva'   ).isNumeric(),
+    body('SubTotal'     ).isNumeric(),
+    body('Iva'          ).isNumeric(),
+    body('Descuento'    ).isNumeric(),
+    body('TotalDetalle' ).isNumeric(),
+    body('Bonificacion' ).isInt().optional({nullable:true}),
+    sanitize('IdFactura'    ).toInt(),
+    sanitize('IdProducto'   ).toInt(),
+    sanitize('PrecioUnitario').toFloat(),
+    sanitize('Cantidad'     ).toFloat(),
+    sanitize('GravadoIva'   ).toFloat(),
+    sanitize('SubTotal'     ).toFloat(),
+    sanitize('Iva'          ).toFloat(),
+    sanitize('Descuento'    ).toFloat(),
+    sanitize('TotalDetalle' ).toFloat(),
 ];
 
 exports.updateDetalleFacturaCompra = [
-    body('IdFactura').isInt().exists(),
-    body('IdProducto').exists(),
-    body('PrecioUnitario'),
-    body('Cantidad'),
-    body('GravadoIva'),
-    body('SubTotal'),
-    body('Iva'),
-    body('Descuento'),
-    body('TotalDetalle'),
-    body('Bonificacion')
+    body('IdFactura').isInt(),
+    body('IdProducto').isInt(),
+    body('PrecioUnitario').isNumeric(),
+    body('Cantidad').isNumeric(),
+    body('GravadoIva').isInt(),
+    body('SubTotal').isNumeric(),
+    body('Iva').isNumeric(),
+    body('Descuento').isNumeric(),
+    body('TotalDetalle').isNumeric(),
+    body('Bonificacion').isInt()
 ];
 
 exports.getFacturaById = [

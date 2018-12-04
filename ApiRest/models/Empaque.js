@@ -1,13 +1,10 @@
-let     sql         = require('mssql');
-let     db          = require('../services/database');
-const { mssqlErrors } = require('../Utils/util')
-
+const { sql, pushAOJParam, storedProcExecute, queryExecute } = require('../Utils/defaultImports');
+const baseSelect =   `SELECT IdEmpaque, NombEmpaque, DescEmpaque, Habilitado, CreatedAt, UpdatedAt 
+FROM EMPAQUE`;
 
 class EmpaqueModel {
     constructor() {
         this.aoj = [];
-        this.baseSelect =   `SELECT IdEmpaque, NombEmpaque, DescEmpaque, Habilitado, CreatedAt, UpdatedAt 
-                            FROM EMPAQUE`;
     }
     
     async getEmpaqueById( IdEmpaque ) {
@@ -15,38 +12,42 @@ class EmpaqueModel {
         let     filter  = '';
     
         filter += ' WHERE IdEmpaque = @IdEmpaque';
-        db.pushAOJParam(aoj, 'IdEmpaque',   sql.Int,    IdEmpaque);
-        return  db.queryExecute(baseSelect + filter, aoj)
+        pushAOJParam(this.aoj, 'IdEmpaque',   sql.Int,    IdEmpaque);
+        return  await queryExecute(baseSelect + filter, this.aoj)
     }
     
     async getEmpaques( {Habilitado} = {} ) {
         this.aoj     = [];
+
         let filter  = ' WHERE Habilitado = ISNULL(@Habilitado, Habilitado)';
     
-        db.pushAOJParam(aoj, 'Habilitado',      sql.Bit(),  +Habilitado);
-        return db.queryExecute( baseSelect + filter, aoj)
+        pushAOJParam(this.aoj, 'Habilitado',      sql.Bit(),  +Habilitado);
+        return await queryExecute( baseSelect + filter, this.aoj)
     }
     
     async createEmpaque( NombEmpaque, DescEmpaque ) {
-        this.aoj    = [];
-        db.pushAOJParam(aoj, 'NombEmpaque',     sql.NVarChar(50),   NombEmpaque);
-        db.pushAOJParam(aoj, 'DescEmpaque',     sql.NVarChar(150),  DescEmpaque);
-        return db.storedProcExecute('USP_CREATE_EMPAQUE', aoj)
+        this.aoj    = []; 
+
+        pushAOJParam(this.aoj, 'NombEmpaque',     sql.NVarChar(50),   NombEmpaque);
+        pushAOJParam(this.aoj, 'DescEmpaque',     sql.NVarChar(150),  DescEmpaque);
+        return storedProcExecute('USP_CREATE_EMPAQUE', this.aoj)
     }
     
     async updateEmpaque( IdEmpaque, NombEmpaque, DescEmpaque ) {
         this.aoj    = [];
-        db.pushAOJParam(aoj, 'IdEmpaque',       sql.Int,                IdEmpaque);
-        db.pushAOJParam(aoj, 'NombEmpaque',     sql.NVarChar(50),       NombEmpaque);
-        db.pushAOJParam(aoj, 'DescEmpaque',     sql.NVarChar(150),      DescEmpaque);
-        return db.storedProcExecute('dbo.USP_UPDATE_EMPAQUE', aoj)
+
+        pushAOJParam(this.aoj, 'IdEmpaque',       sql.Int,                IdEmpaque);
+        pushAOJParam(this.aoj, 'NombEmpaque',     sql.NVarChar(50),       NombEmpaque);
+        pushAOJParam(this.aoj, 'DescEmpaque',     sql.NVarChar(150),      DescEmpaque);
+        return storedProcExecute('dbo.USP_UPDATE_EMPAQUE', this.aoj)
     }
     
     async changeStateEmpaque( IdEmpaque, Habilitado ){
         this.aoj    = [];
-        db.pushAOJParam(aoj, 'IdEmpaque',   sql.Int(),  IdEmpaque);
-        db.pushAOJParam(aoj, 'Habilitado',  sql.Bit(), +Habilitado);
-        return db.storedProcExecute('dbo.USP_DISP_EMPAQUE', aoj)
+
+        pushAOJParam(this.aoj, 'IdEmpaque',   sql.Int(),  IdEmpaque);
+        pushAOJParam(this.aoj, 'Habilitado',  sql.Bit(), +Habilitado);
+        return storedProcExecute('dbo.USP_DISP_EMPAQUE', this.aoj)
     }
 }   
 

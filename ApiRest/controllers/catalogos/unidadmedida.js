@@ -1,7 +1,7 @@
-const {db, sql, mssqlErrors, matchedData} = require('../defaultImports');
-import  UnidadMedidaModel from '../../models/UnidadMedida'
-import { Habilitado } from '../../Utils/validations/genericValidations';
-const   UnidadMedida = new UnidadMedidaModel();
+const {db, sql, mssqlErrors, matchedData} = require('../../Utils/defaultImports');
+const  UnidadMedidaModel = require('../../models/UnidadMedida')
+const  { Habilitado}    = require( '../../Utils/validations/genericValidations');
+const   UnidadMedida    = new UnidadMedidaModel();
 
 function getUnidadById(req,res){
     const data = req.params;
@@ -22,9 +22,11 @@ function getUnidadesMedida(req,res){
 
     UnidadMedida.getUnidadesMedida( data )
     .then((results) => {
-        res.status(200).json({unidadesmedida:results.recordset}) 
+        res.status(200)
+            .json({unidadesmedida:results.recordset}) 
     }).catch((err) => {
-        res.status(500).json( mssqlErrors(err) );
+        res.status(500)
+            .json( mssqlErrors(err) );
     });
 }
 function createUnidadMedida(req,res){

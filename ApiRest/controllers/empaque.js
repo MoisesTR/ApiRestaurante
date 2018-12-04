@@ -33,7 +33,7 @@ function getEmpaques(req, res) {
 function createEmpaque(req, res) {
     const data = matchedData(req, {locations: 'body'});
    
-    Empaque.createEmpaque( data.NomEmpaque, data.DescEmpaque )
+    Empaque.createEmpaque( data.NombEmpaque, data.DescEmpaque )
     .then((results) => {
         res.status(200)
             .json(results.recordset[0])

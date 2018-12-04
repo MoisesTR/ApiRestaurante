@@ -19,22 +19,6 @@ BEGIN
 		END
 END
 GO
-IF OBJECT_ID('USP_GET_CATEGORIAS','P') IS NOT NULL
-	DROP PROCEDURE USP_GET_CATEGORIAS
-GO
-IF	OBJECT_ID('USP_UPDATE_CATEGORIA','P') IS NOT NULL
-	DROP PROCEDURE USP_UPDATE_CATEGORIA
-GO
-CREATE PROCEDURE USP_UPDATE_CATEGORIA(
-	@IdCategoria INT,
-    @NombCategoria NVARCHAR(50),
-    @DescCategoria NVARCHAR(150)
-)
-AS 
-BEGIN
-	UPDATE CATEGORIA_PRODUCTO SET NombCategoria = @NombCategoria,DescCategoria = @DescCategoria,UpdatedAt=GETDATE() WHERE IdCategoria = @IdCategoria;
-END
-GO
 IF OBJECT_ID('dbo.USP_DISP_CATEGORIA','P') IS NOT NULL
 	DROP PROCEDURE dbo.USP_DISP_CATEGORIA
 GO
@@ -47,9 +31,6 @@ AS BEGIN
 	SET Habilitado = @Habilitado, UpdatedAt = GETDATE()
 	WHERE IdCategoria = @IdCategoria
 END
-GO
-IF OBJECT_ID('USP_GET_CATEGORIA_BY_ID','P') IS NOT NULL
-	DROP PROCEDURE USP_GET_CATEGORIA_BY_ID
 GO
 
 IF OBJECT_ID('USP_GET_CLASIFICACIONES_BY_ID_CATEGORIA','P') IS NOT NULL
@@ -241,24 +222,28 @@ GO
 IF OBJECT_ID('USP_CREATE_PROVEEDOR','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_PROVEEDOR
 GO
+GO
 CREATE PROCEDURE USP_CREATE_PROVEEDOR(
-	@NombreProveedor	NVARCHAR(50), -- NOT NULL,
+	@IdPais				INT,
+	@IsProvServicio		BIT,
+	@NombProveedor		NVARCHAR(50), -- NOT NULL,
     @Direccion			NVARCHAR(200),-- NOT NULL,
     @Email				NVARCHAR(100),-- NULL
-    @Descripcion		NVARCHAR(200),-- NULL,
-    @NombreRepresentante NVARCHAR(100), -- NOT NULL,
+	@Imagen				NVARCHAR(50)	NULL,
+    @DescProveedor		NVARCHAR(200),-- NULL,
+    @NombRepresentante	NVARCHAR(100), -- NOT NULL,
+	@IdTipDoc			INT				NULL,
 	@Documento			NVARCHAR(20), --Por defecto sera el numero ruc
-	@Telefono1			NVARCHAR(20),
-	@Telefono2			NVARCHAR(20) NULL,
+	@Abreviatura		NVARCHAR(20),
 	@Retencion2			BIT NULL,
-	@Mercado			BIT NULL
+	@IsMercado			BIT NULL
 ) AS BEGIN
 	BEGIN TRANSACTION myTran
 	BEGIN TRY
 
-		IF EXISTS (SELECT NombProveedor FROM PROVEEDOR WHERE NombProveedor = @NombreProveedor AND Habilitado = 1)
+		IF EXISTS (SELECT NombProveedor FROM PROVEEDOR WHERE NombProveedor = @NombProveedor AND Habilitado = 1)
 		BEGIN
-			RAISERROR('El nombre del proveedor ya existe.',16,1);
+			RAISERROR('Ya existe un proveedor registrado con este nombre.',16,1);
 			RETURN
 		END
 
@@ -268,14 +253,16 @@ CREATE PROCEDURE USP_CREATE_PROVEEDOR(
 			RETURN
 		END
 
-		IF (@Documento IS NULL AND @Mercado = 0)
+		IF (@Documento IS NULL AND @IsMercado = 0)
 		BEGIN
-			RAISERROR('El Numero Ruc ES requerido.',16,1);
+			RAISERROR('Debes ingresar al menos un documento de referencia.',16,1);
 			RETURN
 		END
 
-		INSERT INTO PROVEEDOR(NombProveedor,Direccion,Email,Descripcion,NombreRepresentante,Documento,Retencion2,Mercado)
-		VALUES(@NombreProveedor,@Direccion,@Email,@Descripcion,@NombreRepresentante,@Documento,@Retencion2,@Mercado);
+		INSERT INTO PROVEEDOR( IdPais,	IsProvServicio, NombProveedor,	Direccion,	Email,	DescProveedor,	NombRepresentante, 
+								IdTipDoc,	Documento,	Abreviatura,	Retencion2,		IsMercado)
+		VALUES(	@IdPais,	@IsProvServicio,	@NombProveedor,	@Direccion,	@Email,	@DescProveedor,	@NombRepresentante,
+								@IdTipDoc,	@Documento,	@Abreviatura,	@Retencion2,	@IsMercado);
 		SELECT @@IDENTITY AS IdProveedor
 		COMMIT TRANSACTION myTran;
 	END TRY
@@ -285,28 +272,32 @@ CREATE PROCEDURE USP_CREATE_PROVEEDOR(
 	END CATCH
 END 
 GO
-IF OBJECT_ID('USP_UPDATE_PROVEEDOR','P') IS NOT NULL
+IF OBJECT_ID('USP_UPDATE_PROVEEDOR','P')IS NOT NULL
 	DROP PROCEDURE USP_UPDATE_PROVEEDOR
 GO
+
 CREATE PROCEDURE USP_UPDATE_PROVEEDOR(
-	@IdProveedor	INT,
-    @NombreProveedor NVARCHAR(50), -- NOT NULL,
-    @Direccion		NVARCHAR(200),-- NOT NULL,
-    @Email			NVARCHAR(100),-- NULL
-    @Descripcion	NVARCHAR(200),-- NULL,
-    @NombreRepresentante NVARCHAR(100) NULL, -- NOT NULL,
-	@Documento		NVARCHAR(20),
-	@Telefono1		NVARCHAR(20), 
-	@Telefono2		NVARCHAR(20),
-	@Retencion2		BIT NULL,
-	@Mercado		BIT NULL
+	@IdProveedor		INT,
+	@IdPais				INT,
+	@IsMercado			BIT,
+    @NombProveedor		NVARCHAR(50), 
+    @Direccion			NVARCHAR(200),-- NOT NULL,
+    @Email				NVARCHAR(100),-- NULL
+    @DescProveedor		NVARCHAR(200),-- NULL,
+    @NombRepresentante	NVARCHAR(100) NULL, -- NOT NULL,
+	@IdTipDoc			INT,
+	@Documento			NVARCHAR(20),
+	@Abreviatura		NVARCHAR(20),
+	@Retencion2			BIT NULL
 ) AS BEGIN
-	UPDATE dbo.	PROVEEDOR SET NombProveedor=@NombreProveedor,Direccion=@Direccion,Email=@Email,Descripcion=@Descripcion,
-					NombreRepresentante=ISNULL(@NombreRepresentante, NombreRepresentante),
-					Retencion2 = ISNULL(@Retencion2, Retencion2),Documento=ISNULL(@Documento,Documento),
-					UpdatedAt=GETDATE() , Mercado = ISNULL(@Mercado, Mercado)
-					WHERE IdProveedor = @IdProveedor;
+	UPDATE dbo.	PROVEEDOR 
+	SET		IdPais = @IdPais, IsMercado = @IsMercado,NombProveedor = @NombProveedor,	Direccion=@Direccion,	Email=@Email,	DescProveedor=@DescProveedor,
+			NombRepresentante	=ISNULL(@NombRepresentante, NombRepresentante), IdTipDoc= @IdTipDoc, Documento=ISNULL(@Documento,Documento),
+			Abreviatura= @Abreviatura,Retencion2 = ISNULL(@Retencion2, Retencion2),
+			UpdatedAt=GETDATE() 
+	WHERE IdProveedor = @IdProveedor;
 END 
+GO
 GO
 IF OBJECT_ID('USP_DISP_PROVEEDOR','P') IS NOT NULL
 	DROP PROCEDURE USP_DISP_PROVEEDOR
@@ -316,61 +307,6 @@ CREATE PROCEDURE USP_DISP_PROVEEDOR(
 	@Habilitado		BIT
 ) AS BEGIN 
 	UPDATE dbo.PROVEEDOR SET Habilitado = @Habilitado, UpdatedAt=GETDATE() 
-	WHERE IdProveedor = @IdProveedor;
-END
-GO
-IF OBJECT_ID('USP_GET_PROVEEDORES','P') IS NOT NULL
-	DROP PROCEDURE USP_GET_PROVEEDORES
-GO
-CREATE PROCEDURE USP_GET_PROVEEDORES
-	@Habilitado BIT NULL
-AS BEGIN
-	IF @Habilitado IS NULL
-		BEGIN
-			SELECT IdProveedor
-				, NombProveedor
-				, Direccion
-				, Email
-				, Descripcion
-				, NombreRepresentante
-				, Documento
-				, Retencion2 
-				, Mercado
-			FROM	dbo.PROVEEDOR;
-		END
-	ELSE
-		BEGIN
-			SELECT IdProveedor
-				, NombProveedor
-				, Direccion
-				, Email
-				, Descripcion
-				, NombreRepresentante
-				, Documento
-				, Retencion2 
-				, Mercado
-			FROM	dbo.PROVEEDOR
-			WHERE Habilitado = @Habilitado;
-		END
-END
-GO
-IF OBJECT_ID('USP_GET_PROVEEDOR','P') IS NOT NULL
-	DROP PROCEDURE USP_GET_PROVEEDOR
-GO
-CREATE PROCEDURE USP_GET_PROVEEDOR(
-	@IdProveedor INT
-) AS BEGIN 
-	SELECT IdProveedor
-		, NombProveedor
-		, Direccion
-		, Email
-		, Descripcion
-		, NombreRepresentante
-		, IdTipoDocumento
-		, Documento
-		, Retencion2
-		, Mercado 
-	FROM	dbo.PROVEEDOR
 	WHERE IdProveedor = @IdProveedor;
 END
 GO

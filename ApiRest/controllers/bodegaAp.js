@@ -5,19 +5,18 @@ const { mssqlErrors } = require('../Utils/util');
 const { matchedData, sanitize } = require('express-validator/filter');
 
 function createEntradaBodegaAp(req,res){ 
-    var data = matchedData(req,{locations:'body'})
+    var data = matchedData(req, { locations:'body' } )
     console.log('mandaste los campos')
     var aoj = [];
-    db.pushAOJParam(aoj,'IdBodegaAreap',sql.Int,data.IdBodegaAreaP);
-    db.pushAOJParam(aoj,'IdTrabajador',sql.Int,data.IdTrabajador);
-    db.pushAOJParam(aoj,'IdProveedor',sql.Int,data.IdProveedor);
-    //db.pushAOJParam(IdEstadoEdicicion,sql.,);
-    db.pushAOJParam(aoj,'NFactura',sql.NVarChar(20),data.NFactura);
-    db.pushAOJParam(aoj,'RepresentanteProveedor',sql.NVarChar(50),data.RepresentanteProveedor);
-    db.pushAOJParam(aoj,'PorcRetencion',sql.Int,data.PorcRetencion);
-    db.pushAOJParam(aoj,'PorcIva',sql.Int,data.PorcIva);
-    db.pushAOJParam(aoj,'PorcDescuento',sql.Int,data.PorcDescuento);
-    db.pushAOJParam(aoj,'FechaHora',sql.Date,data.FechaHora);
+    db.pushAOJParam(aoj,    'IdBodegaAreap',            sql.Int,            data.IdBodegaAreaP);
+    db.pushAOJParam(aoj,    'IdTrabajador',             sql.Int,            data.IdTrabajador);
+    db.pushAOJParam(aoj,    'IdProveedor',              sql.Int,            data.IdProveedor);
+    db.pushAOJParam(aoj,    'NFactura',                 sql.NVarChar(20),   data.NFactura);
+    db.pushAOJParam(aoj,    'RepresentanteProveedor',   sql.NVarChar(50),   data.RepresentanteProveedor);
+    db.pushAOJParam(aoj,    'PorcRetencion',            sql.Int,            data.PorcRetencion);
+    db.pushAOJParam(aoj,    'PorcIva',                  sql.Int,            data.PorcIva);
+    db.pushAOJParam(aoj,    'PorcDescuento',            sql.Int,            data.PorcDescuento);
+    db.pushAOJParam(aoj,    'FechaHora',                sql.Date,           data.FechaHora);
     db.storedProcExecute('USP_INSERT_ENTRADA_BODEGA_AREA_PRODUCCION',aoj)
     .then((results) => {
         res.status(200).json(results.recordset[0])

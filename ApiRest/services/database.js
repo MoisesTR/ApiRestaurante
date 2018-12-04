@@ -1,4 +1,5 @@
 const conSql = require('../config/mssqlConfig');
+
 function pushAOJParam(aoj, name, type, value) {
 	aoj[aoj.length] = {
         pClasf: 1,
@@ -14,6 +15,7 @@ function pushOutParam(aoj, name, type) {
 		pType: type
 	}
 }
+
 function storedProcExecuteServer(spName, parametersJsonArray) {
     return conSql.getConnectionPoolGlobalServer()
     .then(function(pool) {	

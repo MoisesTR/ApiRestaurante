@@ -5,7 +5,7 @@ const {matchedData, sanitize} = require('express-validator/filter');
 const { query,param,body,check, validationResult } = require('express-validator/check');
 module.exports = {
     sql,
-    db, 
+    ...db, 
     mssqlErrors,
     matchedData,
     sanitize,

@@ -1,5 +1,4 @@
-const db   = require('../services/database');
-const sql  = require('mssql');
+const { sql, pushAOJParam, queryExecute } = require('../Utils/defaultImports')
 const baseSelect    = 'SELECT IdEstado, NombEstado,DescEstado, Habilitado, CreatedAt FROM ESTADO_PRODUCTO';
 
 class EstadoProductoModel {
@@ -7,8 +6,8 @@ class EstadoProductoModel {
     async getEstados( data ){
         let aoj = [];
     
-        db.pushAOJParam(aoj,    'Habilitado',   sql.Int,    +data.Habilitado)
-        return db.queryExecute(baseSelect + ' WHERE Habilitado = @Habilitado', aoj)
+        pushAOJParam(aoj,    'Habilitado',   sql.Int,    +data.Habilitado)
+        return queryExecute(baseSelect + ' WHERE Habilitado = @Habilitado', aoj)
     }
 
     async getEstadoById( IdEstado ){
@@ -16,9 +15,9 @@ class EstadoProductoModel {
         let filters = '';
 
         filters += ' WHERE IdEstado = @IdEstado';
-        db.pushAOJParam(aoj, 'IdEstado',    sql.Int,    IdEstado)
+        pushAOJParam(aoj, 'IdEstado',    sql.Int,    IdEstado)
         
-        return db.queryExecute(baseSelect + filters, aoj)
+        return queryExecute(baseSelect + filters, aoj)
     }
 }
 

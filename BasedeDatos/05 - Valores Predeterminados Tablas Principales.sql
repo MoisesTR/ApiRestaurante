@@ -3,9 +3,10 @@ GO
 --// Valores predeterminados tabla moneda
 SET IDENTITY_INSERT  dbo.FACTURACION_MONEDA ON
 GO
-INSERT INTO dbo.FACTURACION_MONEDA(IdMoneda, Principal, Nombre, CodigoIso, Simbolo)
-VALUES	(1,1,'Córdoba','NIO','C$'),				(2,0,'Dólar Estadounidense','USD','$'),(3,0,'Euro','EUR','€'),(4,0,'Yuan Chino','CNY','¥'),(5,0,'Nuevo Dólar Taiwanés','TWD','NT$'),
-		(6,0,'Colón Costarricense', 'CRC','₡'),	(7,0,'Lempira hondureño','HNL','L'),(8,0,'Quetzal','GTQ','Q')
+INSERT INTO dbo.FACTURACION_MONEDA(IdMoneda, NombMoneda, CodigoIso, Simbolo)
+VALUES	(1,	'Córdoba','NIO','C$'),		(2,	'Dólar Estadounidense','USD','$'),(3,	'Euro','EUR','€'),	
+		(4, 'Yuan Chino','CNY','¥'),		(5,	'Nuevo Dólar Taiwanés','TWD','NT$'),
+		(6,	'Colón Costarricense', 'CRC','₡'),	(7,	'Lempira hondureño','HNL','L'),(8,	'Quetzal','GTQ','Q')
 GO
 SET IDENTITY_INSERT dbo.FACTURACION_MONEDA	OFF
 GO
@@ -14,9 +15,9 @@ SET IDENTITY_INSERT dbo.PAIS ON
 GO
 
 --// Paises Contenidos por defecto en el Sistema
-INSERT INTO PAIS(IdPais,IdMoneda, NombPais, CodigoAlfa3, CodigoNumerico, PrefijoTelefonico)
-VALUES(1, 1,'Nicaragua', 'NIC',558, '505'),(2,2,'Estados Unidos','USA',840,'001'), (3,5,'Taiwán (República de China)','TWN',158,'886'),(4,4,'China','CHN', 156, '086'),
-	(5,6,'Costa Rica','CRI', 188,'506'),(6,7,'Honduras','HND',340,'504'),(7,8,'Guatemala','GTM',320,'502')
+INSERT INTO PAIS(IdPais, IdMoneda, NombPais, CodAlfa3, CodNumerico, PrefijoTelefonico)
+VALUES(1, 1, 'Nicaragua', 'NIC',558, '505'),(2, 2, 'Estados Unidos','USA',840,'001'), (3, 5, 'Taiwán (República de China)','TWN',158,'886'),(4, 4,  'China','CHN', 156, '086'),
+	(5, 6, 'Costa Rica','CRI', 188,'506'),(6, 7, 'Honduras','HND',340,'504'),(7, 8, 'Guatemala','GTM',320,'502')
 GO
 SET IDENTITY_INSERT dbo.PAIS OFF
 GO

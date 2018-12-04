@@ -1,5 +1,4 @@
-const db = require('../services/database');
-const sql = require('mssql');
+const { sql, pushAOJParam, pushOutParam, storedProcExecute } = require('../Utils/defaultImports')
 
 class MenuModel {
     
@@ -9,30 +8,31 @@ class MenuModel {
 
     async createMenu( menuData ) {
         this.aoj = [];
-        db.pushOutParam(aoj, 'IdMenu',          sql.Int);
-        db.pushAOJParam(aoj, 'IdPadre',         sql.Int,            menuData.IdPadre);
-        db.pushAOJParam(aoj, 'NombreM',         sql.NVarChar(50),   menuData.NombreM);
-        db.pushAOJParam(aoj, 'DescripcionM',    sql.NVarChar(150),  menuData.DescripcionM);
-        db.pushAOJParam(aoj, 'NOrden',          sql.Int,            menuData.NOrden);
-        return  db.storedProcExecute('dbo.USP_INSERT_MENU', aoj)
+        
+        pushOutParam(aoj, 'IdMenu',          sql.Int);
+        pushAOJParam(aoj, 'IdPadre',         sql.Int,            menuData.IdPadre);
+        pushAOJParam(aoj, 'NombreM',         sql.NVarChar(50),   menuData.NombreM);
+        pushAOJParam(aoj, 'DescripcionM',    sql.NVarChar(150),  menuData.DescripcionM);
+        pushAOJParam(aoj, 'NOrden',          sql.Int,            menuData.NOrden);
+        return  storedProcExecute('dbo.USP_INSERT_MENU', aoj)
     }
     
     async updateMenu( menuData ) {
         this.aoj = [];
         
-        db.pushOutParam(aoj, 'IdMenu',          sql.Int,            menuData.IdMenu);
-        db.pushAOJParam(aoj, 'IdPadre',         sql.Int,            menuData.IdPadre);
-        db.pushAOJParam(aoj, 'NombreM',         sql.NVarChar(50),   menuData.NombreM);
-        db.pushAOJParam(aoj, 'DescripcionM',    sql.NVarChar(150),  menuData.DescripcionM);
-        db.pushAOJParam(aoj, 'NOrden',          sql.Int,            menuData.NOrden);
-        return  db.storedProcExecute('dbo.USP_INSERT_MENU', aoj)
+        pushOutParam(aoj, 'IdMenu',          sql.Int,            menuData.IdMenu);
+        pushAOJParam(aoj, 'IdPadre',         sql.Int,            menuData.IdPadre);
+        pushAOJParam(aoj, 'NombreM',         sql.NVarChar(50),   menuData.NombreM);
+        pushAOJParam(aoj, 'DescripcionM',    sql.NVarChar(150),  menuData.DescripcionM);
+        pushAOJParam(aoj, 'NOrden',          sql.Int,            menuData.NOrden);
+        return  storedProcExecute('dbo.USP_INSERT_MENU', aoj)
     }
     
     async getMenuesByRol( IdRol ) {
         this.aoj = [];
         
-        db.pushAOJParam(aoj,    'IdRol',        sql.Int,    IdRol);
-        return  db.storedProcExecute('USP_GET_MENUES', aoj)
+        pushAOJParam(aoj,    'IdRol',        sql.Int,    IdRol);
+        return  storedProcExecute('USP_GET_MENUES', aoj)
     }
 }
 

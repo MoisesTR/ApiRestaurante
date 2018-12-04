@@ -1,9 +1,9 @@
 const jwt = require('../../services/jwt');
 const moment = require('moment');
 const bcrypt = require('bcryptjs');
-const saltRounds = 10;
-const {mssqlErrors, matchedData, sanitize, db, sql} = require('../defaultImports')
-import UserModel from "../../models/User";
+const saltRounds    = 10;
+const {mssqlErrors, matchedData, sanitize, db, sql} = require('../../Utils/defaultImports')
+const UserModel     =require( "../../models/User");
 let User = new UserModel();
 
 //funcion registro\

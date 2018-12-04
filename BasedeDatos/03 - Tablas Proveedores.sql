@@ -3,27 +3,27 @@ USE ATOMIC_RESTAURANTE
 GO
 CREATE TABLE dbo.PROVEEDOR(
     IdProveedor			INT IDENTITY(1,1),
-	IdPais				INT					NOT NULL	DEFAULT 1, --Foraneo
+	IdPais				TINYINT				NOT NULL	DEFAULT 1, --Foraneo
     IsProvServicio		BIT					NOT NULL,
 	NombProveedor		NVARCHAR(50)		NOT NULL,
     Direccion			NVARCHAR(200)		NOT NULL,
     Email				NVARCHAR(100)		NULL,
 	Imagen				NVARCHAR(50)		NOT NULL	DEFAULT 'proveedor.png',
-    Descripcion			NVARCHAR(200)		NULL,
-    NombreRepresentante NVARCHAR(100)		NOT NULL,
-	IdTipoDocumento		INT					NOT NULL,  -- Foraneo
+    DescProveedor		NVARCHAR(200)		NULL,
+    NombRepresentante	NVARCHAR(100)		NOT NULL,
+	IdTipDoc			INT					NOT NULL,  -- Foraneo
 	Documento			NVARCHAR(50)		NULL,
 	Abreviatura			NVARCHAR(20)		NULL,
     Retencion2			Bit					NOT NULL	DEFAULT 0,
-	Mercado				BIT					NOT NULL	DEFAULT 0,
+	IsMercado			BIT					NOT NULL	DEFAULT 0,
 	Habilitado			Bit					NOT NULL	DEFAULT 1,
     CreatedAt			SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
     UpdatedAt			SMALLDATETIME		NULL,
     CONSTRAINT PK_IdProveedor				PRIMARY KEY (IdProveedor),
 	CONSTRAINT FK_PAIS_PROVEEDOR			FOREIGN KEY(IdPais) 
 				REFERENCES PAIS(IdPais),
-	CONSTRAINT FK_TIPO_DOCUMENTO_PROVEEDOR	FOREIGN KEY(IdTipoDocumento) 
-				REFERENCES TIPO_DOCUMENTO_IDENTIFICACION(IdTipoDocumento)
+	CONSTRAINT FK_TIPO_DOCUMENTO_PROVEEDOR	FOREIGN KEY(IdTipDoc) 
+				REFERENCES			TIPO_DOCUMENTO_IDENTIFICACION(IdTipDoc)
 );
 GO
 

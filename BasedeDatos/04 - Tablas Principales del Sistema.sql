@@ -60,7 +60,7 @@ CREATE TABLE dbo.UNIDAD_MEDIDA (
     UpdatedAt					SMALLDATETIME		NULL,
     CONSTRAINT PK_ID_UDM							PRIMARY KEY (IdUnidadMedida),
     CONSTRAINT FK_Clasificacion_Unidad_Medida		FOREIGN KEY (IdClasifUDM)
-        REFERENCES dbo.CLASIFICACION_UNIDAD_MEDIDA (IdClasifUnidadMedida)
+        REFERENCES dbo.CLASIFICACION_UNIDAD_MEDIDA (IdClasifUDM)
 );
 GO
 CREATE TABLE CLASIFICACION_UNIDAD_MEDIDA_FUNCIONAL(
@@ -250,8 +250,8 @@ CREATE TABLE ENTRADA_BODEGA_AREA_PRODUCCION (
     IdBodegaAreaP				INT				NOT NULL,
 	IdProveedor					INT				NOT NULL,
 	IdEstadoEdicion				INT				NOT NULL	DEFAULT 1,
-	IdMoneda					INT				NOT NULL,
-	IdTipDesc					TINYINT				NULL,
+	IdMoneda					TINYINT			NOT NULL,
+	IdTipDesc					TINYINT			NULL,
 	IdTrabajador				INT				NOT NULL,
 	NFactura					NVARCHAR(50)	NOT NULL,
 	RepresentanteProveedor		NVARCHAR(100)	NOT NULL,
