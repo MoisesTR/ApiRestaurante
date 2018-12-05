@@ -19,7 +19,7 @@ function getTiposDocumento(req, res) {
 function createTipoDocumento(req, res){
     let data = matchedData(req, {locations:['body']});
 
-    TipoDocumento.createTipoDocumento( data.NombreTD, data.DescripcionTD)
+    TipoDocumento.createTipoDocumento( data.NombTipDoc, data.DescTipDoc)
     .then((results) => {
         res.status(200)
             .json(results.recordset[0])
@@ -32,7 +32,7 @@ function createTipoDocumento(req, res){
 function updateTipoDocumento(req, res){
     let data = matchedData(req, {locations:['body', 'params']});
 
-    TipoDocumento.updateTipoDocumento( data.IdTipoDocumento, data.NombreTD, data.DescripcionTD)
+    TipoDocumento.updateTipoDocumento( data.IdTipDoc, data.NombTipDoc, data.DescTipDoc)
     .then((results) => {
         let afectadas = results.rowsAffected[0];
         res.status(200)
@@ -47,7 +47,7 @@ function updateTipoDocumento(req, res){
 function changeStateTipoDocumento(req, res) {
     let data = matchedData(req, {locations:['query','params']});
 
-    TipoDocumento.changeStateTipoDocumento( data.IdTipoDocumento, data.Habilitado)
+    TipoDocumento.changeStateTipoDocumento( data.IdTipDoc, data.Habilitado)
     .then((results) => {
         console.log(results)
         let afectadas = results.rowsAffected[0]

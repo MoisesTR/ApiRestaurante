@@ -215,7 +215,7 @@ CREATE TABLE	dbo.AREA_PRODUCCION(
 GO	
 CREATE TABLE	dbo.CARGO_TRABAJADOR(
     IdCargo				INT IDENTITY(1,1),
-    NombreCargo			NVARCHAR(50)		NOT NULL,
+    NombCargo			NVARCHAR(50)		NOT NULL,
 	CodCargo			NVARCHAR(4)			NOT NULL,
     DescripcionCargo	NVARCHAR(100)		NULL,
     Habilitado			BIT DEFAULT 1		NOT NULL,

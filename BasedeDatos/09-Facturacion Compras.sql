@@ -23,12 +23,12 @@ INSERT INTO dbo.SERIE_DOCUMENTO
 GO
 CREATE TABLE dbo.ESTADO_FACTURA(
 	IdEstadoFactura INT IDENTITY(1,1),
-	NombreEstado	NVARCHAR(50) NOT NULL,
+	NombEstado	NVARCHAR(50) NOT NULL,
 	DescripcionEstado NVARCHAR(150) NULL,
 	CONSTRAINT PK_ESTADO_FACTURA PRIMARY KEY(IdEstadoFactura)
 )
 GO
-INSERT INTO ESTADO_FACTURA(NombreEstado, DescripcionEstado)
+INSERT INTO ESTADO_FACTURA(NombEstado, DescripcionEstado)
 VALUES('Borrador',null),('Abierta(En Edicion)','Que la factura se esta ingresando, y no se ha calculado'),
 ('Cerrada', null), ('Cancelada', null)
 GO
@@ -168,7 +168,7 @@ AS BEGIN
 			, FC.IdProveedor
 			, FC.IdTipoMoneda
 			, FC.IdFormaPago
-			, PRO.NombreProveedor
+			, PRO.NombProveedor
 			, TRA.IdTrabajador
 			, TRA.Nombres +' ' + TRA.Apellidos AS [TrabajadorIngreso]
 			, FC.IdEstadoFactura

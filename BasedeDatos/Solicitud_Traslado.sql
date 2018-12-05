@@ -60,13 +60,13 @@ CREATE TABLE DETALLE_BODEGA_SUCURSAL (
 
 create table ESTADO_SOLICITUD(
 	IdEstadoS int IDENTITY(1,1),
-    NombreEstado NVARCHAR(100) NOT NULL,
+    NombEstado NVARCHAR(100) NOT NULL,
     Descripcion NVARCHAR(200) NULL,
     Habilitado Bit DEFAULT 1 NOT NULL,
     constraint pk_IdEstado Primary key(IdEstadoS)
 )
 go
-INSERT INTO ESTADO_SOLICITUD(NombreEstado,Descripcion) VALUES('En Espera',NULL),('Aceptada',NULL),('Rechazada',NULL);
+INSERT INTO ESTADO_SOLICITUD(NombEstado,Descripcion) VALUES('En Espera',NULL),('Aceptada',NULL),('Rechazada',NULL);
 GO
 create table SOLICITUD_PRODUCTOS(
 	IdSolicitud int IDENTITY(1,1),

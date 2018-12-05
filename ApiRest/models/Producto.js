@@ -26,7 +26,7 @@ class ProductoModel {
         pushAOJParam(aoj, 'IdProveedor',         sql.Int,     data.IdProveedor)
         pushAOJParam(aoj, 'IdSubClasificacion',  sql.Int,     data.IdSubClasificacion)
         pushAOJParam(aoj, 'IdEstado',            sql.Int,        data.IdEstado)
-        pushAOJParam(aoj, 'NombreProducto',      sql.NVarChar(50), data.NombreProducto)
+        pushAOJParam(aoj, 'NombProducto',      sql.NVarChar(50), data.NombProducto)
         pushAOJParam(aoj, 'Descripcion',         sql.NVarChar(200), data.Descripcion)
         pushAOJParam(aoj, 'Imagen',              sql.NVarChar(100), data.Imagen);
         pushAOJParam(aoj, 'IdEnvase',            sql.Int,        data.IdEnvase);
@@ -50,7 +50,7 @@ class ProductoModel {
         pushAOJParam(aoj, 'IdCategoria',         sql.Int,            data.IdCategoria)
         pushAOJParam(aoj, 'IdSubClasificacion',  sql.Int,            data.IdSubClasificacion)
         pushAOJParam(aoj, 'IdEstado',            sql.Int,            data.IdEstado)
-        pushAOJParam(aoj, 'NombreProducto',      sql.NVarChar(50),   data.NombreProducto)
+        pushAOJParam(aoj, 'NombProducto',      sql.NVarChar(50),   data.NombProducto)
         pushAOJParam(aoj, 'Descripcion',         sql.NVarChar(200),  data.Descripcion)
         pushAOJParam(aoj, 'Imagen',              sql.NVarChar(100),  data.Imagen)
         pushAOJParam(aoj, 'IdEnvase',            sql.Int,            data.IdEnvase);

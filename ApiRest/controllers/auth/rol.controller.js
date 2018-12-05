@@ -4,7 +4,7 @@ const   RolModel    = require('../../models/Rol');
 const   Rol         = new RolModel();
 
 function createRol(req,res){ 
-    let data = matchedData(req, {locations: ['body']});
+    const data = matchedData(req, {locations: ['body']});
    
     Rol.createRol( data )
     .then((results) => {
@@ -15,14 +15,14 @@ function createRol(req,res){
     })
 }
 function getRoles(req,res){
-    let data = matchedData(req, {locations:['query']})
-    console.log(data)
+    const {Habilitado} = matchedData(req, {locations:['query']})
 
-    Rol.getRoles( data )
+    Rol.getRoles( Habilitado )
     .then((results) => {
-        res.status(200).json({
-            roles:results.recordset
-        })
+        res.status(200)
+            .json({
+                roles:results.recordset
+            })
     }).catch((err) => {
         res.status(err.status | 500)
             .json( mssqlErrors(err) );

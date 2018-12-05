@@ -4,16 +4,16 @@ IF OBJECT_ID('USP_CREATE_CARGO','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_CARGO
 GO
 CREATE PROCEDURE USP_CREATE_CARGO(
-	@NombreCargo NVARCHAR(50),
+	@NombCargo NVARCHAR(50),
     @DescripcionCargo NVARCHAR(150)
 )
 AS BEGIN
-	IF EXISTS (SELECT NombreCargo FROM dbo.CARGO WHERE NombreCargo = @NombreCargo )  
+	IF EXISTS (SELECT NombCargo FROM dbo.CARGO WHERE NombCargo = @NombCargo )  
 		RAISERROR('Ya existe un cargo con este Nombre',14,1)  
 	ELSE
 	BEGIN
-		INSERT INTO dbo.CARGO(NombreCargo,DescripcionCargo)
-		VALUES(@NombreCargo,@DescripcionCargo)
+		INSERT INTO dbo.CARGO(NombCargo,DescripcionCargo)
+		VALUES(@NombCargo,@DescripcionCargo)
 		SELECT @@IDENTITY AS IdCargo
 	END
 END
@@ -23,11 +23,11 @@ IF OBJECT_ID('USP_UPDATE_CARGO','P') IS NOT NULL
 GO
 CREATE PROCEDURE USP_UPDATE_CARGO(
 	@IdCargo INT,
-	@NombreCargo NVARCHAR(50),
+	@NombCargo NVARCHAR(50),
     @DescripcionCargo NVARCHAR(150)
 )
 AS BEGIN
-	UPDATE CARGO SET NombreCargo=@NombreCargo,DescripcionCargo=@DescripcionCargo, UpdatedAt = GETDATE()
+	UPDATE CARGO SET NombCargo=@NombCargo,DescripcionCargo=@DescripcionCargo, UpdatedAt = GETDATE()
 	WHERE IdCargo = @IdCargo
 END
 GO
@@ -38,7 +38,7 @@ CREATE PROCEDURE USP_GET_CARGO(
 	@IdCargo INT
 )
 AS BEGIN
-	SELECT IdCargo,NombreCargo,DescripcionCargo,Habilitado,CreatedAt,UpdatedAt 
+	SELECT IdCargo,NombCargo,DescripcionCargo,Habilitado,CreatedAt,UpdatedAt 
 	FROM CARGO WHERE IdCargo = @IdCargo
 END
 go
@@ -51,11 +51,11 @@ CREATE PROCEDURE USP_GET_CARGOS(
 AS BEGIN
 	IF @Habilitado IS NULL
 		BEGIN
-			SELECT IdCargo,NombreCargo,DescripcionCargo,Habilitado,CreatedAt,UpdatedAt FROM CARGO
+			SELECT IdCargo,NombCargo,DescripcionCargo,Habilitado,CreatedAt,UpdatedAt FROM CARGO
 		END
 	ELSE
 		BEGIN
-			SELECT IdCargo,NombreCargo,DescripcionCargo,Habilitado,CreatedAt,UpdatedAt FROM CARGO
+			SELECT IdCargo,NombCargo,DescripcionCargo,Habilitado,CreatedAt,UpdatedAt FROM CARGO
 			WHERE Habilitado=@Habilitado
 		END
 END
@@ -78,8 +78,8 @@ CREATE PROCEDURE USP_GET_TRABAJADOR(
 	@IdTrabajador INT
 )
 AS BEGIN
-	SELECT T.IdTrabajador, T.IdSucursal, S.NombreSucursal, T.IdCargo, C.NombreCargo,
-			T.Nombres, T.Apellidos, T.IdTipoDocumento, T.Documento, T.Imagen,
+	SELECT T.IdTrabajador, T.IdSucursal, S.NombreSucursal, T.IdCargo, C.NombCargo,
+			T.Nombres, T.Apellidos, T.IdTipDoc, T.Documento, T.Imagen,
 			T.FechaNacimiento, T.Direccion, T.Telefono1, T.Telefono2, T.FechaIngreso,
 			T.Habilitado, T.CreatedAt,T.UpdatedAt
 	FROM dbo.TRABAJADOR T 
@@ -97,8 +97,8 @@ CREATE PROCEDURE dbo.USP_GET_TRABAJADORES(
 )
 AS BEGIN
 	IF @Habilitado IS NULL
-		SELECT T.IdTrabajador,T.IdSucursal,S.NombreSucursal,T.IdCargo,C.NombreCargo,T.Nombres,
-				T.Apellidos,U.Username,T.IdTipoDocumento,T.Documento, T.Imagen, FechaNacimiento,T.Direccion, 
+		SELECT T.IdTrabajador,T.IdSucursal,S.NombreSucursal,T.IdCargo,C.NombCargo,T.Nombres,
+				T.Apellidos,U.Username,T.IdTipDoc,T.Documento, T.Imagen, FechaNacimiento,T.Direccion, 
 				T.Telefono1, T.Telefono2,T.FechaIngreso,T.Habilitado,T.CreatedAt
 		FROM dbo.TRABAJADOR T 
 		INNER JOIN dbo.SUCURSAL_RESTAURANTE S ON T.IdSucursal= S.IdSucursal
@@ -106,8 +106,8 @@ AS BEGIN
 		LEFT  JOIN dbo.USUARIO	U ON T.IdTrabajador = U.IdTrabajador
 		WHERE T.IdSucursal = ISNULL(@IdSucursal, T.IdSucursal)
 	ELSE
-		SELECT T.IdTrabajador,T.IdSucursal,S.NombreSucursal,T.IdCargo,C.NombreCargo,T.Nombres,
-				T.Apellidos,U.Username,T.IdTipoDocumento,T.Documento, T.Imagen, FechaNacimiento,T.Direccion, 
+		SELECT T.IdTrabajador,T.IdSucursal,S.NombreSucursal,T.IdCargo,C.NombCargo,T.Nombres,
+				T.Apellidos,U.Username,T.IdTipDoc,T.Documento, T.Imagen, FechaNacimiento,T.Direccion, 
 				T.Telefono1, T.Telefono2,T.FechaIngreso,T.Habilitado,T.CreatedAt
 		FROM dbo.TRABAJADOR T 
 		INNER JOIN dbo.SUCURSAL_RESTAURANTE S ON T.IdSucursal= S.IdSucursal
@@ -222,20 +222,20 @@ IF OBJECT_ID('dbo.USP_INSERT_TIPO_DOCUMENTO_IDENTIFICACION') IS NOT NULL
 	DROP PROCEDURE dbo.USP_INSERT_TIPO_DOCUMENTO_IDENTIFICACION
 GO
 CREATE PROCEDURE dbo.USP_INSERT_TIPO_DOCUMENTO_IDENTIFICACION (
-	@NombreTD		NVARCHAR(50),
-	@DescripcionTD	NVARCHAR(150)
+	@NombTipDoc		NVARCHAR(50),
+	@DescTipDoc	NVARCHAR(150)
 )
 AS BEGIN
-	IF EXISTS(SELECT IdTipoDocumento FROM dbo.TIPO_DOCUMENTO_IDENTIFICACION WHERE NombreTD = @NombreTD)
+	IF EXISTS(SELECT IdTipDoc FROM dbo.TIPO_DOCUMENTO_IDENTIFICACION WHERE NombTipDoc = @NombTipDoc)
 		BEGIN
-			RAISERROR('Ya existe un tipo de documento llamado "%s".',16,1,@NombreTD)
+			RAISERROR('Ya existe un tipo de documento llamado "%s".',16,1,@NombTipDoc)
 		END
 	ELSE
 		BEGIN
-			INSERT INTO dbo.TIPO_DOCUMENTO_IDENTIFICACION(NombreTD, DescripcionTD)
-			VALUES(@NombreTD, @DescripcionTD)
+			INSERT INTO dbo.TIPO_DOCUMENTO_IDENTIFICACION(NombTipDoc, DescTipDoc)
+			VALUES(@NombTipDoc, @DescTipDoc)
 
-			SELECT @@IDENTITY AS IdTipoDocumento
+			SELECT @@IDENTITY AS IdTipDoc
 		END
 END
 GO
@@ -243,13 +243,13 @@ IF OBJECT_ID('dbo.USP_UPDATE_TIPO_DOCUMENTO_IDENTIFICACION','P') IS NOT NULL
 	DROP PROCEDURE dbo.USP_UPDATE_TIPO_DOCUMENTO_IDENTIFICACION
 GO
 CREATE PROCEDURE dbo.USP_UPDATE_TIPO_DOCUMENTO_IDENTIFICACION(
-	@IdTipoDocumento	INT,
-	@NombreTD			NVARCHAR(50),
-	@DescripcionTD		NVARCHAR(50)
+	@IdTipDoc		INT,
+	@NombTipDoc		NVARCHAR(50),
+	@DescTipDoc		NVARCHAR(50)
 )
 AS BEGIN
-	UPDATE dbo.TIPO_DOCUMENTO_IDENTIFICACION SET NombreTD=@NombreTD, DescripcionTD = @DescripcionTD  , UpdatedAt = GETDATE()
-	WHERE IdTipoDocumento = @IdTipoDocumento
+	UPDATE dbo.TIPO_DOCUMENTO_IDENTIFICACION SET NombTipDoc=@NombTipDoc, DescTipDoc = @DescTipDoc  , UpdatedAt = GETDATE()
+	WHERE IdTipDoc = @IdTipDoc
 END
 GO
 IF OBJECT_ID('dbo.USP_GET_TIPOS_DOCUMENTOS_IDENTIFICACION',N'P') IS NOT NULL
@@ -260,10 +260,10 @@ CREATE PROCEDURE [dbo].[USP_GET_TIPOS_DOCUMENTOS_IDENTIFICACION](
 )
 AS BEGIN
 	IF @Habilitado IS NULL
-		SELECT	IdTipoDocumento, NombreTD, DescripcionTD, Habilitado, CreatedAt
+		SELECT	IdTipDoc, NombTipDoc, DescTipDoc, Habilitado, CreatedAt
 		FROM	dbo.TIPO_DOCUMENTO_IDENTIFICACION
 	ELSE
-		SELECT	IdTipoDocumento, NombreTD, DescripcionTD, Habilitado,CreatedAt
+		SELECT	IdTipDoc, NombTipDoc, DescTipDoc, Habilitado,CreatedAt
 		FROM	dbo.TIPO_DOCUMENTO_IDENTIFICACION T 
 		WHERE T.Habilitado = @Habilitado
 END
@@ -272,12 +272,12 @@ IF OBJECT_ID('dbo.USP_DISP_TIPO_DOCUMENTO_IDENTIFICACION','P') IS NOT NULL
 	DROP PROCEDURE dbo.USP_DISP_TIPO_DOCUMENTO_IDENTIFICACION
 GO
 CREATE PROCEDURE dbo.USP_DISP_TIPO_DOCUMENTO_IDENTIFICACION(
-	@IdTipoDocumento	INT,
+	@IdTipDoc	INT,
 	@Habilitado			BIT
 )
 AS BEGIN
 	UPDATE dbo.TIPO_DOCUMENTO_IDENTIFICACION SET Habilitado = @Habilitado , UpdatedAt = GETDATE()
-	WHERE	IdTipoDocumento = @IdTipoDocumento
+	WHERE	IdTipDoc = @IdTipDoc
 END
 
 GO

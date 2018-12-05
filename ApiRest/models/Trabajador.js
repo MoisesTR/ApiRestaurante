@@ -28,7 +28,7 @@ class TrabajadorModel {
         pushAOJParam(aoj, 'IdCargo', sql.Int, trabajadorData.IdCargo);
         pushAOJParam(aoj, 'Nombres', sql.NVarChar(50), trabajadorData.Nombres);
         pushAOJParam(aoj, 'Apellidos', sql.NVarChar(50), trabajadorData.Apellidos);
-        pushAOJParam(aoj, 'IdTipoDocumento', sql.Int, trabajadorData.IdTipoDocumento);
+        pushAOJParam(aoj, 'IdTipDoc', sql.Int, trabajadorData.IdTipDoc);
         pushAOJParam(aoj, 'Documento', sql.NVarChar(50), trabajadorData.Documento);
         pushAOJParam(aoj, 'Imagen', sql.NVarChar(50), trabajadorData.Imagen);
         pushAOJParam(aoj, 'FechaNacimiento', sql.Date(), trabajadorData.FechaNacimiento);
@@ -50,7 +50,7 @@ class TrabajadorModel {
         pushAOJParam(aoj, 'IdCargo', sql.Int, trabajadorData.IdCargo);
         pushAOJParam(aoj, 'Nombres', sql.NVarChar(50), trabajadorData.Nombres);
         pushAOJParam(aoj, 'Apellidos', sql.NVarChar(50), trabajadorData.Apellidos);
-        pushAOJParam(aoj, 'IdTipoDocumento', sql.Int, trabajadorData.IdTipoDocumento);
+        pushAOJParam(aoj, 'IdTipDoc', sql.Int, trabajadorData.IdTipDoc);
         pushAOJParam(aoj, 'Documento', sql.NVarChar(50), trabajadorData.Documento);
         pushAOJParam(aoj, 'Imagen', sql.NVarChar(50), trabajadorData.Imagen);
         pushAOJParam(aoj, 'FechaNacimiento', sql.Date, trabajadorData.FechaNacimiento);

@@ -255,7 +255,7 @@ CREATE PROCEDURE dbo.USP_GET_PRODUCTOS_PROVEEDORES
 AS BEGIN
 	IF @Habilitado is NULL
 		SELECT	VPD.*
-				, PVE.NombreProveedor
+				, PVE.NombProveedor
 				, Cantidad = 1
 				, Descuento = 0
 				, GravadoIva = 0 
@@ -293,7 +293,7 @@ CREATE PROCEDURE USP_GET_PRODUCTOS_PROVEEDOR(
 	@IdProveedor INT
 ) AS BEGIN
 	SELECT	VPD.*
-			, PVE.NombreProveedor
+			, PVE.NombProveedor
 	FROM	dbo.V_ProductosDetallados VPD
 		INNER JOIN PROVEEDOR PVE
 			ON	VPD.IdProveedor = PVE.IdProveedor
@@ -458,8 +458,8 @@ CREATE PROCEDURE USP_CREATE_TRABAJADOR(
     @Nombres		NVARCHAR(50),
     @Apellidos		NVARCHAR(50),
 	@Imagen			NVARCHAR(50),
-	@IdTipoDocumento	INT NULL,
-    @Documento	NVARCHAR(50),
+	@IdTipDoc		INT NULL,
+    @Documento		NVARCHAR(50),
     @FechaNacimiento DATE,
     @Direccion		NVARCHAR(300),
 	@Telefono1		NVARCHAR(20),
@@ -468,7 +468,7 @@ CREATE PROCEDURE USP_CREATE_TRABAJADOR(
 )
 AS BEGIN 
 
-	IF EXISTS (SELECT 1 FROM TRABAJADOR WHERE Documento = @Documento AND @IdTipoDocumento = 1)
+	IF EXISTS (SELECT 1 FROM TRABAJADOR WHERE Documento = @Documento AND @IdTipDoc = 1)
 	BEGIN
 		RAISERROR('Esta cedula ya se encuentra registrada!!',16,1);
 		RETURN
@@ -481,7 +481,7 @@ AS BEGIN
 	END
 
 	INSERT INTO TRABAJADOR(IdSucursal,IdCargo,Nombres,Apellidos,IdTipDoc, Documento, Imagen, FechaNacimiento,Direccion, Telefono1,Telefono2,FechaIngreso)
-	VALUES(@IdSucursal,@IdCargo,@Nombres,@Apellidos,ISNULL(@IdTipoDocumento,1),@Documento, @Imagen, @FechaNacimiento,@Direccion,@Telefono1, @Telefono2,@FechaIngreso)
+	VALUES(@IdSucursal,@IdCargo,@Nombres,@Apellidos,ISNULL(@IdTipDoc,1),@Documento, @Imagen, @FechaNacimiento,@Direccion,@Telefono1, @Telefono2,@FechaIngreso)
 	SELECT @@IDENTITY AS IdTrabajador
 END
 GO
@@ -494,7 +494,7 @@ CREATE PROCEDURE USP_UPDATE_TRABAJADOR(
     @IdCargo		INT,
     @Nombres		NVARCHAR(50),
     @Apellidos		NVARCHAR(50),
-	@IdTipoDocumento	INT,
+	@IdTipDoc	INT,
     @Documento			NVARCHAR(50),
 	@Imagen				NVARCHAR(50), 
     @FechaNacimiento	DATE,

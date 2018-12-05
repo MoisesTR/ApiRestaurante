@@ -11,8 +11,8 @@ class MenuModel {
         
         pushOutParam(aoj, 'IdMenu',          sql.Int);
         pushAOJParam(aoj, 'IdPadre',         sql.Int,            menuData.IdPadre);
-        pushAOJParam(aoj, 'NombreM',         sql.NVarChar(50),   menuData.NombreM);
-        pushAOJParam(aoj, 'DescripcionM',    sql.NVarChar(150),  menuData.DescripcionM);
+        pushAOJParam(aoj, 'NombMenu',         sql.NVarChar(50),   menuData.NombMenu);
+        pushAOJParam(aoj, 'DescMenu',    sql.NVarChar(150),  menuData.DescMenu);
         pushAOJParam(aoj, 'NOrden',          sql.Int,            menuData.NOrden);
         return  storedProcExecute('dbo.USP_INSERT_MENU', aoj)
     }
@@ -22,8 +22,8 @@ class MenuModel {
         
         pushOutParam(aoj, 'IdMenu',          sql.Int,            menuData.IdMenu);
         pushAOJParam(aoj, 'IdPadre',         sql.Int,            menuData.IdPadre);
-        pushAOJParam(aoj, 'NombreM',         sql.NVarChar(50),   menuData.NombreM);
-        pushAOJParam(aoj, 'DescripcionM',    sql.NVarChar(150),  menuData.DescripcionM);
+        pushAOJParam(aoj, 'NombMenu',         sql.NVarChar(50),   menuData.NombMenu);
+        pushAOJParam(aoj, 'DescMenu',    sql.NVarChar(150),  menuData.DescMenu);
         pushAOJParam(aoj, 'NOrden',          sql.Int,            menuData.NOrden);
         return  storedProcExecute('dbo.USP_INSERT_MENU', aoj)
     }

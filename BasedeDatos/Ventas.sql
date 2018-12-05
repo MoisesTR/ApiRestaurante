@@ -27,7 +27,7 @@ CREATE TABLE CLIENTE(
 	IdCliente		INT IDENTITY(1,1),
 	Nombres			NVARCHAR(100) NOT NULL,
     Apellidos		NVARCHAR(100) NULL,
-    IdTipoDocumento	INT NOT NULL,
+    IdTipDoc	INT NOT NULL,
 	Documento		NVARCHAR(50) NOT NULL,
     Telefono		Nvarchar(20) NULL,
     Direccion		NVARCHAR(250),

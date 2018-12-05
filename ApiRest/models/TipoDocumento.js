@@ -13,20 +13,20 @@ class TipoDocumentoModel {
         return storedProcExecute('USP_GET_TIPOS_DOCUMENTOS_IDENTIFICACION', aoj);
     }
     
-    createTipoDocumento( NombreTD, DescripcionTD ){
+    createTipoDocumento( NombTipDoc, DescTipDoc ){
         this.aoj = [];
     
-        pushAOJParam(this.aoj, 'NombreTD',        sql.NVarChar(50),       NombreTD);
-        pushAOJParam(this.aoj, 'DescripcionTD',   sql.NVarChar(150),      DescripcionTD)
+        pushAOJParam(this.aoj, 'NombTipDoc',        sql.NVarChar(50),       NombTipDoc);
+        pushAOJParam(this.aoj, 'DescTipDoc',   sql.NVarChar(150),      DescTipDoc)
         return storedProcExecute('dbo.USP_INSERT_TIPO_DOCUMENTO_IDENTIFICACION', aoj );
     }
      
-    updateTipoDocumento( IdTipDoc, NombreTD, DescripcionTD ){
+    updateTipoDocumento( IdTipDoc, NombTipDoc, DescTipDoc ){
         this.aoj = [];
     
         pushAOJParam(this.aoj, 'IdTipDoc',          sql.Int,                IdTipDoc);
-        pushAOJParam(this.aoj, 'NombreTD',          sql.NVarChar(50),       NombreTD);
-        pushAOJParam(this.aoj, 'DescripcionTD',     sql.NVarChar(150),      DescripcionTD);
+        pushAOJParam(this.aoj, 'NombTipDoc',          sql.NVarChar(50),       NombTipDoc);
+        pushAOJParam(this.aoj, 'DescTipDoc',     sql.NVarChar(150),      DescTipDoc);
         return storedProcExecute('dbo.USP_UPDATE_TIPO_DOCUMENTO_IDENTIFICACION', aoj );
     }
     

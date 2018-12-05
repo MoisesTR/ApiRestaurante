@@ -38,14 +38,14 @@ GO
 --// Tipos de Documentos de Identificacion  Predeterminados
 SET IDENTITY_INSERT dbo.TIPO_DOCUMENTO_IDENTIFICACION ON;
 GO
-INSERT INTO dbo.TIPO_DOCUMENTO_IDENTIFICACION(IdTipoDocumento,NombreTD, DescripcionTD)
+INSERT INTO dbo.TIPO_DOCUMENTO_IDENTIFICACION(IdTipDoc,NombTipDoc, DescTipDoc)
 VALUES(1,'Cedula',NULL),(2,'Numero RUC', 'Registro Unico de Contribuyentes.')
 GO
 SET IDENTITY_INSERT dbo.TIPO_DOCUMENTO_IDENTIFICACION OFF;
 GO
 SET IDENTITY_INSERT dbo.CARGO ON;
 GO
-INSERT INTO CARGO(NombreCargo, CodCargo, DescripcionCargo) 
+INSERT INTO CARGO(NombCargo, CodCargo, DescripcionCargo) 
 VALUES (1,'Propietario','PROP','Propietario del restaurante')
 		,(2, 'Gerente General','GEGN',		NULL)
 		,(3, 'Gerente Produccion','GEPR',	NULL)
@@ -114,7 +114,7 @@ VALUES ('Sin Procesar','Producto que no se ha procesado')
         ,('Terminado','Producto terminado.');
 GO
 
-INSERT INTO ESTADO_EMPAQUE(NombreEstado) 
+INSERT INTO ESTADO_EMPAQUE(NombEstado) 
 VALUES	('Cerrado/Completo')
 		,('Abierto/Incompleto')
 		,('Sin EMPAQUE/No viene empacado');

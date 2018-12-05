@@ -3,7 +3,7 @@ const {mssqlErrors, matchedData, sanitize, db, sql} = require('../../Utils/defau
 function createCargo(req, res) {
     var data = matchedData(req);
     var aoj = [];
-    db.pushAOJParam(aoj, 'NombreCargo',      sql.NVarChar(50),  data.NombreCargo);
+    db.pushAOJParam(aoj, 'NombCargo',      sql.NVarChar(50),  data.NombCargo);
     db.pushAOJParam(aoj, 'DescripcionCargo', sql.NVarChar(100), data.DescripcionCargo);
     db.storedProcExecute('USP_CREATE_CARGO', aoj)
         .then((results) => {
@@ -32,7 +32,7 @@ function updateCargo(req, res) {
     var aoj = [];
     console.log(data);
     db.pushAOJParam(aoj, 'IdCargo',          sql.Int,           data.IdCargo);
-    db.pushAOJParam(aoj, 'NombreCargo',      sql.NVarChar(50),  data.NombreCargo);
+    db.pushAOJParam(aoj, 'NombCargo',      sql.NVarChar(50),  data.NombCargo);
     db.pushAOJParam(aoj, 'DescripcionCargo', sql.NVarChar(100), data.DescripcionCargo);
     db.storedProcExecute('USP_UPDATE_CARGO', aoj)
         .then((results) => {

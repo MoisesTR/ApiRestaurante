@@ -15,6 +15,6 @@ router
     .get('/tiposDocumento',                             Habilitado,validsParams,           TipDocIdentController.getTiposDocumento)
     .post('/tipoDocumento',                             validations.createTipoDocumentoI,       validsParams,       TipDocIdentController.createTipoDocumento)
     .put('/tipoDocumento/:IdTipDoc(\\d+)',              validations.updateTipoDocumentoI,       validsParams,       TipDocIdentController.updateTipoDocumento)
-    .delete('/tipoDocumento/:IdTipoDocumento(\\d+)',    validations.changeStateGeneric('IdTipoDocumento'),  validsParams,       TipDocIdentController.changeStateTipoDocumento)
+    .delete('/tipoDocumento/:IdTipDoc(\\d+)',    validations.changeStateGeneric('IdTipDoc'),  validsParams,       TipDocIdentController.changeStateTipoDocumento)
         
 module.exports = router;

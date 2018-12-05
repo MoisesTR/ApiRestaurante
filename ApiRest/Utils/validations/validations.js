@@ -128,7 +128,7 @@ exports.createTrabajador = [
     body('IdCargo', 'IdCargo debe ser entero').isInt(),
     body('Nombres', 'Nombres debe tener un minimo de 4 y un maximo de 50').isLength({ min: 4, max: 50 }),
     body('Apellidos', 'Apellidos debe tener un minimo de 4 y un maximo de 50').isLength({ min: 4, max: 50 }),
-    body('IdTipoDocumento', 'IdDocumento es requerido y debe ser entero').isInt(),
+    body('IdTipDoc', 'IdDocumento es requerido y debe ser entero').isInt(),
     body('Documento', 'Documento es necesario').isLength({ min: 4, max: 50 }),
     body('Imagen', 'Imagen es requerida').isString(),
     isDate('FechaNacimiento'),
@@ -247,8 +247,8 @@ exports.updateProducto = createProducto.concat([
 ]);
 
 let createUnidadMedida = [
-    body('IdClasificacionUnidadMedida','Seleccione la clasificacion de la unidad de medida.').isInt().toInt(),
-    body('NombreUnidad', 'Ingrese el nombre de la unidad de medida.').isString().isLength({max:50}),
+    body('IdClasifUDM','Seleccione la clasificacion de la unidad de medida.').isInt().toInt(),
+    body('NombUnidad', 'Ingrese el nombre de la unidad de medida.').isString().isLength({max:50}),
     body('Simbolo','Ingrese el Simbolo de la Unidad de Medida.').isString().isLength({max:3}).toString(),
     body('NImportancia','Ingrese el valor de Importancia de esta Unidad de Medida.').isInt()
 ];
@@ -267,17 +267,17 @@ exports.changeStateGeneric = (nameIdParam) => {
     ]
 }
 let createTipoDocumento = [
-    body('NombreTD', 'Tipo de Documento necesario.').isString().isLength({min:2,max:50 }),
-    body('DescripcionTD','Es Necesaria la Descripcion del Tipo de Documento').isString().isLength({min:2, max:50}),
-    sanitize('NombreTD').toString(),
-    sanitize('DescripcionTD').toString()
+    body('NombTipDoc', 'Tipo de Documento necesario.').isString().isLength({min:2,max:50 }),
+    body('DescTipDoc','Es Necesaria la Descripcion del Tipo de Documento').isString().isLength({min:2, max:50}),
+    sanitize('NombTipDoc').toString(),
+    sanitize('DescTipDoc').toString()
 ];
 
 exports.createTipoDocumentoI = createTipoDocumento
 
 exports.updateTipoDocumentoI = createTipoDocumento.concat([
-    param('IdTipoDocumento').isInt(),
-    sanitize('IdTipoDocumento').toInt()
+    param('IdTipDoc').isInt(),
+    sanitize('IdTipDoc').toInt()
 ])
 
 exports.createFacturaCompra  = [

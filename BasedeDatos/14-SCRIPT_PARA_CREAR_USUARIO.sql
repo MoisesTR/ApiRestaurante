@@ -1,6 +1,6 @@
 use pruebas_node;
 
-INSERT INTO TRABAJADOR(IdSucursal,IdCargo,Nombres,Apellidos,IdTipoDocumento,Documento,Imagen,FechaNacimiento,Direccion,Telefono1,Telefono2,FechaIngreso) 
+INSERT INTO TRABAJADOR(IdSucursal,IdCargo,Nombres,Apellidos,IdTipDoc,Documento,Imagen,FechaNacimiento,Direccion,Telefono1,Telefono2,FechaIngreso) 
 VALUES(1,1,'Cristian','Chang',1,'00111960028E','chang.jpg','19800101','Rubenia','87792956',NULL,GETDATE())
 
 DECLARE @ID_TRABAJADOR INT = (SELECT TOP 1 IdTrabajador FROM TRABAJADOR ORDER BY 1 DESC)

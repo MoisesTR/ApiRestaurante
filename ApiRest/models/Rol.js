@@ -2,31 +2,31 @@ const baseSelect        = 'SELECT IdRol, NombRol, DescRol, Habilitado, CreatedAt
 const { sql, pushAOJParam, queryExecute, storedProcExecute } = require('../Utils/defaultImports');
 
 class RolModel {
-    async createRol( data ){ 
+    createRol( {NombRol, DescRol} ){ 
         let aoj = [];
         
-        pushAOJParam(aoj, 'NombRol',     sql.NVarChar(50),   data.NombRol)
-        pushAOJParam(aoj, 'DescRol',     sql.NVarChar(150),  data.DescRol)
+        pushAOJParam(aoj, 'NombRol',     sql.NVarChar(50),      NombRol)
+        pushAOJParam(aoj, 'DescRol',     sql.NVarChar(150),     DescRol)
         return storedProcExecute('USP_CREATE_ROL_USUARIO', aoj)
     }
 
-    async getRoles( data ){
+    getRoles( Habilitado ){
         let aoj = [];
 
-        pushAOJParam(aoj, 'Habilitado',sql.Int,+data.Habilitado);
-        let result = await queryExecute(baseSelect, aoj);
-        return result;
+        pushAOJParam(aoj, 'Habilitado', sql.Int,    +Habilitado);
+        return  queryExecute(baseSelect, aoj);
     }    
 
-    async getRolbyId( IdRol ){
-        let IdRol = req.params.IdRol;
+    getRolbyId( IdRol ){
         let aoj = [];
+    
         pushAOJParam(aoj, 'IdRol',   sql.Int,    IdRol)
         return storedProcExecute('USP_GET_ROL', aoj) 
     }
 
-    async updateRol( data ){
+    updateRol( data ){
         let aoj = [];
+    
         pushAOJParam(aoj, 'IdRol',       sql.Int,            data.IdRol );
         pushAOJParam(aoj, 'NombRol',     sql.NVarChar(50),   data.NombRol );
         pushAOJParam(aoj, 'DescRol',     sql.NVarChar(150),  data.DescRol );
