@@ -20,13 +20,13 @@ INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUE
 --MENU FACTURA
 --SUBMENUES
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre) VALUES ('Factura','Modulo Factura','/factura/add','ninguno',1,3)
-INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre) VALUES ('Proveedor','Modulo Proveedor','/proveedor','ninguno',2,11)
+INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre) VALUES ('Proveedor','Modulo Proveedor','/proveedor','ninguno',2,9)
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre) VALUES ('Productos','Catalogos de sistema','/producto','ninguno',3,2)
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre) VALUES ('Busqueda Facturas','Modulo Factura','/factura/busquedafacturas','ninguno',4,3)
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre) VALUES ('Total','Modulo Factura','/factura/summaryFactura','ninguno',4,3)
 
 --MENU GASTOS
-INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre) VALUES ('Gastos','Modulo Gastos','/gastos','ninguno',1,12)
+INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre) VALUES ('Gastos','Modulo Gastos','/gastos','ninguno',1,10)
 
 
 --MENU CATALOGOS
