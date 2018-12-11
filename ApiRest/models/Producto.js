@@ -6,21 +6,21 @@ class ProductoModel {
         this.aoj = [];
     }
     
-    async getProductoById( IdProducto ) {
+    getProductoById( IdProducto ) {
         this.aoj = [];
 
         pushAOJParam(aoj, 'IdProducto',      sql.Int,    IdProducto)
         return  storedProcExecute('dbo.USP_GET_PRODUCTO', aoj)
     }
     
-    async getProductos( Habilitado ) {
+    getProductos( Habilitado ) {
         this.aoj = [];
 
         pushAOJParam(aoj, 'Habilitado',      sql.Int,     +Habilitado)
         return storedProcExecute('USP_GET_PRODUCTOS', aoj)
     }
     
-    async createProducto( data ) {
+    createProducto( data ) {
         this.aoj = [];
 
         pushAOJParam(aoj, 'IdProveedor',         sql.Int,     data.IdProveedor)
@@ -42,7 +42,7 @@ class ProductoModel {
         return  storedProcExecute('dbo.USP_CREATE_PRODUCTO', aoj)
     }
     
-    async updateProducto( data ) {
+    updateProducto( data ) {
         this.aoj = [];
         
         pushAOJParam(aoj, 'IdProveedor',         sql.Int,            data.IdProveedor)
@@ -66,7 +66,7 @@ class ProductoModel {
         return  storedProcExecute('USP_UPDATE_PRODUCTO', aoj)
     }
     
-    async changeStateProducto( IdProducto, Habilitado ) {
+    changeStateProducto( IdProducto, Habilitado ) {
         this.aoj = [];
         pushAOJParam(aoj, 'IdProducto', sql.Int(),   IdProducto)
         pushAOJParam(aoj, 'Habilitado', sql.Bit(),   +Habilitado)

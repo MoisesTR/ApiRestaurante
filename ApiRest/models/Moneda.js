@@ -1,5 +1,5 @@
 'use strict';
-const baseSelect    = 'SELECT IdMoneda, IdPais, IsPrincipal, NombMoneda, CodigoIso,Simbolo, Habilitado, CreatedAt, UpdatedAt FROM FACTURACION_MONEDA';
+const baseSelect    = 'SELECT IdMoneda, IsPrincipal, NombMoneda, CodigoIso,Simbolo, Habilitado, CreatedAt, UpdatedAt FROM FACTURACION_MONEDA';
 const { addLikeParamInFilter, addEqualParamInFilter }   =  require( '../Utils/util');
 const { param }     = require('express-validator/check');
 const { sql, pushAOJParam, queryExecute } = require('../Utils/defaultImports')
@@ -7,11 +7,11 @@ const { sql, pushAOJParam, queryExecute } = require('../Utils/defaultImports')
 
 class MonedaModel {
 
-    async createMoneda() {
+    createMoneda() {
         throw new ReferenceError('Funcion no implementada');
     }
     
-    async updateMoneda() {
+    updateMoneda() {
         throw new ReferenceError('Funcion no implementada');
     }
 
@@ -19,30 +19,30 @@ class MonedaModel {
      * @name _getAMoneda
      * @param filter String 
      */
-    async _getAMoneda( paranName, type,  value ) {
+    _getAMoneda( paranName, type,  value ) {
         this.aoj    = [];
         let filter  = ` WHERE ${paranName}  = @${paranName};`
         
         pushAOJParam( this.aoj, paranName, type, value);
-        return await queryExecute( baseSelect + filter, this.aoj)
+        return queryExecute( baseSelect + filter, this.aoj)
     }
 
-    async getMonedaById( IdMoneda) {
+    getMonedaById( IdMoneda) {
         return this._getAMoneda( 'IdMoneda',    sql.TinyInt,   IdMoneda );
     }
 
-    async getMonedaByIdPais( IdPais ) {
+    getMonedaByIdPais( IdPais ) {
         return this._getAMoneda( 'IdPais',      sql.TinyInt,    IdPais);
     }
 
-    async getMonedaByCodIso( CodigoIso ) {
+    getMonedaByCodIso( CodigoIso ) {
         return  this._getAMoneda( 'CodigoIso',  sql.NVarChar(3), CodigoIso);
     }
 
-    async getMonedaPrincipal( ) {
+    getMonedaPrincipal( ) {
         return  this._getAMoneda( 'IsPrincipal',sql.Bit,        1);
     }
-    async getMonedas( params ) { 
+    getMonedas( params ) { 
         let filter  = '';
         this.aoj     = [];
         

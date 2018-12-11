@@ -62,7 +62,7 @@ AS
 SELECT 
 		s.IdSubClasificacion
 		, s.NombSubClasificacion
-		, s.DescripcionSubClasificacion
+		, s.DescSubClasificacion
 		, s.IdClasificacion
 		, c.NombClasificacion
 		, s.Habilitado 
@@ -102,6 +102,6 @@ IF OBJECT_ID('V_SUBCLASIFICACIONES','V') IS NOT NULL
 GO
 CREATE VIEW V_SUBCLASIFICACIONES
 AS
-SELECT s.IdSubClasificacion,s.NombSubClasificacion,s.DescripcionSubClasificacion,s.IdClasificacion,c.NombClasificacion,s.Habilitado FROM SUBCLASIFICACION_PRODUCTO s
+SELECT s.IdSubClasificacion,s.NombSubClasificacion,s.DescSubClasificacion,s.IdClasificacion,c.NombClasificacion,s.Habilitado FROM SUBCLASIFICACION_PRODUCTO s
     INNER JOIN CLASIFICACION_PRODUCTO c ON s.IdClasificacion = c.IdClasificacion;
 GO

@@ -6,7 +6,7 @@ class MenuModel {
         this.aoj = [];
     }
 
-    async createMenu( menuData ) {
+    createMenu( menuData ) {
         this.aoj = [];
         
         pushOutParam(aoj, 'IdMenu',          sql.Int);
@@ -17,7 +17,7 @@ class MenuModel {
         return  storedProcExecute('dbo.USP_INSERT_MENU', aoj)
     }
     
-    async updateMenu( menuData ) {
+    updateMenu( menuData ) {
         this.aoj = [];
         
         pushOutParam(aoj, 'IdMenu',          sql.Int,            menuData.IdMenu);
@@ -28,7 +28,7 @@ class MenuModel {
         return  storedProcExecute('dbo.USP_INSERT_MENU', aoj)
     }
     
-    async getMenuesByRol( IdRol ) {
+    getMenuesByRol( IdRol ) {
         this.aoj = [];
         
         pushAOJParam(aoj,    'IdRol',        sql.Int,    IdRol);

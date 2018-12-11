@@ -1,20 +1,38 @@
 const conSql = require('../config/mssqlConfig');
 
-function pushAOJParam(aoj, name, type, value) {
-	aoj[aoj.length] = {
-        pClasf: 1,
+
+/**
+ * @name    pushAOJ
+ * @param {Array} aoj Array de Parametros
+ * @param {*} mode 
+ * @param {String} name 
+ * @param {*} type 
+ * @param {Object} value 
+ */
+function pushAOJ(aoj, mode, name,type, value) {
+    aoj[aoj.length] = {
+        pMode: mode,
 		pName: name,
 		pType: type,
 		pData: value
-	}
-}
-function pushOutParam(aoj, name, type) {
-	aoj[aoj.length] = {
-        pClasf: 2,
-		pName: name,
-		pType: type
-	}
-}
+	};
+};
+
+exports.pushAOJParam    = function pushAOJParam(aoj, name, type, value) {
+	pushAOJ(aoj, 1, name, type, value);
+};
+
+exports.pushAOJOuput    = function pushAOJOuput(aoj, name, type ) {
+    pushAOJ(aoj, 0, name, type);
+};
+
+exports.addMssqlParam   = function( filterVar, param ) {
+    filterVar += ' AND ' + param  + ' = @' + param;
+};
+
+exports.addLikeParam    = function( param ) {
+    return      ' AND ' + param  + ' LIKE \'%\'+@' + param + '+\'%\'';
+};
 
 function storedProcExecuteServer(spName, parametersJsonArray) {
     return conSql.getConnectionPoolGlobalServer()
@@ -89,7 +107,3 @@ function queryExecute(query, parametersJsonArray) {
         throw err
     })
 }
-module.exports.storedProcExecute = storedProcExecute;
-module.exports.pushAOJParam     = pushAOJParam;
-module.exports.queryExecute     = queryExecute;
-module.exports.pushOutParam     = pushOutParam;

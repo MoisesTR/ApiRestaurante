@@ -8,14 +8,14 @@ class EnvaseModel {
         this.aoj = [];
     }
 
-    async getEnvaseById( IdEnvase ) {
+    getEnvaseById( IdEnvase ) {
         this.aoj    = [];
 
         pushAOJParam(this.aoj, 'IdEnvase',    sql.Int,   IdEnvase);
         return  queryExecute(baseSelect+' WHERE IdEnvase = @IdEnvase', this.aoj)
     }
     
-    async getEnvases( {NombEnvase, Habilitado} = {}) {
+    getEnvases( {NombEnvase, Habilitado} = {}) {
         this.aoj     = [];
         let     filters = '';
     
@@ -30,7 +30,7 @@ class EnvaseModel {
         return  queryExecute(baseSelect + filters, this.aoj)
     }
     
-    async createEnvase( NombEnvase, DescEnvase ) {
+    createEnvase( NombEnvase, DescEnvase ) {
         this.aoj    = [];
         
         pushAOJParam(this.aoj, 'NombEnvase', sql.NVarChar(50),    NombEnvase)
@@ -38,7 +38,7 @@ class EnvaseModel {
         return  storedProcExecute('USP_CREATE_ENVASE', this.aoj)
     }
     
-    async updateEnvase( IdEnvase, NombEnvase, DescEnvase ) {
+    updateEnvase( IdEnvase, NombEnvase, DescEnvase ) {
         this.aoj    = [];
 
         pushAOJParam(this.aoj, 'IdEnvase',    sql.Int,            IdEnvase);
@@ -47,7 +47,7 @@ class EnvaseModel {
         return  storedProcExecute('dbo.USP_UPDATE_ENVASE', this.aoj)
     }
 
-    async changeStateEnvase( IdEnvase, Habilitado ){
+    changeStateEnvase( IdEnvase, Habilitado ){
         this.aoj = [];
 
         pushAOJParam(this.aoj, 'IdEnvase',    sql.Int(),      IdEnvase);

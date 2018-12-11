@@ -7,7 +7,7 @@ class CategoriaModel {
         this.aoj = [];
     }
     
-    async createCategoria( NombCategoria, DescCategoria ){ 
+    createCategoria( NombCategoria, DescCategoria ){ 
         this.aoj = [];
 
         pushAOJParam(this.aoj, 'NombCategoria',   sql.NVarChar(50),  NombCategoria)
@@ -15,7 +15,7 @@ class CategoriaModel {
         return storedProcExecute('USP_CREATE_CATEGORIA', this.aoj)
     }
 
-    async getCategorias( data ){
+    getCategorias( data ){
         this.aoj     = [];
         let filter  = '';    
     
@@ -30,7 +30,7 @@ class CategoriaModel {
         return queryExecute(baseSelect +  filter, this.aoj)
     }
 
-    async updateCategoria( data ){
+    updateCategoria( data ){
         this.aoj    = [];
 
         pushAOJParam(this.aoj, 'IdCategoria',     sql.Int,            data.IdCategoria)
@@ -39,7 +39,7 @@ class CategoriaModel {
         return storedProcExecute('USP_UPDATE_CATEGORIA', this.aoj)
     }
 
-    async getCategoriaById( IdCategoria ){
+    getCategoriaById( IdCategoria ){
         this.aoj    = [];
         let filter = ' WHERE IdCategoria = @IdCategoria;';
     
@@ -47,7 +47,7 @@ class CategoriaModel {
         return queryExecute(baseSelect +filter, this.aoj)
     }
 
-    async changeStateCategoria( IdCategoria, Habilitado ){
+    changeStateCategoria( IdCategoria, Habilitado ){
         this.aoj    = [];
         
         pushAOJParam(this.aoj, 'IdCategoria',    sql.Int(),  IdCategoria);

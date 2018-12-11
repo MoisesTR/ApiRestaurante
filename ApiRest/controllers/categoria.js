@@ -12,7 +12,6 @@ function createCategoria(req,res){
     }).catch((err) => {
         res.status(500)
             .json( mssqlErrors(err) );
-        // res.status(500).json( err );
     })
 }
 function getCategorias(req,res){

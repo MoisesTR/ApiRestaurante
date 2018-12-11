@@ -19,9 +19,9 @@ class SubClasificacionModel {
     async createSubclasificacion( data ) {
         var aoj = [];
 
-        pushAOJParam(aoj, 'IdClasificacion',             sql.Int, data.IdClasificacion)
-        pushAOJParam(aoj, 'NombSubClasificacion',        sql.NVarChar(50), data.NombreSubClasificacion)
-        pushAOJParam(aoj, 'DescSubClasificacion',        sql.NVarChar(150), data.DescripcionSubClasificacion)
+        pushAOJParam(aoj, 'IdClasificacion',             sql.Int,           data.IdClasificacion)
+        pushAOJParam(aoj, 'NombSubClasificacion',        sql.NVarChar(50),  data.NombSubClasificacion)
+        pushAOJParam(aoj, 'DescSubClasificacion',        sql.NVarChar(150), data.DescSubClasificacion)
         return  storedProcExecute('USP_CREATE_SUBCLASIFICACION', aoj)
     }
     
@@ -29,16 +29,16 @@ class SubClasificacionModel {
         var aoj = [];
     
         pushAOJParam(aoj, 'IdSubClasificacion', sql.Int, data.IdSubClasificacion)
-        pushAOJParam(aoj, 'IdClasificacion', sql.Int, data.IdClasificacion)
-        pushAOJParam(aoj, 'NombreSubClasificacion', sql.NVarChar(50), data.NombreSubClasificacion)
-        pushAOJParam(aoj, 'DescripcionSubClasificacion', sql.NVarChar(150), data.DescripcionSubClasificacion)
+        pushAOJParam(aoj, 'IdClasificacion',    sql.Int, data.IdClasificacion)
+        pushAOJParam(aoj, 'NombSubClasificacion', sql.NVarChar(50),     data.NombSubClasificacion)
+        pushAOJParam(aoj, 'DescSubClasificacion', sql.NVarChar(150),    data.DescSubClasificacion)
         return  storedProcExecute('USP_UPDATE_SUBCLASIFICACION', aoj)
     }
     
     async getSubclasificacionesByIdClasificacion( IdClasificacion ) {
         var aoj = [];
 
-        pushAOJParam(aoj, 'IdClasificacion', sql.Int, data.IdClasificacion)
+        pushAOJParam(aoj, 'IdClasificacion', sql.Int, IdClasificacion)
         return  storedProcExecute('USP_GET_SUBCLASIFICACIONES_BY_IDCLASIFICACION', aoj)
     }
     

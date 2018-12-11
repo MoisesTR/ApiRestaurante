@@ -3,14 +3,14 @@ const baseSelect    = 'SELECT IdEstado, NombEstado,DescEstado, Habilitado, Creat
 
 class EstadoProductoModel {
 
-    async getEstados( data ){
+    getEstados( data ){
         let aoj = [];
     
         pushAOJParam(aoj,    'Habilitado',   sql.Int,    +data.Habilitado)
         return queryExecute(baseSelect + ' WHERE Habilitado = @Habilitado', aoj)
     }
 
-    async getEstadoById( IdEstado ){
+    getEstadoById( IdEstado ){
         let aoj     = [];
         let filters = '';
 

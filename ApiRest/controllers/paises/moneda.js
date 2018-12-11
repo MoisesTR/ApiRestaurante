@@ -8,13 +8,13 @@ exports.getMonedas = ( req, res ) => {
 
     moneda.getMonedas( data )
     .then((result) => {
-        console.log(result);
+        // console.log(result);
         res.status(200)
             .json(result.recordset)
     }).catch((err) => {
         console.error(err);
-        res.status( error.status || 500)
-            .json(error);
+        res.status( err.status || 500)
+            .json( mssqlErrors( err ) );
     });
 }
 

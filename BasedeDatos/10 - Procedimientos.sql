@@ -112,14 +112,14 @@ GO
 CREATE PROCEDURE USP_CREATE_SUBCLASIFICACION(
 	@IdClasificacion				INT,
     @NombSubClasificacion			NVARCHAR(50),
-    @DescripcionSubClasificacion	NVARCHAR(150)
+    @DescSubClasificacion			NVARCHAR(150)
 ) AS BEGIN
 	IF NOT EXISTS(SELECT * FROM dbo.CLASIFICACION_PRODUCTO where IdClasificacion = @IdClasificacion)
 		RAISERROR('La Clasificacion Seleccionada no se encontro, por lo tanto no se inserto la Subclasificacion.',16,1);
     ELSE
 		BEGIN
 			INSERT INTO SUBCLASIFICACION_PRODUCTO(IdClasificacion,NombSubClasificacion,DescSubclasificacion)
-			VALUES(@IdClasificacion,@NombSubClasificacion,@DescripcionSubClasificacion);
+			VALUES(@IdClasificacion,@NombSubClasificacion,@DescSubClasificacion);
 			SELECT @@IDENTITY AS IdSubClasificacion
 		END
 END
@@ -131,13 +131,13 @@ CREATE PROCEDURE USP_UPDATE_SUBCLASIFICACION(
 	@IdSubClasificacion					INT,
     @IdClasificacion					INT NULL,
 	@NombSubClasificacion				NVARCHAR(50)  NULL,
-    @DescripcionSubClasificacion		NVARCHAR(150) NULL
+    @DescSubClasificacion				NVARCHAR(150) NULL
 ) AS BEGIN
-	IF COALESCE(@IdSubClasificacion, @NombSubClasificacion, @DescripcionSubClasificacion) IS NOT NULL
+	IF COALESCE(@IdSubClasificacion, @NombSubClasificacion, @DescSubClasificacion) IS NOT NULL
 		BEGIN
 			UPDATE SUBCLASIFICACION_PRODUCTO
-			SET IdClasificacion= ISNULL(@IdClasificacion,IdClasificacion)
-			,NombSubClasificacion = ISNULL(@NombSubClasificacion, NombSubClasificacion),DescSubclasificacion  = ISNULL(@DescripcionSubClasificacion,DescSubclasificacion),UpdatedAt=GETDATE() 
+			SET IdClasificacion = ISNULL(@IdClasificacion,IdClasificacion)
+			,NombSubClasificacion = ISNULL(@NombSubClasificacion, NombSubClasificacion),DescSubclasificacion  = ISNULL(@DescSubClasificacion,DescSubclasificacion),UpdatedAt=GETDATE() 
 			WHERE IdSubClasificacion = @IdSubClasificacion;
 		END
 END 

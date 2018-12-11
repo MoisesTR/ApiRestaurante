@@ -1,5 +1,5 @@
 const { mssqlErrors } = require('../Utils/util')
-const { matchedData, sanitize } = require('express-validator/filter');
+const { matchedData } = require('express-validator/filter');
 const EnvaseModel  = require('../models/Envase');
 const Envase = new EnvaseModel();
 

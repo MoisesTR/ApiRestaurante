@@ -180,7 +180,7 @@ var createSubclasificacion =  [
     body('DescSubClasificacion', 'La Descripcion no debe tener mas de 150 caracteres.').isString().optional({nullable:true}),
     body('IdClasificacion', 'Id de la clasificacion es requerido!').isInt(),
     sanitize('IdClasificacion').toInt(),
-    sanitize('NombreSubClasificacion').toString()
+    sanitize('NombSubClasificacion').toString()
 ];
 
 exports.createSubclasificacion = createSubclasificacion;

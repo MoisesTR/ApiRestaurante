@@ -6,14 +6,15 @@ class ClasificacionUdmModel {
         FROM CLASIFICACION_UNIDAD_MEDIDA`;
         this.aoj    = [];
     }
-    async getClasificaciones( {Habilitado} = {}){
+    
+    getClasificaciones( {Habilitado} = {}){
         this.aoj = [];
         
         pushAOJParam(aoj,   'Habilitado',   sql.Int,    +Habilitado)
         return queryExecute( this.baseSelect + filter,aoj)
     }
     
-    async getClasificacion( IdClasifUDM ){
+    getClasificacion( IdClasifUDM ){
         this.aoj=[];
         
         pushAOJParam(aoj,   'IdClasifUDM',  sql.Int,    IdClasifUDM)

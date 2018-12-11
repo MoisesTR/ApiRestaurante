@@ -5,7 +5,7 @@ class CompraInsumosModel {
         this.aoj = [];
     }
 
-    async createFacturaCompra( data ) {
+    createFacturaCompra( data ) {
         this.aoj = [];
 
         pushAOJParam(aoj, 'NumRefFactura',       sql.NVarChar(50),   data.NumRefFactura);
@@ -27,7 +27,7 @@ class CompraInsumosModel {
         return storedProcExecute('USP_CREATE_FACTURA_COMPRA',aoj)
     }
     
-    async updateFacturaCompra( data ) {
+    updateFacturaCompra( data ) {
         this.aoj    = [];
 
         pushAOJParam(aoj, 'NumRefFactura',   sql.NVarChar(50),   data.NumRefFactura);
@@ -46,7 +46,7 @@ class CompraInsumosModel {
     }
     
     
-    async createDetalleFacturaCompra( data ) {
+    createDetalleFacturaCompra( data ) {
         let aoj = [];
 
         pushOutParam(aoj, 'IdDetalle',       sql.Int);
@@ -63,7 +63,7 @@ class CompraInsumosModel {
         return storedProcExecute('USP_CREATE_DETALLE_FACTURA_COMPRA',aoj)
     }
     
-    async updateDetalleFacturaCompra( data ) {
+    updateDetalleFacturaCompra( data ) {
         let aoj = [];
      
         pushAOJParam(aoj, 'IdFactura',       sql.Int,            data.IdFactura);
@@ -80,7 +80,7 @@ class CompraInsumosModel {
     }
     
     
-    async getFacturaById( IdFactura ) {
+    getFacturaById( IdFactura ) {
         let aoj = [];
      
         pushAOJParam(aoj, 'IdFactura',   sql.Int,    IdFactura);
@@ -88,7 +88,7 @@ class CompraInsumosModel {
     }
     
     
-    async getCambiosFacturaById( IdFactura ) {
+    getCambiosFacturaById( IdFactura ) {
         let aoj = [];
 
         pushAOJParam(aoj, 'IdFactura',       sql.Int,        IdFactura);
@@ -96,7 +96,7 @@ class CompraInsumosModel {
     }
     
     
-    async obtenerFacturasCompra({IdFechaFiltro, FechaInicio, FechaFin, IdProveedor, IdEstadoFactura} = {} ) {
+    obtenerFacturasCompra({IdFechaFiltro, FechaInicio, FechaFin, IdProveedor, IdEstadoFactura} = {} ) {
         let aoj = [];
         
         pushAOJParam(aoj, 'IdFechaFiltro',   sql.Int,        IdFechaFiltro);

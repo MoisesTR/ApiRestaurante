@@ -1,5 +1,3 @@
-var fs                  = require('fs');
-var path                = require('path');
 const { mssqlErrors }   = require('../Utils/util');
 const {matchedData}     = require('express-validator/filter')
 const ProductoModel     = require('../models/Producto');

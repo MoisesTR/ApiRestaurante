@@ -2,7 +2,7 @@ const { sql, pushAOJParam } = require('../Utils/defaultImports')
 
 class BodegaAp {
     
-    createEntradaBodegaAp = async ( data ) => { 
+    createEntradaBodegaAp( data ) { 
         let aoj     = [];
 
         pushAOJParam(aoj,    'IdBodegaAreap',            sql.Int,            data.IdBodegaAreaP);
@@ -14,11 +14,11 @@ class BodegaAp {
         pushAOJParam(aoj,    'PorcIva',                  sql.Int,            data.PorcIva);
         pushAOJParam(aoj,    'PorcDescuento',            sql.Int,            data.PorcDescuento);
         pushAOJParam(aoj,    'FechaHora',                sql.Date,           data.FechaHora);
-        return await storedProcExecute('USP_INSERT_ENTRADA_BODEGA_AREA_PRODUCCION',aoj)
+        return storedProcExecute('USP_INSERT_ENTRADA_BODEGA_AREA_PRODUCCION',aoj)
     }
 
     
-    createDetalleEntrada    = async ( data ) => { 
+    createDetalleEntrada( data ) { 
         let aoj = [];
 
         pushAOJParam(aoj,    'IdEntradaBodegaAP',    sql.Int,    data.IdEntradaBodegaAP);
@@ -26,10 +26,10 @@ class BodegaAp {
         pushAOJParam(aoj,    'Cantidad',             sql.Int,    data.Cantidad);
         pushAOJParam(aoj,    'PrecioUnitarioEntrada',sql.Money,  data.PrecioUnitarioEntrada);
         pushAOJParam(aoj,    'DescuentoCalculado',   sql.Money,  data.DescuentoCalculado);
-        return await storedProcExecute('USP_INSERT_DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION',aoj)
+        return storedProcExecute('USP_INSERT_DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION',aoj)
     }
 
-    createDetalleEntrada    = async ( data ) => { 
+    createDetalleEntrada( data ) { 
         let aoj = [];
 
         pushAOJParam(aoj,    'IdEntradaBodegaAP',    sql.Int,    data.IdEntradaBodegaAP);
@@ -37,21 +37,21 @@ class BodegaAp {
         pushAOJParam(aoj,    'Cantidad',             sql.Int,    data.Cantidad);
         pushAOJParam(aoj,    'PrecioUnitarioEntrada',sql.Money,  data.PrecioUnitarioEntrada);
         pushAOJParam(aoj,    'DescuentoCalculado',   sql.Money,  data.DescuentoCalculado);
-        return await storedProcExecute('USP_INSERT_DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION',aoj)
+        return storedProcExecute('USP_INSERT_DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION',aoj)
     }
     
-    getDetalleBodegaAp = async ( Habilitado ) => {
+    getDetalleBodegaAp ( Habilitado ) {
         let aoj=[];
 
         pushAOJParam( aoj,   'IdBodegaAreaP',    sql.Int,    Habilitado);
-        return await storedProcExecute('USP_GET_DETALLE_BODEGA_AP',aoj)
+        return storedProcExecute('USP_GET_DETALLE_BODEGA_AP',aoj)
     }
     
-    generarFactura  = async ( IdEntradaBodegaAP ) => {
+    generarFactura ( IdEntradaBodegaAP ) {
         let aoj =[];
 
         pushAOJParam( aoj,   'IdEntradaBodegaAP',    IdEntradaBodegaAP)
-        return await storedProcExecute('USP_GENERAR_FACTURA',aoj)
+        return storedProcExecute('USP_GENERAR_FACTURA',aoj)
     }
 }
 

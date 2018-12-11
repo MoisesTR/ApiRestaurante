@@ -1,4 +1,4 @@
-const   { matchedData, sanitize } = require('express-validator/filter');
+const   { matchedData } = require('express-validator/filter');
 let     {mssqlErrors }      = require('../Utils/util');
 const   CompraInsumosModel  = require('../models/CompraInsumos');
 const   CompraInsumos       = new CompraInsumosModel();

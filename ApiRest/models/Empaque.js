@@ -7,25 +7,25 @@ class EmpaqueModel {
         this.aoj = [];
     }
     
-    async getEmpaqueById( IdEmpaque ) {
+    getEmpaqueById( IdEmpaque ) {
         this.aoj     = [];
         let     filter  = '';
     
         filter += ' WHERE IdEmpaque = @IdEmpaque';
         pushAOJParam(this.aoj, 'IdEmpaque',   sql.Int,    IdEmpaque);
-        return  await queryExecute(baseSelect + filter, this.aoj)
+        return  queryExecute(baseSelect + filter, this.aoj)
     }
     
-    async getEmpaques( {Habilitado} = {} ) {
+    getEmpaques( {Habilitado} = {} ) {
         this.aoj     = [];
 
         let filter  = ' WHERE Habilitado = ISNULL(@Habilitado, Habilitado)';
     
         pushAOJParam(this.aoj, 'Habilitado',      sql.Bit(),  +Habilitado);
-        return await queryExecute( baseSelect + filter, this.aoj)
+        return queryExecute( baseSelect + filter, this.aoj)
     }
     
-    async createEmpaque( NombEmpaque, DescEmpaque ) {
+    createEmpaque( NombEmpaque, DescEmpaque ) {
         this.aoj    = []; 
 
         pushAOJParam(this.aoj, 'NombEmpaque',     sql.NVarChar(50),   NombEmpaque);
@@ -33,7 +33,7 @@ class EmpaqueModel {
         return storedProcExecute('USP_CREATE_EMPAQUE', this.aoj)
     }
     
-    async updateEmpaque( IdEmpaque, NombEmpaque, DescEmpaque ) {
+    updateEmpaque( IdEmpaque, NombEmpaque, DescEmpaque ) {
         this.aoj    = [];
 
         pushAOJParam(this.aoj, 'IdEmpaque',       sql.Int,                IdEmpaque);
@@ -42,7 +42,7 @@ class EmpaqueModel {
         return storedProcExecute('dbo.USP_UPDATE_EMPAQUE', this.aoj)
     }
     
-    async changeStateEmpaque( IdEmpaque, Habilitado ){
+    changeStateEmpaque( IdEmpaque, Habilitado ){
         this.aoj    = [];
 
         pushAOJParam(this.aoj, 'IdEmpaque',   sql.Int(),  IdEmpaque);

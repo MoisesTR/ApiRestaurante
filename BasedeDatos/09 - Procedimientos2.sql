@@ -386,7 +386,7 @@ CREATE PROCEDURE USP_CREATE_UNIDAD_MEDIDA(
 	@IdUnidadMedidaBase			INT
 )
 AS BEGIN
-	INSERT INTO UNIDAD_MEDIDA(IdClasifUnidadMedida,NombUnidad,Simbolo,IdUnidadMedidaBase)
+	INSERT INTO UNIDAD_MEDIDA(IdClasifUDM,NombUnidad,Simbolo,IdUDMBase)
 	VALUES(@IdClasifUnidadMedida,@NombUnidad,@Simbolo, @IdUnidadMedidaBase)
 	SELECT @@IDENTITY AS IdUnidadMedida
 END
@@ -405,8 +405,8 @@ AS BEGIN
 	IF COALESCE(@IdClasifUnidadMedida,@NombUnidad, @Simbolo, @IdUnidadMedidaBase) IS NOT NULL
 	BEGIN
 		UPDATE dbo.UNIDAD_MEDIDA
-		SET IdClasifUnidadMedida = ISNULL(@IdClasifUnidadMedida,IdClasifUnidadMedida), NombUnidad = ISNULL(@NombUnidad,NombUnidad),
-			Simbolo = ISNULL(@Simbolo,Simbolo), IdUnidadMedidaBase = ISNULL(@IdUnidadMedidaBase,IdUnidadMedidaBase)
+		SET IdClasifUDM = ISNULL(@IdClasifUnidadMedida,IdClasifUDM), NombUnidad = ISNULL(@NombUnidad,NombUnidad),
+			Simbolo = ISNULL(@Simbolo,Simbolo), IdUDMBase = ISNULL(@IdUnidadMedidaBase, IdUDMBase)
 			WHERE IdUnidadMedida = @IdUnidadMedida
 	END
 END
