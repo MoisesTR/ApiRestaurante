@@ -25,8 +25,8 @@ INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre)
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre) VALUES ('Total','Modulo Factura','/factura/summaryFactura','ninguno',4,3)
 
 --MENU GASTOS
-INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre) VALUES ('Gastos','Modulo Gastos','/gastos','ninguno',1,10)
-
+INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre) VALUES ('Gastos','Modulo Gastos','/gasto/gastos','ninguno',1,10)
+INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre) VALUES ('Total','Modulo Gastos','/gastos/summary-gastos','ninguno',2,10)
 
 --MENU CATALOGOS
 --SUBMENUES
@@ -58,6 +58,7 @@ INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,18)
 INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,19)
 INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,20)
 INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,21)
+INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,22)
 --INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,23)
 --INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,24)
 
