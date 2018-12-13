@@ -22,11 +22,11 @@ exports.pushAOJParam    = function pushAOJParam(aoj, name, type, value) {
 	pushAOJ(aoj, 1, name, type, value);
 };
 
-exports.pushAOJOuput    = function pushAOJOuput(aoj, name, type ) {
+exports.pushAOJOuput    = ( aoj, name, type ) => {
     pushAOJ(aoj, 0, name, type);
 };
 
-exports.addMssqlParam   = function( filterVar, param ) {
+exports.addMssqlParam   = ( filterVar, param ) => {
     return filterVar + ` AND ${param}   = @${param}`;
 };
 
@@ -61,13 +61,13 @@ function addInputOrOutputParam( request, parametersJson ) {
  * @param {Connection} userConn 
  */
 async function executeStoredProc( spName, parametersJsonArray, config, userConn ) {
-    let     isConnSupplied  =  ( userConn != undefined );
+    let     isConnSupplied  = !!userConn;
     let     conn            =  ( isConnSupplied ) ? userConn : undefined;
     if  ( isConnSupplied ) {
         return execSP(conn, spName, parametersJsonArray)
     }
     try { 
-        const pool = await conSql.getConnectionPoolGlobalByConf(config);
+        const pool = await conSql.getConnectionPoolGlobal();
         pool.on('error', (error) => {
             throw error;
         })
@@ -107,12 +107,12 @@ async function executeQueryByConfig(queryString, parametersJsonArray, config, co
         return execQuery(queryString, parametersJsonArray, connection);
     }
     try {
-        const pool = await conSql.getConnectionPoolGlobalByConf(conSql.configs.server)
+        const pool = await conSql.getConnectionPoolGlobal()
         
         console.log('Conecto');
         return execQuery(queryString, parametersJsonArray, pool);
     } catch( _err ) {
-        console.error("Connection Error: " + err);
+        console.error("Connection Error: " + _err);
         return Promise.reject( _err )
     }
 };
@@ -125,12 +125,12 @@ exports.executeQueryByConfig    = executeQueryByConfig;
  * @param {String} spName Nombre del Procedimiento Almacenado
  * @param {Array} parametersJsonArray
  */
-exports.executeStoredProcServer = function executeStoredProcServer(spName, parametersJsonArray) {
-    return executeStoredProc(spName, parametersJsonArray, conSql.configs.server);
+exports.storedProcExecute = (spName, parametersJsonArray) => {
+    return executeStoredProc(spName, parametersJsonArray, conSql.config);
 };
 
-exports.queryExecuteServer      = function queryExecuteServer(queryString, parametersJsonArray) {
-    return  executeQueryByConfig(queryString, parametersJsonArray, conSql.configs.server);
+exports.queryExecute = (queryString, parametersJsonArray) => {
+    return  executeQueryByConfig(queryString, parametersJsonArray, conSql.config);
 };
 
 function execQuery( query, parametersJsonArray, conn ) {

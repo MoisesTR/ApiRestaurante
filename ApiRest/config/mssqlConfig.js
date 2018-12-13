@@ -12,19 +12,20 @@ const config = {
     }
 }
 function getConnectionPoolGlobal(){
-    function conect(resolve,reject){
-        if (global.poolGlobal){
-            console.log('Reutilizando pool '+poolGlobal.listenerCount())
-            resolve(poolGlobal)
+    async function conect(resolve,reject){
+        if ( !!global.poolGlobal ){
+            console.log('Reutilizando pool ',global.poolGlobal._eventsCount)
+            resolve(global.poolGlobal)
         }
-        else{
-            new sql.ConnectionPool(config).connect().then(poolObt=>{
-                global.poolGlobal=poolObt
+        else {
+            try {
+                const poolObt = new sql.ConnectionPool(config).connect()
+                global.poolGlobal = poolObt
                 resolve(global.poolGlobal)
                 console.log('Nuevo pool Creado')
-            }).catch(err =>{
-                reject(err)
-            })
+            } catch( _err ) {
+                reject(_err)
+            }
         }      
     }
     return new Promise(conect)
