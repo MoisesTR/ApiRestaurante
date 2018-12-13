@@ -27,83 +27,122 @@ exports.pushAOJOuput    = function pushAOJOuput(aoj, name, type ) {
 };
 
 exports.addMssqlParam   = function( filterVar, param ) {
-    filterVar += ' AND ' + param  + ' = @' + param;
+    return filterVar + ` AND ${param}   = @${param}`;
 };
 
 exports.addLikeParam    = function( param ) {
     return      ' AND ' + param  + ' LIKE \'%\'+@' + param + '+\'%\'';
 };
 
-function storedProcExecuteServer(spName, parametersJsonArray) {
-    return conSql.getConnectionPoolGlobalServer()
-    .then(function(pool) {	
+/**
+ * @name    addInputOrOutputParam
+ * @param {Request} request 
+ * @param {Object} parametersJsonArray 
+ */
+function addInputOrOutputParam( request, parametersJson ) {
+    if  (   parametersJson.pMode == 1   ){
+        request.input(
+            parametersJson['pName'],
+            eval(parametersJson['pType']),
+            parametersJson['pData']);
+    }   else    {
+        request.output(
+            parametersJson['pName'],
+            eval(parametersJson['pType'])
+        );
+    }
+};
+
+/**
+ * @name storedProcExecute
+ * @param {String} spName 
+ * @param {Array} parametersJsonArray 
+ * @param {Object} config 
+ * @param {Connection} userConn 
+ */
+async function executeStoredProc( spName, parametersJsonArray, config, userConn ) {
+    let     isConnSupplied  =  ( userConn != undefined );
+    let     conn            =  ( isConnSupplied ) ? userConn : undefined;
+    if  ( isConnSupplied ) {
+        return execSP(conn, spName, parametersJsonArray)
+    }
+    try { 
+        const pool = await conSql.getConnectionPoolGlobalByConf(config);
+        pool.on('error', (error) => {
+            throw error;
+        })
+        
+        return execSP(pool, spName, parametersJsonArray);			
+    } catch( _err ) {
+        return Promise.reject( _err )
+    }
+};
+
+exports.executeStoredProc = executeStoredProc;
+
+/**
+ * @name execSP
+ * @param {sql.ConnectionPool} conn Este parametro puede ser una Connection mssql o un Transaction
+ * @param {String} spName Nombre del Procedimiento
+ * @param {Array} parametersJsonArray 
+ */
+function execSP(conn, spName, parametersJsonArray) {
+    let request  = conn.request();
+    for (var i = 0; i < parametersJsonArray.length; i++) {
+        addInputOrOutputParam(request, parametersJsonArray[i]);
+    }
+    return request.execute(spName)
+};
+
+async function executeQueryByConfig(queryString, parametersJsonArray, config, connection) {
+    if ( parametersJsonArray == null || parametersJsonArray == undefined ) {
+        throw   new Error('Arreglo de parametros indefinido.');
+    }
+    if ( (config == undefined) && (connection == undefined ) )  {
+        throw   new Error('Debes definir una configuracion o coneccion a utilizar.');
+    }
+    let isConnSupplied  = (connection != undefined);
+
+    if  ( isConnSupplied ) {
+        return execQuery(queryString, parametersJsonArray, connection);
+    }
+    try {
+        const pool = await conSql.getConnectionPoolGlobalByConf(conSql.configs.server)
+        
         console.log('Conecto');
-        let request  = pool.request()
-        for (var i = 0; i < parametersJsonArray.length; i++) {
-            if(parametersJsonArray[i].pClasf == 1)
-                request.input(
-                    parametersJsonArray[i]['pName'],
-                    eval(parametersJsonArray[i]['pType']),
-                    parametersJsonArray[i]['pData']);
-            else
-                request.output(
-                    parametersJsonArray[i]['pName'],
-                    eval(parametersJsonArray[i]['pType']));
-        }
-       // console.dir(request.parameters)
-        return request.execute(spName);			
-    }).catch(function(err) {
-        //console.log("Connection Error: " + err);
-        throw err;
-    })
+        return execQuery(queryString, parametersJsonArray, pool);
+    } catch( _err ) {
+        console.error("Connection Error: " + err);
+        return Promise.reject( _err )
+    }
+};
+exports.executeQueryByConfig    = executeQueryByConfig;
+
+/**
+ * @name executeStoredProcServer
+ * @description Ejecutar Procedimiento Almacenado en el servidor
+ * @returns {Promise} Promise con resultado del Procedimiento
+ * @param {String} spName Nombre del Procedimiento Almacenado
+ * @param {Array} parametersJsonArray
+ */
+exports.executeStoredProcServer = function executeStoredProcServer(spName, parametersJsonArray) {
+    return executeStoredProc(spName, parametersJsonArray, conSql.configs.server);
+};
+
+exports.queryExecuteServer      = function queryExecuteServer(queryString, parametersJsonArray) {
+    return  executeQueryByConfig(queryString, parametersJsonArray, conSql.configs.server);
+};
+
+function execQuery( query, parametersJsonArray, conn ) {
+    let request  = conn.request();
+    for (var i = 0; i < parametersJsonArray.length; i++) {
+        addInputOrOutputParam(request, parametersJsonArray[i]);
+    }
+    console.log('\r\nExecuting '+query);
+    return request.query( query );			
 }
 
-function storedProcExecute(spName, parametersJsonArray) {
-    console.log('storedProcExec')
-    return conSql.getConnectionPoolGlobal()
-    .then(function(pool) {	
-        console.log('Conecto');
-        let request  = pool.request()
-        const tam = parametersJsonArray.length;
-        for (var i = 0; i < tam; i++) {
-            if(parametersJsonArray[i].pClasf == 1) {
-                request.input(
-                    parametersJsonArray[i]['pName'],
-                    eval(parametersJsonArray[i]['pType']),
-                    parametersJsonArray[i]['pData']);
-            } else {
-                request.output(
-                    parametersJsonArray[i]['pName'],
-                    eval(parametersJsonArray[i]['pType']));
-            }
-        }
-        // console.dir(request)
-        return request.execute(spName);			
-    }).catch(function(err) {
-        throw err
-    })
-}
-function queryExecute(query, parametersJsonArray) {
-    return conSql.getConnectionPoolGlobal()
-    .then(function(pool) {	
-        console.log('Conecto');
-        let request  = pool.request();
-        const tam = parametersJsonArray.length;
-        for (var i = 0; i < tam; i++) {
-            if(parametersJsonArray[i].pClasf == 1) {
-                request.input(
-                    parametersJsonArray[i]['pName'],
-                    eval(parametersJsonArray[i]['pType']),
-                    parametersJsonArray[i]['pData']);
-            } else {
-                request.output(
-                    parametersJsonArray[i]['pName'],
-                    eval(parametersJsonArray[i]['pType']));
-                }
-        }
-        return request.query(query);			
-    }).catch(function(err) {
-        console.log("Connection Error: " + err);
-        throw err
-    })
-}
+exports.bulkInsert  = ( table, conn ) => {
+    return conn.request()
+        .bulk( table );
+};
