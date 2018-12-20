@@ -1,7 +1,6 @@
 'use strict';
 const baseSelect    = 'SELECT IdMoneda, IsPrincipal, NombMoneda, CodigoIso,Simbolo, Habilitado, CreatedAt, UpdatedAt FROM FACTURACION_MONEDA';
 const { addLikeParamInFilter, addEqualParamInFilter }   =  require( '../Utils/util');
-const { param }     = require('express-validator/check');
 const { sql, pushAOJParam, queryExecute } = require('../Utils/defaultImports')
 
 

@@ -95,13 +95,13 @@ function execSP(conn, spName, parametersJsonArray) {
 };
 
 async function executeQueryByConfig(queryString, parametersJsonArray, config, connection) {
-    if ( parametersJsonArray == null || parametersJsonArray == undefined ) {
+    if ( !parametersJsonArray ) {
         throw   new Error('Arreglo de parametros indefinido.');
     }
-    if ( (config == undefined) && (connection == undefined ) )  {
+    if ( !config && !connection )  {
         throw   new Error('Debes definir una configuracion o coneccion a utilizar.');
     }
-    let isConnSupplied  = (connection != undefined);
+    let isConnSupplied  = !!connection;
 
     if  ( isConnSupplied ) {
         return execQuery(queryString, parametersJsonArray, connection);

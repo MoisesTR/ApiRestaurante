@@ -1,5 +1,8 @@
 const { pushAOJParam, sql, storedProcExecute, queryExecute }  = require('../Utils/defaultImports')
 const baseSelect = 'SELECT IdCategoria,NombCategoria,DescCategoria,Habilitado,CreatedAt, UpdatedAt FROM CATEGORIA_PRODUCTO'
+const queryUpdate = `UPDATE CATEGORIA_PRODUCTO 
+SET NombCategoria = @NombCategoria, DescCategoria = @DescCategoria, UpdatedAt= GETDATE()
+WHERE IdCategoria = @IdCategoria `;
 
 class CategoriaModel {
 
@@ -36,7 +39,7 @@ class CategoriaModel {
         pushAOJParam(this.aoj, 'IdCategoria',     sql.Int,            data.IdCategoria)
         pushAOJParam(this.aoj, 'NombCategoria',   sql.NVarChar(50),   data.NombCategoria)
         pushAOJParam(this.aoj, 'DescCategoria',   sql.NVarChar(150),  data.DescCategoria)
-        return storedProcExecute('USP_UPDATE_CATEGORIA', this.aoj)
+        return queryExecute(queryUpdate, this.aoj)
     }
 
     getCategoriaById( IdCategoria ){

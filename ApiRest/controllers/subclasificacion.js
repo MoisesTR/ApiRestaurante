@@ -6,7 +6,7 @@ const SubClasificacion      = new SubClasificacionModel();
 function getSubclasificById(req, res) {
     var data = req.params;
 
-    SubClasificacion.getSubclasificById( data.IdSubclasificacion )
+    SubClasificacion.getSubclasificById( data.IdSubClasificacion )
     .then((results) => {
         res.status(200)
             .json({ subclasificacion: results.recordset[0] })
@@ -75,9 +75,9 @@ function getSubclasificacionesByIdClasificacion(req, res) {
 function changeStateSubClasificacion(req, res) {
     let data = matchedData(req, {locations:['query','params','body']});
     
-    SubClasificacion.changeStateSubClasificacion( data.IdSubclasificacion, data.Habilitado )
+    SubClasificacion.changeStateSubClasificacion( data.IdSubClasificacion, data.Habilitado )
     .then((results) => {
-        console.log(results)
+        // console.log(results)
         let afectadas   = results.rowsAffected[0]
         let accion      = (data.Habilitado == 0) ? 'Deshabilitada' : 'Habilitada';
         res.status(200)
