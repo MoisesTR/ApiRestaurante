@@ -7,19 +7,17 @@ IF OBJECT_ID('dbo.BITACORA_CAMBIOS_FACTURA') IS NOT NULL
 
 GO
 CREATE TABLE dbo.BITACORA_CAMBIOS_FACTURA(
-	IdConsecutivo INT IDENTITY(1,1)
-	, IdFactura INT NOT NULL
-	, IdUsuario INT NOT NULL
-	, Descripcion VARCHAR(300) NOT NULL
-	, CreatedAt DATETIME NOT NULL
-
+	IdConsecutivo	INT IDENTITY(1,1), 
+	IdFactura		INT				NOT NULL, 
+	IdUsuario		INT				NOT NULL, 
+	DescCambio		VARCHAR(300)	NOT NULL, 
+	CreatedAt		DATETIME		NOT NULL
 	CONSTRAINT PK_ConsecutivoBitacora	PRIMARY KEY (IdConsecutivo), 
 	CONSTRAINT FK_IdFacturaBitacora		FOREIGN KEY (IdFactura) 
-				REFERENCES FACTURA_COMPRA(IdFactura), 
+				REFERENCES	FACTURA_COMPRA(IdFactura), 
 	CONSTRAINT FK_IdUsuarioBitacora		FOREIGN KEY (IdUsuario) 
-			REFERENCES USUARIO(IdUsuario)
+				REFERENCES	USUARIO(IdUsuario)
 )
-
 GO
 
 USE master;
