@@ -195,19 +195,19 @@ GO
 IF OBJECT_ID('USP_INSERT_DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION','P') IS NOT NULL
 	DROP PROCEDURE USP_INSERT_DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION
 GO
-CREATE PROCEDURE USP_INSERT_DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION(
-	@IdEntradaBodegaAP INT,
-    @IdProductoProveedor INT,
-    @Cantidad INT,
-	@PrecioUnitarioEntrada MONEY,
-	@DescuentoCalculado MONEY
-)
-AS BEGIN
-	DECLARE @PrecioUnitarioActual MONEY
+--CREATE PROCEDURE USP_INSERT_DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION(
+--	@IdEntradaBodegaAP	INT,
+--    @IdProcedencia		INT,
+--    @Cantidad			INT,
+--	@PrecioUnitarioEntrada MONEY,
+--	@DescuentoCalculado MONEY
+--)
+--AS BEGIN
+--	DECLARE @PrecioUnitarioActual MONEY
 	
-	INSERT INTO dbo.DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION(IdEntradaBodegaAP,IdProductoProveedor,Cantidad,PrecioUnitarioEntrada,DescuentoCalculado)
-	VALUES(@IdEntradaBodegaAP,@IdProductoProveedor,@Cantidad,@PrecioUnitarioEntrada,@DescuentoCalculado)
-END
+--	INSERT INTO dbo.DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION(IdEntradaBodegaAP,IdProcedencia,Cantidad, DescuentoCalculado)
+--	VALUES(@IdEntradaBodegaAP,	@IdProcedencia, @Cantidad,	@PrecioUnitarioEntrada,	@DescuentoCalculado)
+--END
 GO
 IF OBJECT_ID('USP_GENERAR_FACTURA','P') IS NOT NULL
 	DROP PROCEDURE USP_GENERAR_FACTURA
@@ -291,14 +291,14 @@ CREATE PROCEDURE USP_CREATE_UNIDAD_MEDIDA(
 	@Descripcion		NVARCHAR(50)	NULL,
 	@ValorUdm			NUMERIC(10,5)
 ) AS BEGIN
-	INSERT INTO dbo.UNIDAD_MEDIDA_FUNCIONAL(IdUnidadMedida, Nombre, Descripcion, ValorUdm)
+	INSERT INTO dbo.UNIDAD_MEDIDA_FUNCIONAL(IdUnidadMedida, NombUdmFunc, Descripcion, ValorUdm)
 	VALUES(@IdUnidadMedida, @Nombre, @Descripcion, @ValorUdm)
 	
 	SELECT @IdUdmFuncional = @@IDENTITY
 END
 GO
-INSERT INTO ENVASE(NombEnvase,Descripcion) 
-VALUES	('Botella Plastica','una botella de plastico')
+INSERT INTO ENVASE(NombEnvase, DescEnvase) 
+VALUES	('Botella Plastica','Una botella de plastico')
 		,('Bolsa Plastica','Bolsa de plastico')
 		,('Caja Plastica','Una caja de plastico')
 		,('Lata de aluminio','')
@@ -317,7 +317,7 @@ GO
 
 SET IDENTITY_INSERT dbo.EMPAQUE ON
 
-INSERT INTO EMPAQUE(NombreEmpaque,Descripcion) 
+INSERT INTO EMPAQUE(NombEmpaque) 
 VALUES	('Caja Carton')
 		,('Caja plastica')
 		,('Bolsa Plastica')
@@ -326,3 +326,5 @@ VALUES	('Caja Carton')
 		,('Cajilla Carton')
 		,('Saco');
 GO
+
+SET IDENTITY_INSERT dbo.EMPAQUE ON

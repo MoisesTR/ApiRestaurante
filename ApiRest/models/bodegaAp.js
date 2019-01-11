@@ -3,7 +3,7 @@ const { sql, pushAOJParam } = require('../Utils/defaultImports')
 class BodegaAp {
     
     createEntradaBodegaAp( data ) { 
-        let aoj     = [];
+        const aoj     = [];
 
         pushAOJParam(aoj,    'IdBodegaAreap',            sql.Int,            data.IdBodegaAreaP);
         pushAOJParam(aoj,    'IdTrabajador',             sql.Int,            data.IdTrabajador);
@@ -19,7 +19,7 @@ class BodegaAp {
 
     
     createDetalleEntrada( data ) { 
-        let aoj = [];
+        const aoj = [];
 
         pushAOJParam(aoj,    'IdEntradaBodegaAP',    sql.Int,    data.IdEntradaBodegaAP);
         pushAOJParam(aoj,    'IdProductoProveedor',  sql.Int,    data.IdProductoProveedor);
@@ -30,7 +30,7 @@ class BodegaAp {
     }
 
     createDetalleEntrada( data ) { 
-        let aoj = [];
+        const aoj = [];
 
         pushAOJParam(aoj,    'IdEntradaBodegaAP',    sql.Int,    data.IdEntradaBodegaAP);
         pushAOJParam(aoj,    'IdProductoProveedor',  sql.Int,    data.IdProductoProveedor);
@@ -41,14 +41,14 @@ class BodegaAp {
     }
     
     getDetalleBodegaAp ( Habilitado ) {
-        let aoj=[];
+        const aoj=[];
 
         pushAOJParam( aoj,   'IdBodegaAreaP',    sql.Int,    Habilitado);
         return storedProcExecute('USP_GET_DETALLE_BODEGA_AP',aoj)
     }
     
     generarFactura ( IdEntradaBodegaAP ) {
-        let aoj =[];
+        const aoj =[];
 
         pushAOJParam( aoj,   'IdEntradaBodegaAP',    IdEntradaBodegaAP)
         return storedProcExecute('USP_GENERAR_FACTURA',aoj)

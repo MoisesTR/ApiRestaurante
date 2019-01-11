@@ -2,38 +2,36 @@ const jwt = require('../../services/jwt');
 const moment = require('moment');
 const bcrypt = require('bcryptjs');
 const saltRounds    = 10;
-const {mssqlErrors, matchedData, sanitize, db, sql} = require('../../Utils/defaultImports')
+const {mssqlErrors, matchedData, db, sql} = require('../../Utils/defaultImports')
 const UserModel     =require( "../../models/User");
 let User = new UserModel();
 
-//funcion registro\
-function signUp(req, res) {
-    var userData = matchedData(req);
-    var aoj = [];
-    console.log('*-*-*-*-*-*-*-*-*-*-*    \tsignup \t*-*-*-*-*-*-*\n', userData)
+//funcion registro
+exports.signUp = ( req, res ) => {
+    const   userData    = matchedData(req);
+    let     hashPassw   = null;
+    
     bcrypt.hash(userData.Password, saltRounds)
-    .then((hashPassw) => {
-        userData.Password = hashPassw;
-        console.log('password hasseada')
+    .then((_hashPassw) => {
+        hashPassw = _hashPassw;
 
-        return User.getUserByUsernameOREmail( userData.Username, userData.email)
+        return User.getUserByUsernameOREmail( userData.Username, userData.Email)
     }).then((usersfind) => {
-        var users = usersfind.recordset;
+        const   users = usersfind.recordset;
         console.log(usersfind)
             //Si se encontro mas de un usuario
-        if (users.length > 1) {
+        if ( users.length > 1 ) {
             // console.log(usersfind.recordset[0])
             throw { status: 401, code: "UEEXIST", message: "No se registro el usuario, email y username ya se encuentran registrados!" };
             //res.status(401).json({code:"UEXIST",message:"No se registro el usuario, email o username ya registrados!"})
-        } else if (users.length == 1) {
+        } else if ( users.length === 1 ) {
             // if(usersfind[0].username == userData.username || usersfind[1].username== userData.username)
-            if (users[0].Username == userData.Username)
+            if ( users[0].Username === userData.Username )
                 throw { status: 401, code: "UEXIST", message: 'No se registro el usuario username:' + userData.username + ', ya se encuentra registrado!' };
             else
                 throw { status: 401, code: "EEXIST", message: 'No se registro el usuario email:' + userData.email + ', ya se encuentra registrado!' };
         } else {
-            console.log('Creando Usuario');
-            return User.createUser(userData)
+            return User.createUser({...userData, hashPassw})
         }
     }).then((result) => {
         console.log("Creado")
@@ -42,41 +40,43 @@ function signUp(req, res) {
                 user: result.recordset[0] 
             })
     }).catch((err) => {
-        console.error('Error principal')
+        console.error('Error principal', err)
         res.status(err.status | 500)
             .json(err)
     })
 }
-//funcion login
-function singIn(req, res) {
-    var userData = matchedData(req);
-    var aoj = [];
-    db.pushAOJParam(aoj, 'Username', sql.NVarChar(50), userData.Username);
+
+/**
+ * @name singIn
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.singIn = ( req, res ) => {
+    const   userData = matchedData(req);
+    let     user =  null;
 
     User.getUserByUsername( userData.Username )
     .then((userResult) => {
-        var user = userResult.recordset[0];
+        user = userResult.recordset[0];
         if (user) {
-            var passh = user.Password;
-            console.log('Usuario encontrado');
+            const passh = user.Password;
 
-            let isEqual = bcrypt.compareSync(userData.Password, passh);
-
+            return  bcrypt.compare(userData.Password, passh);
         } else {
             console.log('Usuario no encontrado!');
-            res.status(404).json({ status: '401', code: 'NEXIST', message: 'El usuario ingresado no existe en la base de dato!' });
+            res.status(404)
+                .json({ status: '401', code: 'NEXIST', message: 'El usuario ingresado no existe en la base de dato!' });
         }
     })
     .then((isequal) => {
         if (isequal) {
-            console.log('Las contrasenas coinciden');
-            console.log((userData.gettoken == true) ? 'Se retornara un token' : 'Se retornara la informacion del usuario');
-            if (userData.gettoken == true) {
+            console.log((!!userData.gettoken) ? 'Se retornara un token' : 'Se retornara la informacion del usuario');
+            if (!!userData.gettoken) {
                 console.log('Mande get token')
-                let tokenGen = jwt.createToken(user);
+                let {_token : tokenGen, expiration} = jwt.createToken(user);
                 //console.log('Devolviendo token, del usuario '+user.username);
                 console.log('token:' + tokenGen);
-                res.status(200).json({ token: tokenGen });
+                res.status(200).json({ token: tokenGen, expiration });
             } else {
                 //delete user.password
                 res.status(200).json(user);
@@ -94,7 +94,7 @@ function singIn(req, res) {
     })
 }
 
-function getUsers(req, res) {
+exports.getUsers = (req, res) => {
     let Habilitado = req.query.Habilitado;
     var aoj = [];
     db.pushAOJParam(aoj, 'Habilitado', sql.Int, +Habilitado);
@@ -110,7 +110,7 @@ function getUsers(req, res) {
     })
 }
 //
-function updateUser(req, res) {
+exports.updateUser = (req, res) => {
     var userData = matchedData(req, { locations: ['body', 'query']});
     if (IdUsuario != req.user.sub) {
         return res.status(403)
@@ -135,11 +135,11 @@ function updateUser(req, res) {
     })
 }
 
-function changeStateUser(req, res) {
+exports.changeStateUser = ( req, res ) => {
     let data = matchedData(req, {locations: ['body', 'params']});
     console.log(data)
 
-    User.changeStateUser( )
+    User.changeStateUser( data.IdUsuario, data.Habilitado )
     .then((results) => {
         console.log(results)
         let afectadas = results.rowsAffected[0]
@@ -152,10 +152,12 @@ function changeStateUser(req, res) {
         console.log('Error:', err)
     });
 }
-module.exports = {
-    signUp,
-    singIn,
-    updateUser,
-    getUsers,
-    changeStateUser
-};
+
+exports.getAuthenticateUserInfo = ( req, res ) => {
+    req.status(200)
+        .json(req)
+}
+
+exports.refreshToken = ( req, res ) => {
+    
+}

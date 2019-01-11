@@ -1,25 +1,21 @@
-const express = require('express');
-const path = require('path');
+const express   = require('express');
+const path      = require('path');
 const compression = require('compression');
 const favicon = require('serve-favicon');
-const logger = require('morgan');
+const logger    = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const serveIndex = require('serve-index');
 const fileUpload = require('express-fileupload');
 
-const api = require('./routes/api')
+const apiRoutes     = require('./routes/api');
 const catalogRoutes = require('./routes/catalogosRoutes');
-
-const reports = require('./routes/reports')
+const reportsRoutes = require('./routes/reports');
+const authRoutes    = require('./routes/authRoutes');
 const app = express();
 
 // Comprime todas las respuestas
 app.use(compression())
-
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -29,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
-app.use('/reports', reports);
+app.use('/reports', reportsRoutes);
 
 //Imagenes
 app.use(express.static(__dirname + '/'))
@@ -45,8 +41,9 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use('/api', api);
-app.use('/api', catalogRoutes)
+app.use('/api', apiRoutes);
+app.use('/api', catalogRoutes);
+app.use('/api', authRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

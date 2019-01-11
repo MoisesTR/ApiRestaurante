@@ -247,31 +247,31 @@ CREATE PROCEDURE USP_DISP_PRODUCTO(
 	WHERE IdProducto=@IdProducto
 END
 go
-IF OBJECT_ID('dbo.USP_GET_PRODUCTOS_PROVEEDORES','P') IS NOT NULL
-	DROP PROCEDURE dbo.USP_GET_PRODUCTOS_PROVEEDORES
-GO
-CREATE PROCEDURE dbo.USP_GET_PRODUCTOS_PROVEEDORES
-	@Habilitado BIT NULL
-AS BEGIN
-	IF @Habilitado is NULL
-		SELECT	VPD.*
-				, PVE.NombProveedor
-				, Cantidad = 1
-				, Descuento = 0
-				, GravadoIva = 0 
-		FROM	dbo.V_ProductosDetallados VPD
-				INNER JOIN dbo.PROVEEDOR PVE
-					ON VPD.IdProveedor = PVE.IdProveedor
-	ELSE
-		SELECT VPD.*
-				, Cantidad = 1
-				, Descuento = 0
-				, GravadoIva = 0 
-		FROM	dbo.V_ProductosDetallados VPD
-				INNER JOIN dbo.PROVEEDOR PVE
-					ON VPD.IdProveedor = PVE.IdProveedor
-		WHERE	VPD.Habilitado = @Habilitado;
-END 
+--IF OBJECT_ID('dbo.USP_GET_PRODUCTOS_PROVEEDORES','P') IS NOT NULL
+--	DROP PROCEDURE dbo.USP_GET_PRODUCTOS_PROVEEDORES
+--GO
+--CREATE PROCEDURE dbo.USP_GET_PRODUCTOS_PROVEEDORES
+--	@Habilitado BIT NULL
+--AS BEGIN
+--	IF @Habilitado is NULL
+--		SELECT	VPD.*
+--				, PVE.NombProveedor
+--				, Cantidad = 1
+--				, Descuento = 0
+--				, GravadoIva = 0 
+--		FROM	dbo.V_ProductosDetallados VPD
+--				INNER JOIN dbo.PROVEEDOR PVE
+--					ON VPD.IdProveedor = PVE.IdProveedor
+--	ELSE
+--		SELECT VPD.*
+--				, Cantidad = 1
+--				, Descuento = 0
+--				, GravadoIva = 0 
+--		FROM	dbo.V_ProductosDetallados VPD
+--				INNER JOIN dbo.PROVEEDOR PVE
+--					ON VPD.IdProveedor = PVE.IdProveedor
+--		WHERE	VPD.Habilitado = @Habilitado;
+--END 
 GO
 
 --IF OBJECT_ID('USP_GET_PRODUCTO_PROVEEDORES','P') IS NOT NULL
@@ -289,17 +289,17 @@ GO
 IF OBJECT_ID('USP_GET_PRODUCTOS_PROVEEDOR','P') IS NOT NULL
 	DROP PROCEDURE USP_GET_PRODUCTOS_PROVEEDOR
 GO
-CREATE PROCEDURE USP_GET_PRODUCTOS_PROVEEDOR(
-	@IdProveedor INT
-) AS BEGIN
-	SELECT	VPD.*
-			, PVE.NombProveedor
-	FROM	dbo.V_ProductosDetallados VPD
-		INNER JOIN PROVEEDOR PVE
-			ON	VPD.IdProveedor = PVE.IdProveedor
-	WHERE VPD.IdProveedor = @IdProveedor;
-END
-GO
+--CREATE PROCEDURE USP_GET_PRODUCTOS_PROVEEDOR(
+--	@IdProveedor INT
+--) AS BEGIN
+--	SELECT	VPD.*
+--			, PVE.NombProveedor
+--	FROM	dbo.V_ProductosDetallados VPD
+--		INNER JOIN PROVEEDOR PVE
+--			ON	VPD.IdProveedor = PVE.IdProveedor
+--	WHERE VPD.IdProveedor = @IdProveedor;
+--END
+--GO
 IF OBJECT_ID('dbo.USP_CREATE_EMPAQUE','P') IS NOT NULL
 	DROP PROCEDURE dbo.USP_CREATE_EMPAQUE
 GO

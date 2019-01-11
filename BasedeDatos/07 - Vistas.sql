@@ -18,20 +18,20 @@ SELECT	p.IdProducto
 		, p.IdEnvase
 		, e.NombEnvase
 		, p.IdEmpaque
-		, em.NombreEmpaque
+		, em.NombEmpaque
 		, p.CantidadEmpaque
 		, p.Imagen
 		, p.IdUnidadMedida
 		, um.NombUnidad
 		, p.ValorUnidadMedida
 		, p.IdEstado
-		, ep.Nombre
+		, ep.NombEstado
 		, p.Habilitado
 		, P.DiasRotacion
 		, im.IdTipInsumo 
 		, DescripcionInsumo = im.Descripcion
 		, p.CodProd
-		, p.CodigoInterno
+		, p.CodOriginal
 		, p.CodBarra
 		, P.CreatedAt
 		, P.UpdatedAt
@@ -78,9 +78,9 @@ CREATE VIEW dbo.V_ProductosDetallados
 AS
 SELECT	p.IdProducto,	p.NombProducto,	p.Descripcion,	cl.IdCategoria,	cp.NombCategoria,
 		p.IdSubClasificacion,	sp.NombSubClasificacion,	cl.IdClasificacion,		cl.NombClasificacion,
-		p.IdEnvase,	e.NombEnvase,		p.IdEmpaque,	em.NombreEmpaque,    p.CantidadEmpaque,
+		p.IdEnvase,	e.NombEnvase,		p.IdEmpaque,	em.NombEmpaque,    p.CantidadEmpaque,
 		p.Imagen,	p.IdUnidadMedida,	um.NombUnidad,	p.ValorUnidadMedida,	p.IdEstado,
-		ep.Nombre,	p.Habilitado,		P.DiasCaducidad,	P.CreatedAt,P.UpdatedAt
+		ep.NombEstado,	p.Habilitado,		P.DiasRotacion,	P.CreatedAt,P.UpdatedAt
     FROM Producto p 
     INNER JOIN SUBCLASIFICACION_PRODUCTO sp 
 		ON	p.IdSubClasificacion = sp.IdSubClasificacion

@@ -1,12 +1,10 @@
-var db = require('../services/database')
-var sql = require('mssql')
 const { mssqlErrors } = require('../Utils/util');
 const { matchedData, sanitize } = require('express-validator/filter');
 const BodegaApModel = require('../models/bodegaAp');
 const BodegaAp  = new BodegaApModel();
 
-function createEntradaBodegaAp(req, res){ 
-    var data = matchedData(req, { locations:'body' } )
+exports.createEntradaBodegaAp = (req, res) => { 
+    const data = matchedData(req, { locations:'body' } )
     
     BodegaAp.createEntradaBodegaAp( data )
     .then((results) => {
@@ -16,8 +14,9 @@ function createEntradaBodegaAp(req, res){
         res.status(500).json( mssqlErrors(err) );
     })
 }
-function createDetalleEntrada(req, res){ 
-    var data = matchedData(req,{locations:'body'})
+
+exports.createDetalleEntrada = ( req, res ) => { 
+    const data = matchedData(req,{locations:'body'})
 
     BodegaAp.createDetalleEntrada( data )
     .then((results) => {
@@ -27,8 +26,8 @@ function createDetalleEntrada(req, res){
     })
 }
 
-function getDetalleBodegaAp(req, res){
-    let Habilitado = req.query.Habilitado;
+exports.getDetalleBodegaAp = (req, res) => {
+    const Habilitado = req.query.Habilitado;
 
     BodegaAp.getDetalleBodegaAp( Habilitado )
     .then((results) => {
@@ -39,8 +38,9 @@ function getDetalleBodegaAp(req, res){
         res.status(500).json( mssqlErrors(err) );
     });
 }
-function generarFactura(req,res){
-    let data = matchedData(req,{locations:'params'})
+
+exports.generarFactura = (req, res ) => {
+    const data = matchedData(req,{locations:'params'})
     
     BodegaAp.generarFactura( data.IdEntradaBodegaAP )
     .then((result) => {
@@ -48,11 +48,4 @@ function generarFactura(req,res){
     }).catch((err) => {
         res.status(500).json( mssqlErrors(err) );
     });
-}
-
-module.exports={
-   createEntradaBodegaAp,
-   getDetalleBodegaAp,
-   generarFactura,
-   createDetalleEntrada
 }

@@ -1,16 +1,18 @@
 const   express             = require('express');
-const   AuthController      = require('../controllers/auth');
+const   AuthController      = require('../controllers/auth/auth.controller');
 const   validations         = require('../Utils/validations/authValidations');
-let     router              = express.Router();
-let     { validsParams } = validations;
+const   router              = express.Router();
+const   { ensureAuth }      = require('../services/jwt');
+const   { validsParams } = validations;
 
 router
     //Rutas para manejo de Usuarios
     .post('/signup',        validations.userSignUpValidation,       validsParams, AuthController.signUp)
-    .post('/signupAdmin',   validations.userSignUpValidationAdmin,  validsParams, AuthController.signUp)
     .post('/signin',        validations.userSignInValidation,       validsParams, AuthController.singIn)
-    .get('/users',          validations.Habilitado,                 validsParams, AuthController.getUsers)
-    .put('/update-user/:IdUsuario(\\d+)',   validations.userSignInValidation, validations.userUpdate, validsParams, AuthController.updateUser)
+    .get( '/me',            ensureAuth,     validations.meInfo,     validsParams, AuthController.getAuthenticateUserInfo)
+    .post('/refresh',       AuthController.refreshToken)
+    .get( '/users',         validations.Habilitado,                 validsParams, AuthController.getUsers)
+    .put( '/update-user/:IdUsuario(\\d+)',   validations.userSignInValidation, validations.userUpdate, validsParams, AuthController.updateUser)
     .delete('/user/:IdUsuario(\\d+)',       AuthController.changeStateUser)
 
 module.exports = router;

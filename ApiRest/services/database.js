@@ -1,6 +1,5 @@
 const conSql = require('../config/mssqlConfig');
 
-
 /**
  * @name    pushAOJ
  * @param {Array} aoj Array de Parametros
@@ -10,12 +9,12 @@ const conSql = require('../config/mssqlConfig');
  * @param {Object} value 
  */
 function pushAOJ(aoj, mode, name,type, value) {
-    aoj[aoj.length] = {
+    aoj.push({
         pMode: mode,
 		pName: name,
 		pType: type,
 		pData: value
-	};
+	});
 };
 
 exports.pushAOJParam    = function pushAOJParam(aoj, name, type, value) {
