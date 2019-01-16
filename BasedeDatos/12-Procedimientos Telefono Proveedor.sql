@@ -6,11 +6,11 @@ IF OBJECT_ID('dbo.USP_CREATE_TELEFONO_PROVEEDOR') IS NOT NULL
 	DROP PROCEDURE dbo.USP_CREATE_TELEFONO_PROVEEDOR
 GO
 CREATE PROCEDURE dbo.USP_CREATE_TELEFONO_PROVEEDOR (
-	@IdProveedor	INT, 
-	@Nombre			NVARCHAR(50), 
+	@IdProveedor		INT, 
+	@NombPAsignada		NVARCHAR(50), 
 	@Cargo			NVARCHAR(50), 
 	@Telefono		NVARCHAR(15),
-	@Titular		BIT
+	@IsTitular		BIT
 )
 AS	
 BEGIN
@@ -22,8 +22,8 @@ BEGIN
 	END
 	ELSE
 	BEGIN 
-		INSERT INTO dbo.TELEFONOS_PROVEEDOR(IdProveedor, Nombre, Cargo, Telefono,Titular) 
-		VALUES(@IdProveedor, @Nombre, @Cargo, @Telefono, @Titular)
+		INSERT INTO dbo.TELEFONOS_PROVEEDOR(IdProveedor, NombPAsignada, Cargo, Telefono, IsTitular) 
+		VALUES(@IdProveedor, @NombPAsignada, @Cargo, @Telefono, @IsTitular)
 		SELECT @@IDENTITY AS IdTelefono
 	END
 END

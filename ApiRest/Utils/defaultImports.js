@@ -2,7 +2,9 @@ const sql   = require('mssql');
 const db    = require('../services/database');
 const {mssqlErrors} = require('./util');
 const {matchedData, sanitize} = require('express-validator/filter');
-const { query,param,body,check, validationResult } = require('express-validator/check');
+const { query,param,body,check,oneOf, validationResult } = require('express-validator/check');
+const whereHabilitadoFilter = ' WHERE Habilitado = @Habilitado';
+
 module.exports = {
     sql,
     ...db, 
@@ -12,6 +14,8 @@ module.exports = {
     query,
     param, 
     body, 
+    oneOf,
     check, 
-    validationResult
+    validationResult,
+    whereHabilitadoFilter
 }

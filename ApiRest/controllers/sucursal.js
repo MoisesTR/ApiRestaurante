@@ -1,12 +1,11 @@
 const { mssqlErrors }           = require('../Utils/util');
-const { matchedData, sanitize } = require('express-validator/filter');
+const { matchedData } = require('express-validator/filter');
 const SucursalModel     = require('../models/Sucursal');
-const Sucursal          = new SucursalModel();
 
 function getSucursalById(req, res) {
-    var data = req.params;
+    const data = req.params;
 
-    Sucursal.getSucursalById( data.IdSucursal )
+    SucursalModel.getSucursalById( data.IdSucursal )
     .then((results) => {
         res.status(200)
             .json({ sucursal: results.recordset[0] })
@@ -17,9 +16,9 @@ function getSucursalById(req, res) {
 }
 
 function getSucursales(req, res) {
-    let data = matchedData(req,{locations:['query']});
+    const data = matchedData(req,{locations:['query']});
 
-    Sucursal.getSucursales( data.Habilitado )
+    SucursalModel.getSucursales( data.Habilitado )
     .then((results) => {
         res.status(200)
             .json({ sucursales: results.recordset })
@@ -30,10 +29,10 @@ function getSucursales(req, res) {
 }
 
 function createSucursal(req, res) {
-    var data = matchedData(req, {locations: 'body'});
+    const data = matchedData(req, {locations: 'body'});
 
-    Sucursal.createSucursal( data )
-    .then((results) => {
+    SucursalModel.createSucursal( data )
+    .then( results => {
         res.status(200)
             .json(results.recordset[0])
     }).catch((err) => {
@@ -43,7 +42,7 @@ function createSucursal(req, res) {
 }
 
 function updateSucursal(req, res) {
-    var data =  matchedData(req, {locations:['body','params']});
+    const data =  matchedData(req, {locations:['body','params']});
 
     Sucursal.updateSucursal( data )
     .then((results) => {
@@ -60,7 +59,7 @@ function updateSucursal(req, res) {
 function changeStateSucursal(req, res) {
     let data = matchedData(req, {locations:['query','params','body']});
 
-    Sucursal.changeStateSucursal( data.IdSucursal. data.Habilitado )
+    SucursalModel.changeStateSucursal( data.IdSucursal. data.Habilitado )
     .then((results) => {
         let afectadas   = results.rowsAffected[0]
         let accion      = (data.Habilitado == 0) ? 'Deshabilitada' : 'Habilitada';

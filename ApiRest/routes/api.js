@@ -1,4 +1,4 @@
-var express = require('express')
+const express = require('express')
 const CategoriaController       = require('../controllers/categoria')
 const ClasificacionController   = require('../controllers/clasificacion')
 const EmpaqueController         = require('../controllers/empaque')
@@ -18,10 +18,9 @@ const clasifUDMController       = require('../controllers/clasificacionudm')
 const bodegaApController        = require('../controllers/bodegaAp');
 const menuController            = require('../controllers/menu');
 const validations               = require('../Utils/validations/validations');
-const jwt                       = require('../services/jwt');
 let   FactCompController        = require('../controllers/facturacion');
-let   {validsParams, Habilitado : habilitadoValid,changeStateGeneric}    = validations;
-var Router = express.Router();
+let   {validsParams, Habilitado : habilitadoValid,changeStateGeneric}    = require('../Utils/validations/genericValidations');
+const Router = express.Router();
 
 
 Router
@@ -107,8 +106,8 @@ Router
     /*********** faltan */
     //Rutas para Trabajador Controller
     .get('/trabajadores',                       habilitadoValid.concat(validations.IdSucursal), validsParams,       TrabajadorController.getTrabajadores)
-    .post('/trabajador',                        validations.createTrabajador,                   validsParams,       TrabajadorController.createTrabajador)
     .get('/trabajador/:IdTrabajador(\\d+)',     TrabajadorController.getTrabajadorById)
+    .post('/trabajador',                        validations.createTrabajador,                   validsParams,       TrabajadorController.createTrabajador)
     .put('/trabajador/:IdTrabajador(\\d+)',     validations.createTrabajador.concat(validations.updateTrabajador),  validsParams,       TrabajadorController.updateTrabajador)
     .delete('/trabajador/:IdTrabajador(\\d+)',  changeStateGeneric('IdTrabajador'),             validsParams,       TrabajadorController.changeStateTrabajador)
     //Rutas Para Cargo Controller

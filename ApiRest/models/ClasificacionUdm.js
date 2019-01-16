@@ -1,24 +1,24 @@
 const { sql, pushAOJParam, queryExecute } = require('../Utils/defaultImports');
+const baseSelect = 'SELECT IdClasifUDM, NombClasificacion, DescClasificacion, Habilitado, CreatedAt, UpdatedAt FROM CLASIFICACION_UNIDAD_MEDIDA';
+const { addEqualParamInFilter } = require('../Utils/util');
 
 class ClasificacionUdmModel {
-    constructor() {
-        this.baseSelect =   `SELECT IdClasifUDM, NombClasificacion, DescClasificacion, Habilitado, CreatedAt, UpdatedAt 
-        FROM CLASIFICACION_UNIDAD_MEDIDA`;
-        this.aoj    = [];
-    }
     
-    getClasificaciones( {Habilitado} = {}){
-        this.aoj = [];
-        
+    static getClasificaciones( {Habilitado} = {}){
+        const   aoj = [];
+        let     filter = '';
+
+        filter += addEqualParamInFilter( filter, 'Habilitado' );
         pushAOJParam(aoj,   'Habilitado',   sql.Int,    +Habilitado)
-        return queryExecute( this.baseSelect + filter,aoj)
+        return queryExecute( baseSelect + filter, aoj)
     }
     
-    getClasificacion( IdClasifUDM ){
-        this.aoj=[];
+    static getClasificacion( IdClasifUDM ){
+        const aoj = [];
         
+        filter += addEqualParamInFilter( filter, 'IdClasifUDM' );
         pushAOJParam(aoj,   'IdClasifUDM',  sql.Int,    IdClasifUDM)
-        return queryExecute( this.baseSelect + filter,aoj)
+        return queryExecute( baseSelect + filter, aoj)
     }
 }
 

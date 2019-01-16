@@ -18,11 +18,11 @@ class MonedaModel {
      * @name _getAMoneda
      * @param filter String 
      */
-    _getAMoneda( paranName, type,  value ) {
+    _getAMoneda( paramName, type,  value ) {
         this.aoj    = [];
-        let filter  = ` WHERE ${paranName}  = @${paranName};`
+        let filter  = ` WHERE ${paramName}  = @${paramName};`
         
-        pushAOJParam( this.aoj, paranName, type, value);
+        pushAOJParam( this.aoj, paramName, type, value);
         return queryExecute( baseSelect + filter, this.aoj)
     }
 
@@ -53,7 +53,7 @@ class MonedaModel {
             filter = addLikeParamInFilter( filter, 'NombMoneda');
             pushAOJParam( this.aoj,   'NombMoneda',   sql.NVarChar(50),   NombMoneda);
         }
-        if ( !!param.Habilitado ) {
+        if ( undefined != params.Habilitado ) {
             filter = addEqualParamInFilter( filter, 'Habilitado');
             pushAOJParam( this.aoj,   'Habilitado',   sql.Bit,            Habilitado);
         }

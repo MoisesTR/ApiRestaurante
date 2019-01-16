@@ -1,4 +1,5 @@
 const { pushAOJParam, sql, storedProcExecute, queryExecute }  = require('../Utils/defaultImports')
+const { addLikeParamInFilter, addEqualParamInFilter } = require('../Utils/util');
 const baseSelect = 'SELECT IdCategoria,NombCategoria,DescCategoria,Habilitado,CreatedAt, UpdatedAt FROM CATEGORIA_PRODUCTO'
 const queryUpdate = `UPDATE CATEGORIA_PRODUCTO 
 SET NombCategoria = @NombCategoria, DescCategoria = @DescCategoria, UpdatedAt= GETDATE()
@@ -23,13 +24,14 @@ class CategoriaModel {
         let filter  = '';    
     
         if ( !!data.NombCategoria  ) {
-            filter += (filter === '') ? " WHERE NombCategoria = '%'@NombCategoria'%'" : " AND NombCategoria LIKE '%'@NombCategoria'%";
+            filter += addLikeParamInFilter( filter, 'NombCategoria' );
             pushAOJParam(this.aoj, 'NombCategoria', sql.NVarChar(50), data.NombCategoria)
         }
         if ( !!data.Habilitado  ) {
-            filter += ' WHERE Habilitado = @Habilitado';
+            filter += addEqualParamInFilter( filter, 'Habilitado' );
             pushAOJParam(this.aoj, 'Habilitado',  sql.Bit() , +data.Habilitado)
         }
+
         return queryExecute(baseSelect +  filter, this.aoj)
     }
 
@@ -39,6 +41,7 @@ class CategoriaModel {
         pushAOJParam(this.aoj, 'IdCategoria',     sql.Int,            data.IdCategoria)
         pushAOJParam(this.aoj, 'NombCategoria',   sql.NVarChar(50),   data.NombCategoria)
         pushAOJParam(this.aoj, 'DescCategoria',   sql.NVarChar(150),  data.DescCategoria)
+        
         return queryExecute(queryUpdate, this.aoj)
     }
 

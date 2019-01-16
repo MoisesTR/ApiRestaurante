@@ -8,10 +8,13 @@ const bodyParser = require('body-parser');
 const serveIndex = require('serve-index');
 const fileUpload = require('express-fileupload');
 
+//Rutas del API
 const apiRoutes     = require('./routes/api');
 const catalogRoutes = require('./routes/catalogosRoutes');
 const reportsRoutes = require('./routes/reports');
 const authRoutes    = require('./routes/authRoutes');
+const restaurantRoutes = require('./routes/restaurantRoutes');
+
 const app = express();
 
 // Comprime todas las respuestas
@@ -44,6 +47,7 @@ app.use((req, res, next) => {
 app.use('/api', apiRoutes);
 app.use('/api', catalogRoutes);
 app.use('/api', authRoutes);
+app.use('/api', restaurantRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -55,10 +59,11 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development
+    console.log('Middleware errores', err);
+    
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-    // render the error page
     res.status(err.status || 500);
     res.json(err);
 });

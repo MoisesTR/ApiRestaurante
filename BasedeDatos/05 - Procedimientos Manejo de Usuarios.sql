@@ -88,24 +88,24 @@ GO
 GO
 	IF OBJECT_ID('dbo.USP_CREATE_USUARIO','P') IS NOT NULL
 		DROP PROCEDURE USP_CREATE_USUARIO
-	GO
-	CREATE PROCEDURE USP_CREATE_USUARIO(
-		@IdTrabajador	INT,
-		@IdRol			INT,
-		@Username		NVARCHAR(50),
-		@Email			NVARCHAR(100)	NULL,
-		@Imagen			NVARCHAR(100)	NULL,
-		@Password		NVARCHAR(100)
-	)
-	AS BEGIN 
-		INSERT INTO USUARIO(IdRol,IdTrabajador,Username,Email,Imagen,Password)
-		VALUES(@IdRol,@IdTrabajador,@Username,@Email,@Imagen,@Password)
-		SELECT U.IdUsuario,U.IdTrabajador,T.Nombres,U.IdRol,R.NombRol,C.NombCargo,Username,Email,Password,U.Habilitado,U.CreatedAt,U.UpdatedAt
-		FROM USUARIO U
-		INNER JOIN TRABAJADOR T ON U.IdTrabajador = T.IdTrabajador
-		INNER JOIN CARGO C ON T.IdCargo= C.IdCargo
-		INNER JOIN ROL_USUARIO R ON U.IdRol = R.IdRol
-	END
+GO
+CREATE PROCEDURE USP_CREATE_USUARIO(
+	@IdTrabajador	INT,
+	@IdRol			INT,
+	@Username		NVARCHAR(50),
+	@Email			NVARCHAR(100)	NULL,
+	@Imagen			NVARCHAR(100)	NULL,
+	@Password		NVARCHAR(100)
+)
+AS BEGIN 
+	INSERT INTO USUARIO(IdRol,IdTrabajador,Username,Email,Imagen,Password)
+	VALUES(@IdRol,@IdTrabajador,@Username,@Email,@Imagen,@Password)
+	SELECT U.IdUsuario,U.IdTrabajador,T.Nombres,U.IdRol,R.NombRol,C.NombCargo,Username,Email,Password,U.Habilitado,U.CreatedAt,U.UpdatedAt
+	FROM USUARIO U
+	INNER JOIN TRABAJADOR T ON U.IdTrabajador = T.IdTrabajador
+	INNER JOIN CARGO_TRABAJADOR C ON T.IdCargo= C.IdCargo
+	INNER JOIN ROL_USUARIO R ON U.IdRol = R.IdRol
+END
 GO
 IF OBJECT_ID('dbo.USP_GET_USUARIOS','P') IS NOT NULL
 	DROP PROCEDURE USP_GET_USUARIOS

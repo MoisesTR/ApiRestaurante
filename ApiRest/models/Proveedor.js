@@ -19,7 +19,8 @@ class ProveedorModel {
         this.aoj    = [];
         let filter  = '';
     
-        existParam( Habilitado ) && pushAOJParam(this.aoj, 'Habilitado',  sql.Int,    +Habilitado)
+        if( undefined != Habilitado ) 
+            pushAOJParam(this.aoj, 'Habilitado',  sql.Int,    +Habilitado)
 
         return queryExecute(baseSelect + filter, this.aoj)
     }

@@ -1,48 +1,46 @@
-const { sql, pushAOJParam, pushOutParam, storedProcExecute } = require('../Utils/defaultImports')
+const { sql, pushAOJParam, storedProcExecute, queryExecute } = require('../Utils/defaultImports')
+const baseSelect = 'SELECT IdSucursal,NombSucursal,Direccion, Telefono1, Telefono2,Habilitado from dbo.SUCURSAL_RESTAURANTE';
 
 class SucursalModel {
-    constructor() {
-        this.aoj = [];
-    }
-
-    getSucursalById( IdSucursal ) {
-        this.aoj = [];
+    static getSucursalById( IdSucursal ) {
+        const aoj = [];
 
         pushAOJParam(aoj, 'IdSucursal',      sql.Int,    IdSucursal)
-        return storedProcExecute('USP_GET_SUCURSAL', aoj)
+        return queryExecute( baseSelect + ' WHERE IdSucursal = @IdSucursal', aoj)
     }
     
-    getSucursales( Habilitado ) {
-        this.aoj = [];
+    static getSucursales( Habilitado ) {
+        const aoj = [];
+        const filter = ' WHERE Habilitado = @Habilitado';
 
         pushAOJParam(aoj, 'Habilitado',      sql.Int,    +Habilitado)
-        return storedProcExecute('USP_GET_SUCURSALES', aoj)
+        return queryExecute( baseSelect+ filter, aoj)
     }
     
-    createSucursal( data ) {
-        this.aoj = [];
+    static createSucursal( data ) {
+        const aoj = [];
 
-        pushAOJParam(aoj,    'IdRestaurante',    sql.Int,            data.IdRestaurante);
-        pushAOJParam(aoj,    'NombreSucursal',   sql.NVarChar(100),  data.NombreSucursal)
-        pushAOJParam(aoj,    'Direccion',        sql.NVarChar(250),  data.Direccion)
-        pushAOJParam(aoj,    'Telefono1',        sql.NVarChar(20),   data.Telefono1)
-        pushAOJParam(aoj,    'Telefono2',        sql.NVarChar(20),   data.Telefono2)
+        pushAOJParam(aoj,    'IdRestaurante',   sql.Int,            data.IdRestaurante);
+        pushAOJParam(aoj,    'NombSucursal',    sql.NVarChar(100),  data.NombSucursal)
+        pushAOJParam(aoj,    'Direccion',       sql.NVarChar(250),  data.Direccion)
+        pushAOJParam(aoj,    'Telefono1',       sql.NVarChar(20),   data.Telefono1)
+        pushAOJParam(aoj,    'Telefono2',       sql.NVarChar(20),   data.Telefono2)
         return storedProcExecute('USP_CREATE_SUCURSAL', aoj)
     }
     
-    updateSucursal( data ) {
-        this.aoj = [];
+    static updateSucursal( data ) {
+        const aoj = [];
 
         pushAOJParam(aoj, 'IdSucursal',          sql.Int,            data.IdSucursal)
-        pushAOJParam(aoj, 'NombreSucursal',      sql.NVarChar(100),  data.NombreSucursal)
+        pushAOJParam(aoj, 'NombSucursal',      sql.NVarChar(100),  data.NombSucursal)
         pushAOJParam(aoj, 'Direccion',           sql.NVarChar(250),  data.Direccion)
         pushAOJParam(aoj, 'Telefono1',           sql.NVarChar(20),   data.Telefono1)
         pushAOJParam(aoj, 'Telefono2',           sql.NVarChar(20),   data.Telefono2)
         return storedProcExecute('USP_UPDATE_SUCURSAL', aoj)
     }
     
-    changeStateSucursal( IdSucursal, Habilitado) {
-        this.aoj = [];
+    static changeStateSucursal( IdSucursal, Habilitado) {
+        const aoj = [];
 
         pushAOJParam(aoj, 'IdSucursal',  sql.Int,    IdSucursal);
         pushAOJParam(aoj, 'Habilitado',  sql.Bit,    +Habilitado);

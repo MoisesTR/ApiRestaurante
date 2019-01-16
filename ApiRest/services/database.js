@@ -24,14 +24,13 @@ exports.pushAOJParam    = function pushAOJParam(aoj, name, type, value) {
 exports.pushAOJOuput    = ( aoj, name, type ) => {
     pushAOJ(aoj, 0, name, type);
 };
+// exports.addMssqlParam   = ( filterVar, param ) => {
+//     return filterVar + ` AND ${param}   = @${param}`;
+// };
 
-exports.addMssqlParam   = ( filterVar, param ) => {
-    return filterVar + ` AND ${param}   = @${param}`;
-};
-
-exports.addLikeParam    = function( param ) {
-    return      ' AND ' + param  + ' LIKE \'%\'+@' + param + '+\'%\'';
-};
+// exports.addLikeParam    = function( param ) {
+//     return      ' AND ' + param  + ' LIKE \'%\'+@' + param + '+\'%\'';
+// };
 
 /**
  * @name    addInputOrOutputParam

@@ -15,6 +15,8 @@ exports.signUp = ( req, res ) => {
     .then((_hashPassw) => {
         hashPassw = _hashPassw;
 
+        console.log(userData);
+        
         return User.getUserByUsernameOREmail( userData.Username, userData.Email)
     }).then((usersfind) => {
         const   users = usersfind.recordset;

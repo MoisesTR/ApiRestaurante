@@ -1,30 +1,42 @@
-const { pushAOJParam, storedProcExecute, sql} = require('../Utils/defaultImports')
+const { pushAOJParam, storedProcExecute, queryExecute, sql} = require('../Utils/defaultImports')
+const baseSelect = `SELECT T.IdTrabajador, T.IdSucursal, S.NombSucursal, T.IdCargo, C.NombCargo,
+        T.Nombres, T.Apellidos, T.IdTipDoc, T.Documento, T.Imagen,
+        T.FechaNacimiento, T.Direccion, T.Telefono1, T.Telefono2, T.FechaIngreso,
+        T.Habilitado, U.Username,T.CreatedAt,T.UpdatedAt
+        FROM dbo.TRABAJADOR T 
+        INNER JOIN dbo.SUCURSAL_RESTAURANTE S ON T.IdSucursal= S.IdSucursal
+        INNER JOIN dbo.CARGO_TRABAJADOR C ON T.IdCargo = C.IdCargo
+        LEFT  JOIN dbo.USUARIO	U ON T.IdTrabajador = U.IdTrabajador
+        `;
 
 class TrabajadorModel {
     
-    getTrabajadorById( IdTrabajador ) {
-        let aoj = [];
+    static getTrabajadorById( IdTrabajador ) {
+        const aoj = [];
         
         pushAOJParam(aoj, 'IdTrabajador', sql.Int, IdTrabajador);
-        return storedProcExecute('USP_GET_TRABAJADOR', aoj)
+        return queryExecute(baseSelect + ' WHERE T.IdTrabajador = @IdTrabajador', aoj)
     }
 
-    getTrabajadores( Habilitado, IdSucursal ) {
-        let aoj = [];
+    static getTrabajadores( Habilitado, IdSucursal, IdPais ) {
+        const aoj = [];
+        let filter = '';
         
-        pushAOJParam(aoj, 'Habilitado', sql.Int,    +Habilitado);
-        pushAOJParam(aoj, 'IdSucursal', sql.Int,    IdSucursal);
-        return storedProcExecute('USP_GET_TRABAJADORES', aoj)
+        pushAOJParam(aoj,   'Habilitado',   sql.Bit,    +Habilitado);
+        pushAOJParam(aoj,   'IdSucursal',   sql.Int,    IdSucursal);
+        pushAOJParam(aoj,   'IdPais',       sql.Int,    IdPais);
+        return queryExecute( baseSelect + filter, aoj)
     }
     
-    createTrabajador( trabajadorData ) {
-        let aoj = [];
+    static createTrabajador( trabajadorData ) {
+        const aoj = [];
        
         pushAOJParam(aoj, 'IdSucursal', sql.Int,            trabajadorData.IdSucursal);
         pushAOJParam(aoj, 'IdCargo',    sql.Int,            trabajadorData.IdCargo);
         pushAOJParam(aoj, 'Nombres',    sql.NVarChar(50),   trabajadorData.Nombres);
         pushAOJParam(aoj, 'Apellidos',  sql.NVarChar(50),   trabajadorData.Apellidos);
         pushAOJParam(aoj, 'IdTipDoc',   sql.Int,            trabajadorData.IdTipDoc);
+        pushAOJParam(aoj, 'IdPais',     sql.Int,            +trabajadorData.IdPais);
         pushAOJParam(aoj, 'Documento',  sql.NVarChar(50),   trabajadorData.Documento);
         pushAOJParam(aoj, 'Imagen',     sql.NVarChar(50),   trabajadorData.Imagen);
         pushAOJParam(aoj, 'FechaNacimiento', sql.Date(),    trabajadorData.FechaNacimiento);
@@ -36,8 +48,8 @@ class TrabajadorModel {
         return storedProcExecute('USP_CREATE_TRABAJADOR', aoj)
     }
     
-     updateTrabajador( trabajadorData ) {
-        let aoj = [];
+    static updateTrabajador( trabajadorData ) {
+        const aoj = [];
 
         pushAOJParam(aoj, 'IdTrabajador',   sql.Int,            trabajadorData.IdTrabajador);
         pushAOJParam(aoj, 'IdSucursal',     sql.Int,            trabajadorData.IdSucursal);
@@ -55,8 +67,8 @@ class TrabajadorModel {
         return storedProcExecute('USP_UPDATE_TRABAJADOR', aoj)
     }
     
-    changeStateTrabajador( IdTrabajador, Habilitado ) {
-        let aoj = [];
+    static changeStateTrabajador( IdTrabajador, Habilitado ) {
+        const aoj = [];
         
         console.log('Changing state')
         pushAOJParam(aoj, 'IdTrabajador',    sql.Int,   IdTrabajador);

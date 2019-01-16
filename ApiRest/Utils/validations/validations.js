@@ -1,8 +1,6 @@
 const { query,param,check,body } = require('express-validator/check');
 const { sanitize } = require('express-validator/filter');
-const generic   = require('./genericValidations');
-
-Object.assign(exports, generic);
+const {isDate}   = require('./genericValidations');
 
 exports.getTelefonoSucursal = [
     param('IdTelefonoSucursal').isInt(),
@@ -10,7 +8,7 @@ exports.getTelefonoSucursal = [
     sanitize('IdSucursal').toInt()
 ]
     
-var createCategoria = [
+const createCategoria = [
         body('NombCategoria', 'El nombre de la categoria es requerido').isString(),
         body('DescCategoria', 'La descripcion de la categoria es requerida!').isString()
     ];
@@ -22,7 +20,7 @@ exports.updateCategoria = createCategoria.concat([
         sanitize('IdCategoria').toInt(),
     ]);
 
-var createCargo = [
+const createCargo = [
     check('NombCargo', 'El nombre del cargo es requerido!').isString(),
     check('DescCargo', 'La descripcion del cargo es requerida!').isString(),
     sanitize('NombCargo').toString()
@@ -35,7 +33,7 @@ exports.updateCargo = createCargo.concat([
     sanitize(   'IdCargo').toInt()
 ]);
 
-var createProveedor = [
+const createProveedor = [
     body('IdPais').isInt(),
     body('IsProvServicio').isInt().isIn([0,1]),
     body('NombProveedor', 'Ingrese el Nombre del proveedor.').isString(),
@@ -88,22 +86,7 @@ exports.detalleEntradaBodega = [
     check('DescuentoCalculado').isFloat()
 ];
 
-function isDate(nombreCampo ) {
-    return check(nombreCampo, nombreCampo + '  es requerido.').exists()
-    .custom((value) => {
-        console.log('Valor sin formatear: ' +value);
-        let date = new Date(value);
-       
-        if(isNaN(date)) {
-            console.log('No es una fecha')
-            throw new Error(`El parametro ${nombreCampo} debe ser una fecha valida.`);
-        }
-        date = date.toISOString();
-        return date;
-    },`El parametro ${nombreCampo} debe ser una fecha valida.`)
-}
-
-var createEnvase = [
+const createEnvase = [
     body('NombEnvase', 'El nombre de envase es requerido!').isString().isLength({min: 3, max:50}),
     body('DescEnvase', 'La descripcion debe tener una longitud maxima de 150 caracteres.').isString().optional({nullable:true}).isLength({max:150}),
     sanitize('NombEnvase').toString().trim(),
@@ -129,6 +112,7 @@ exports.createTrabajador = [
     body('Nombres', 'Nombres debe tener un minimo de 4 y un maximo de 50').isLength({ min: 4, max: 50 }),
     body('Apellidos', 'Apellidos debe tener un minimo de 4 y un maximo de 50').isLength({ min: 4, max: 50 }),
     body('IdTipDoc', 'IdDocumento es requerido y debe ser entero').isInt(),
+    body('IdPais',    'Selecciona un pais.'),
     body('Documento', 'Documento es necesario').isLength({ min: 4, max: 50 }),
     body('Imagen', 'Imagen es requerida').isString(),
     isDate('FechaNacimiento'),
@@ -147,7 +131,7 @@ exports.updateTrabajador = [
     sanitize('IdTrabajador').toInt()
 ];
 
-var createEmpaque = [
+const createEmpaque = [
     body('NombEmpaque', 'Nombre de Empaque requerido').isString(),
     body('DescEmpaque'  , 'La descripcion debe ser texto!').isString().optional({nullable: true}),
     sanitize('NombEmpaque').toString(),
@@ -161,7 +145,7 @@ exports.updateEmpaque = createEmpaque.concat([
     sanitize('IdEmpaque').toInt()
 ]);
 
-var createClasificacion =  [
+const createClasificacion =  [
     body('IdCategoria', 'Id de la categoria es requerido!').isInt(),
     body('NombClasificacion','El nombre de la clasificacion es requerido, y no debe tener mas de 50 caracteres.').isString().isLength({max:50}),
     body('DescClasificacion', 'La Descripcion no debe tener mas de 150 caracteres.').isString().optional({nullable:true}),
@@ -175,7 +159,7 @@ exports.updateClasificacion = createClasificacion.concat([
     sanitize(   'IdClasificacion'   ).toInt()
 ]);
 
-var createSubclasificacion =  [
+const createSubclasificacion =  [
     body('NombSubClasificacion','El nombre de la subclasificacion es requerido, y no debe tener mas de 50 caracteres.').isString().isLength({max:50}),
     body('DescSubClasificacion', 'La Descripcion no debe tener mas de 150 caracteres.').isString().optional({nullable:true}),
     body('IdClasificacion', 'Id de la clasificacion es requerido!').isInt(),
@@ -190,12 +174,13 @@ exports.updateSubclasificacion = createSubclasificacion.concat([
     sanitize('IdSubClasificacion').toInt()
 ]);
 
-var createSucursal =  [
-    body('NombreSucursal','El nombre de la subclasificacion es requerido, y no debe tener mas de 50 caracteres.').isString().isLength({max:50}),
+const createSucursal =  [
+    body('IdRestaurante', 'Selecciona el Restaurante al que pertenece la sucursal.').isInt(),
+    body('NombSucursal','El nombre de la subclasificacion es requerido, y no debe tener mas de 50 caracteres.').isString().isLength({max:50}),
     body('Direccion', 'La Direccion no debe tener mas de 300 caracteres.').isString(),
     body('Telefono1','El telefono es requerido y debe tener 8 digitos.').isLength(8).isInt(),
     body('Telefono2','El telefono debe tener 8 digitos.').optional({nullable:true}),
-    sanitize('NombreSucursal').toString(),
+    sanitize('NombSucursal').toString(),
     sanitize('Direccion').toString().trim()
 ];
 
@@ -206,7 +191,7 @@ exports.updateSucursal = createSucursal.concat([
     sanitize('IdSucursal').toInt()
 ])
 
-var createRol = [
+const createRol = [
     body('NombreRol', 'El nombre del rol es requerido').isString().isLength({max: 50}),
     body('DescripcionRol','La Descripcion debe tener un maximo de 150 caracteres!').isLength({max:150}).optional({nullable: true}),
     sanitize('NombreRol').toString(),
@@ -219,7 +204,7 @@ exports.updateRol = createRol.concat([
     sanitize('IdRol').toInt()
 ])
 
-var createProducto = [
+const createProducto = [
     body('IdProveedor', 'Selecciona Un proveedor.').isInt(),
     body('IdSubClasificacion', 'Selecciona Una SubClasificacion.').isInt(),
     body('IdEstado','Elige el estado del producto.').isInt(),
@@ -258,19 +243,9 @@ exports.updateUnidadMedida = createUnidadMedida.concat([
     param('IdUnidadMedida').isInt()
 ]);
 
-exports.changeStateGeneric = (nameIdParam) => {
-    return [
-        param(nameIdParam).isInt(),
-        check('Habilitado','Habilitado debe ser booleano.').isBoolean(),
-        sanitize('Habilitado').toBoolean(),
-        sanitize(nameIdParam).toInt()
-    ]
-}
 let createTipoDocumento = [
-    body('NombTipDoc', 'Tipo de Documento necesario.').isString().isLength({min:2,max:50 }),
-    body('DescTipDoc','Es Necesaria la Descripcion del Tipo de Documento').isString().isLength({min:2, max:50}),
-    sanitize('NombTipDoc').toString(),
-    sanitize('DescTipDoc').toString()
+    body('NombTipDoc', 'Tipo de Documento necesario.').isLength({min:2,max:50 }),
+    body('DescTipDoc','Es Necesaria la Descripcion del Tipo de Documento').isLength({min:2, max:50}),
 ];
 
 exports.createTipoDocumentoI = createTipoDocumento
@@ -302,15 +277,15 @@ exports.createFacturaCompra  = [
 ];
 
 exports.updateFacturaCompra  = [
-    check('NumRefFactura'),
-    check('IdTrabajador'),
-    check('NombVendedor'),
-    check('SubTotal'),
-    check('TotalIva'),
-    check('CambioActual'),
-    check('TotalDescuento'),
-    check('TotalCordobas'),
-    check('Retencion')
+    body('NumRefFactura'),
+    body('IdTrabajador'),
+    body('NombVendedor'),
+    body('SubTotal'),
+    body('TotalIva'),
+    body('CambioActual'),
+    body('TotalDescuento'),
+    body('TotalCordobas'),
+    body('Retencion')
 ];
 
 exports.createDetalleFacturaCompra = [
@@ -375,7 +350,7 @@ exports.getMenuesByRol = [
 ];
 
 
-var createTelefonoProveedor = [
+const createTelefonoProveedor = [
     body('IdProveedor', 'Selecciona Un proveedor.').isInt(),
     body('Telefono', 'Ingresa un telefono.').isString(),
     body('NombPAsignada','Ingresa un nombre.').isString(),

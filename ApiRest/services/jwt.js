@@ -29,26 +29,46 @@ exports.createToken = ( user )  => {
     return { _token, expiration: payload.exp}
 }
 
-function verifyToken( token ) {
-    return new Promise( ( resolve, reject ) => {
-        jwt.verify( token, secret, (err, decoded) => {
-            if( !!err ) {
-                if ( err.name === 'TokenExpiredError' ) {
-                    decoded     = jwt.decode(token, {complete: true});
-                    decoded.payload.isExpired   = true;
-                    resolve(decoded);
-                } else {
-                    console.error('Error, token invalido')
-                    err.code    = 'EITOKEN';
-                    reject({
-                        ...{code, name, message } = err ,
-                        status: 401
-                    });
-                }
+// function verifyToken( token ) {
+//     return new Promise( ( resolve, reject ) => {
+//         jwt.verify( token, secret, (err, decoded) => {
+//             if( !!err ) {
+//                 if ( err.name === 'TokenExpiredError' ) {
+//                     decoded     = jwt.decode(token, {complete: true});
+//                     decoded.payload.isExpired   = true;
+//                     resolve(decoded);
+//                 } else {
+//                     console.error('Error, token invalido')
+//                     err.code    = 'EITOKEN';
+//                     reject({
+//                         ...{code, name, message } = err ,
+//                         status: 401
+//                     });
+//                 }
+//             } else {
+//                 resolve(decoded);
+//             }
+//         })
+//     })
+// }
+async function verifyToken( token ) {
+    jwt.verify( token, secret, (err, decoded) => {
+        if( !!err ) {
+            if ( err.name === 'TokenExpiredError' ) {
+                decoded     = jwt.decode(token, {complete: true});
+                decoded.payload.isExpired   = true;
+                return decoded;
             } else {
-                resolve(decoded);
+                console.error('Error, token invalido')
+                err.code    = 'EITOKEN';
+                throw {
+                    ...{code, name, message } = err ,
+                    status: 401
+                };
             }
-        })
+        } else {
+            return decoded;
+        }
     })
 }
 

@@ -1,36 +1,25 @@
-var sql = require('mssql')
+const sql = require('mssql');
 
 const config = {
     user: 'usuario_node',
     password: 'node123',
     server: 'localhost',
     database: 'ATOMIC_RESTAURANTE',
-    port: '1433',
+    port: 1433,
     parseJSON: true,
     options: {
         trustedConnection: false
     }
 }
-function getConnectionPoolGlobal(){
-    async function conect(resolve,reject){
-        if ( !!global.poolGlobal ){
-            console.log('Reutilizando pool ',global.poolGlobal._eventsCount)
-            resolve(global.poolGlobal)
-        }
-        else {
-            try {
-                const poolObt = new sql.ConnectionPool(config).connect()
-                global.poolGlobal = poolObt
-                resolve(global.poolGlobal)
-                console.log('Nuevo pool Creado')
-            } catch( _err ) {
-                reject(_err)
-            }
-        }      
-    }
-    return new Promise(conect)
-}
-module.exports = {
-    config,
-    getConnectionPoolGlobal
+exports.config = config;
+
+//Ya que async retorna una promesa
+exports.getConnectionPoolGlobal = async () => {
+    if ( !global.poolGlobal ){
+        console.log('Creando new Pool');
+        const poolObt = await new sql.ConnectionPool(config);
+        global.poolGlobal = await poolObt.connect();
+    }      
+
+    return global.poolGlobal;
 }

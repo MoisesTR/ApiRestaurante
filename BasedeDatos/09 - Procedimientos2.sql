@@ -425,14 +425,17 @@ IF OBJECT_ID('USP_CREATE_SUCURSAL','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_SUCURSAL
 GO
 CREATE PROCEDURE USP_CREATE_SUCURSAL(
-    @NombreSucursal NVARCHAR(100) ,
+	@IdRestaurante	INT,
+    @NombSucursal NVARCHAR(100) ,
     @Direccion		NVARCHAR(250),
 	@Telefono1		NVARCHAR(20),
 	@Telefono2		NVARCHAR(20) NULL
 )
 AS BEGIN 
-	INSERT INTO dbo.SUCURSAL(NombreSucursal,Direccion, Telefono1, Telefono2)
-	VALUES(@NombreSucursal,@Direccion, @Telefono1, @Telefono2)
+	DECLARE @NUM_SUC INT
+	SELECT @NUM_SUC = COUNT(IdRestaurante) FROM dbo.SUCURSAL_RESTAURANTE WHERE IdRestaurante = @IdRestaurante
+	INSERT INTO dbo.SUCURSAL_RESTAURANTE(IdRestaurante,NumSucursal, NombSucursal,Direccion, Telefono1, Telefono2)
+	VALUES(@IdRestaurante,@NUM_SUC,@NombSucursal,@Direccion, @Telefono1, @Telefono2)
 	SELECT @@IDENTITY AS IdSucursal
 END
 GO
@@ -458,6 +461,7 @@ CREATE PROCEDURE USP_CREATE_TRABAJADOR(
     @Nombres		NVARCHAR(50),
     @Apellidos		NVARCHAR(50),
 	@Imagen			NVARCHAR(50),
+	@IdPais			INT,
 	@IdTipDoc		INT NULL,
     @Documento		NVARCHAR(50),
     @FechaNacimiento DATE,
@@ -480,8 +484,8 @@ AS BEGIN
 		RETURN
 	END
 
-	INSERT INTO TRABAJADOR(IdSucursal,IdCargo,Nombres,Apellidos,IdTipDoc, Documento, Imagen, FechaNacimiento,Direccion, Telefono1,Telefono2,FechaIngreso)
-	VALUES(@IdSucursal,@IdCargo,@Nombres,@Apellidos,ISNULL(@IdTipDoc,1),@Documento, @Imagen, @FechaNacimiento,@Direccion,@Telefono1, @Telefono2,@FechaIngreso)
+	INSERT INTO TRABAJADOR(IdSucursal,IdCargo,Nombres,Apellidos,IdTipDoc,IdPais, Documento, Imagen, FechaNacimiento,Direccion, Telefono1,Telefono2,FechaIngreso)
+	VALUES(@IdSucursal,@IdCargo,@Nombres,@Apellidos,ISNULL(@IdTipDoc,1),@IdPais, @Documento, @Imagen, @FechaNacimiento,@Direccion,@Telefono1, @Telefono2,@FechaIngreso)
 	SELECT @@IDENTITY AS IdTrabajador
 END
 GO

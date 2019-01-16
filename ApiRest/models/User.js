@@ -1,11 +1,8 @@
 const {pushAOJParam, storedProcExecute, queryExecute, sql} = require('../Utils/defaultImports')
-const baseSelect = '';
+const { addEqualParamInFilter } = require('../Utils/util'); 
+const baseSelect = 'SELECT * FROM dbo.USUARIO';
 
 class UserModel {
-
-    constructor() {
-        this.aoj    = [];
-    }
 
     getUsers( Habilitado ) {
         let aoj = [];
@@ -23,10 +20,16 @@ class UserModel {
     
     getUserByUsernameOREmail( Username, Email ) {
         const aoj = [];
-        
+        let   filter = '';
+
+        filter = ' WHERE Username = @Username';
         pushAOJParam(aoj, 'Username',   sql.NVarChar(50),   Username);
-        pushAOJParam(aoj, 'Email',      sql.NVarChar(100),  Email);
-        return queryExecute( baseSelect + filter, this.aoj);
+        if ( !!Email ) {
+            filter += ' OR Email = @Email';
+            pushAOJParam(aoj, 'Email',      sql.NVarChar(100),  Email);
+        }
+        
+        return queryExecute( baseSelect + filter, aoj);
     }
 
     updateUser(req, res) {
@@ -42,6 +45,8 @@ class UserModel {
     createUser( userData ) {
         const aoj = [];
 
+        pushAOJParam(aoj, 'Username',   sql.NVarChar(50),   userData.Username);
+        pushAOJParam(aoj, 'Email',      sql.NVarChar(100),  userData.Email);
         pushAOJParam(aoj, 'Imagen',     sql.NVarChar(100),  userData.Imagen);
         pushAOJParam(aoj, 'Password',   sql.NVarChar(100),  userData.Password);
         if ( !!userData.IdTrabajador ) {

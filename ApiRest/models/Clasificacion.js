@@ -1,11 +1,12 @@
 const { sql, pushAOJParam, storedProcExecute, queryExecute } = require('../Utils/defaultImports');
+const { addEqualParamInFilter } = require('../Utils/util');
 const baseSelect    =  `SELECT IdClasificacion, IdCategoria, NombClasificacion,DescClasificacion,Habilitado, CreatedAt,UpdatedAt 
                         FROM CLASIFICACION_PRODUCTO`;
 
 module.exports =  class ClasificacionController {
 
     createClasificacion( IdCategoria, NombClasificacion, DescClasificacion) {
-        let aoj = [];
+        const   aoj = [];
 
         console.log(IdCategoria, NombClasificacion);
         pushAOJParam(aoj, 'IdCategoria',         sql.Int,                IdCategoria);
@@ -19,7 +20,7 @@ module.exports =  class ClasificacionController {
         let filter  = '';
 
         if (  Habilitado ) {
-            filter += ' WHERE Habilitado = @Habilitado';
+            filter +=  addEqualParamInFilter( filter, 'Habilitado' );
             pushAOJParam(aoj, 'Habilitado',  sql.Bit(),  +Habilitado);
         }
         return queryExecute(baseSelect + filter, aoj)
@@ -32,7 +33,7 @@ module.exports =  class ClasificacionController {
         filter +=   ' WHERE IdCategoria = @IdCategoria';
         pushAOJParam(aoj, 'IdCategoria',    sql.Int, data.IdCategoria)
         if ( Habilitado ) {
-            filter  +=  ' AND Habilitado = @Habilitado'
+            filter  += addEqualParamInFilter(filter, 'Habilitado');
             pushAOJParam(aoj, 'Habilitado', sql.Int, data.Habilitado)
         }
         return  queryExecute(baseSelect + filter, aoj)
@@ -49,7 +50,7 @@ module.exports =  class ClasificacionController {
     }
     
     getClasificacionById( IdClasificacion ) {
-        let aoj     = [];
+        const aoj     = [];
         let filter  = '';
     
         filter += ' WHERE IdClasificacion = @IdClasificacion';
@@ -58,7 +59,7 @@ module.exports =  class ClasificacionController {
     }
     
     changeStateClasificacion( IdClasificacion, Habilitado ) {
-        let aoj = [];
+        const aoj = [];
 
         pushAOJParam(aoj, 'IdClasificacion',     sql.Int(),  IdClasificacion);
         pushAOJParam(aoj, 'Habilitado',          sql.Bit(), +Habilitado);

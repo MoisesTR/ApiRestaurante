@@ -78,43 +78,14 @@ CREATE PROCEDURE USP_GET_TRABAJADOR(
 	@IdTrabajador INT
 )
 AS BEGIN
-	SELECT T.IdTrabajador, T.IdSucursal, S.NombreSucursal, T.IdCargo, C.NombCargo,
+	SELECT T.IdTrabajador, T.IdSucursal, S.NombSucursal, T.IdCargo, C.NombCargo,
 			T.Nombres, T.Apellidos, T.IdTipDoc, T.Documento, T.Imagen,
 			T.FechaNacimiento, T.Direccion, T.Telefono1, T.Telefono2, T.FechaIngreso,
 			T.Habilitado, T.CreatedAt,T.UpdatedAt
 	FROM dbo.TRABAJADOR T 
 	INNER JOIN dbo.SUCURSAL_RESTAURANTE S ON T.IdSucursal= S.IdSucursal
-	INNER JOIN dbo.CARGO C ON T.IdCargo = C.IdCargo
+	INNER JOIN dbo.CARGO_TRABAJADOR C ON T.IdCargo = C.IdCargo
 	WHERE T.IdTrabajador = @IdTrabajador
-END
-go
-IF OBJECT_ID('dbo.USP_GET_TRABAJADORES','P') IS NOT NULL
-	DROP PROCEDURE dbo.USP_GET_TRABAJADORES
-GO
-CREATE PROCEDURE dbo.USP_GET_TRABAJADORES(
-	@Habilitado		BIT NULL,
-	@IdSucursal		INT NULL
-)
-AS BEGIN
-	IF @Habilitado IS NULL
-		SELECT T.IdTrabajador,T.IdSucursal,S.NombreSucursal,T.IdCargo,C.NombCargo,T.Nombres,
-				T.Apellidos,U.Username,T.IdTipDoc,T.Documento, T.Imagen, FechaNacimiento,T.Direccion, 
-				T.Telefono1, T.Telefono2,T.FechaIngreso,T.Habilitado,T.CreatedAt
-		FROM dbo.TRABAJADOR T 
-		INNER JOIN dbo.SUCURSAL_RESTAURANTE S ON T.IdSucursal= S.IdSucursal
-		INNER JOIN dbo.CARGO C ON T.IdCargo = C.IdCargo
-		LEFT  JOIN dbo.USUARIO	U ON T.IdTrabajador = U.IdTrabajador
-		WHERE T.IdSucursal = ISNULL(@IdSucursal, T.IdSucursal)
-	ELSE
-		SELECT T.IdTrabajador,T.IdSucursal,S.NombreSucursal,T.IdCargo,C.NombCargo,T.Nombres,
-				T.Apellidos,U.Username,T.IdTipDoc,T.Documento, T.Imagen, FechaNacimiento,T.Direccion, 
-				T.Telefono1, T.Telefono2,T.FechaIngreso,T.Habilitado,T.CreatedAt
-		FROM dbo.TRABAJADOR T 
-		INNER JOIN dbo.SUCURSAL_RESTAURANTE S ON T.IdSucursal= S.IdSucursal
-		INNER JOIN dbo.CARGO C ON T.IdCargo = C.IdCargo
-		LEFT  JOIN dbo.USUARIO U ON T.IdTrabajador = U.IdTrabajador
-		WHERE T.Habilitado = @Habilitado
-		AND T.IdSucursal = ISNULL(@IdSucursal, T.IdSucursal)
 END
 GO
 IF OBJECT_ID('USP_DISP_TRABAJADOR','P') IS NOT NULL
@@ -297,34 +268,3 @@ CREATE PROCEDURE USP_CREATE_UNIDAD_MEDIDA(
 	SELECT @IdUdmFuncional = @@IDENTITY
 END
 GO
-INSERT INTO ENVASE(NombEnvase, DescEnvase) 
-VALUES	('Botella Plastica','Una botella de plastico')
-		,('Bolsa Plastica','Bolsa de plastico')
-		,('Caja Plastica','Una caja de plastico')
-		,('Lata de aluminio','')
-		,('Frasco','')
-		,('Tarrro','')
-		,('Botella de vidrio','Una botella de vidrio.'); 
-GO
-
-SET IDENTITY_INSERT dbo.TIPO_EMPAQUE_PRODUCTO ON
-GO
-INSERT INTO dbo.TIPO_EMPAQUE_PRODUCTO(IdTipoEmpaque, NombTipoEmpaque, DescTipoEmpaque)
-VALUES(1,'Empaque Pedido(Compra)',NULL), (2,'Empaque Envio',NULL), (3,'Empaque Venta',NULL), (4,'Empaque Almacenamiento',NULL)
-GO
-SET IDENTITY_INSERT dbo.TIPO_EMPAQUE_PRODUCTO OFF
-GO
-
-SET IDENTITY_INSERT dbo.EMPAQUE ON
-
-INSERT INTO EMPAQUE(NombEmpaque) 
-VALUES	('Caja Carton')
-		,('Caja plastica')
-		,('Bolsa Plastica')
-		,('Bolsa Papel Craft')
-		,('Cajilla Plastica')
-		,('Cajilla Carton')
-		,('Saco');
-GO
-
-SET IDENTITY_INSERT dbo.EMPAQUE ON
