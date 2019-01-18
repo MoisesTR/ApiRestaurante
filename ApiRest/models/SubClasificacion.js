@@ -1,23 +1,36 @@
-const { sql, pushAOJParam, storedProcExecute } = require('../Utils/defaultImports');
+const { sql, pushAOJParam, queryExecute, storedProcExecute } = require('../Utils/defaultImports');
+const baseSelect = `SELECT	s.IdSubClasificacion,
+s.NombSubClasificacion,
+s.DescSubClasificacion,
+s.IdClasificacion,
+c.NombClasificacion,
+s.Habilitado,
+s.CreatedAt,
+s.UpdatedAt FROM SUBCLASIFICACION_PRODUCTO s
+INNER JOIN dbo.CLASIFICACION_PRODUCTO c ON s.IdClasificacion = c.IdClasificacion`;
 
 class SubClasificacionModel {
     
-    async getSubclasificById( IdSubClasificacion ) {
-        var aoj = [];
+    getSubclasificById( IdSubClasificacion ) {
+        const aoj = [];
 
         pushAOJParam(aoj, 'IdSubClasificacion',  sql.Int,    IdSubClasificacion)
-        return  storedProcExecute('USP_GET_SUBCLASIFICACION', aoj)
+        return  queryExecute(baseSelect+' WHERE s.IdSubClasificacion = @IdSubClasificacion ', aoj)
     }
     
-    async getSubclasificaciones( Habilitado ) {
-        var aoj = [];
+    getSubclasificaciones( Habilitado ) {
+        const aoj = [];
+        let filter = '';
 
-        pushAOJParam(aoj, 'Habilitado',          sql.Int,    +Habilitado)
-        return  storedProcExecute('USP_GET_SUBCLASIFICACIONES', aoj)
+        if ( Habilitado != undefined ) {
+            filter += ' WHERE s.Habilitado = @Habilitado';
+            pushAOJParam(aoj, 'Habilitado',          sql.Int,    +Habilitado)
+        }
+        return  queryExecute(baseSelect + filter, aoj)
     }
     
-    async createSubclasificacion( data ) {
-        var aoj = [];
+    createSubclasificacion( data ) {
+        const aoj = [];
 
         pushAOJParam(aoj, 'IdClasificacion',             sql.Int,           data.IdClasificacion)
         pushAOJParam(aoj, 'NombSubClasificacion',        sql.NVarChar(50),  data.NombSubClasificacion)
@@ -26,7 +39,7 @@ class SubClasificacionModel {
     }
     
     async updateSubclasificacion( data ) {
-        var aoj = [];
+        const aoj = [];
     
         pushAOJParam(aoj, 'IdSubClasificacion', sql.Int, data.IdSubClasificacion)
         pushAOJParam(aoj, 'IdClasificacion',    sql.Int, data.IdClasificacion)
@@ -36,14 +49,14 @@ class SubClasificacionModel {
     }
     
     async getSubclasificacionesByIdClasificacion( IdClasificacion ) {
-        var aoj = [];
+        const aoj = [];
 
         pushAOJParam(aoj, 'IdClasificacion', sql.Int, IdClasificacion)
         return  storedProcExecute('USP_GET_SUBCLASIFICACIONES_BY_IDCLASIFICACION', aoj)
     }
     
     async changeStateSubClasificacion( IdSubClasificacion, Habilitado ) {
-        var aoj = [];
+        const aoj = [];
         pushAOJParam(aoj, 'IdSubClasificacion',  sql.Int,    IdSubClasificacion)
         pushAOJParam(aoj, 'Habilitado',          sql.Bit,    +Habilitado)
         return  storedProcExecute('USP_DISP_SUBCLASIFICACION', aoj)

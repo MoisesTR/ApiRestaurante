@@ -1,4 +1,4 @@
-const {db, sql, mssqlErrors, matchedData} = require('../../Utils/defaultImports');
+const {mssqlErrors, matchedData} = require('../../Utils/defaultImports');
 const  UnidadMedidaModel = require('../../models/UnidadMedida')
 const  { Habilitado}    = require( '../../Utils/validations/genericValidations');
 const   UnidadMedida    = new UnidadMedidaModel();
@@ -6,7 +6,7 @@ const   UnidadMedida    = new UnidadMedidaModel();
 function getUnidadById(req,res){
     const data = req.params;
    
-   UnidadMedida.getUnidadById( IdUnidadMedida ) 
+    UnidadMedida.getUnidadById( data.IdUnidadMedida ) 
     .then((results) => {
         res.status(200)
             .json({
@@ -18,7 +18,7 @@ function getUnidadById(req,res){
     });
 }
 function getUnidadesMedida(req,res){
-    let data    = matchedData(req, {locations:['query']})
+    const data    = matchedData(req, {locations:['query']})
 
     UnidadMedida.getUnidadesMedida( data )
     .then((results) => {

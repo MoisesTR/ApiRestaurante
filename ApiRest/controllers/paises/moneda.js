@@ -4,7 +4,7 @@ const MonedaModel   =   require('../../models/Moneda');
 const moneda        =   new MonedaModel();
 
 exports.getMonedas = ( req, res ) => {
-    let data = matchedData( req,{locations: 'query'});
+    const data = matchedData( req,{locations: 'query'});
 
     moneda.getMonedas( data )
     .then((result) => {

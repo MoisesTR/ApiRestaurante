@@ -1,10 +1,10 @@
-const { mssqlErrors } = require('../Utils/util')
+const { mssqlErrors } = require('../../Utils/util')
 const { matchedData } = require('express-validator/filter');
-const EnvaseModel  = require('../models/Envase');
-const Envase = new EnvaseModel();
+const EnvaseModel   = require('../../models/catalogos/Envase');
+const Envase        = new EnvaseModel();
 
 function getEnvaseById(req, res) {
-    let data = req.params;
+    const data = req.params;
 
     Envase.getEnvaseById( data.IdEnvase )
     .then((results) => {
@@ -32,7 +32,7 @@ function getEnvases(req, res) {
 }
 
 function createEnvase(req, res) {
-    let data = matchedData(req, { locations: 'body' });
+    const data = matchedData(req, { locations: 'body' });
 
     Envase.createEnvase( data.NombEnvase, data.DescEnvase )
     .then((results) => {
@@ -45,7 +45,7 @@ function createEnvase(req, res) {
 }
 
 function updateEnvase(req, res) {
-    let data = matchedData(req, { locations: ['body', 'params'] });
+    const data = matchedData(req, { locations: ['body', 'params'] });
     
     Envase.updateEnvase( data.IdEnvase, data.NombEnvase, data.DescEnvase )
     .then((result) => {
@@ -61,7 +61,7 @@ function updateEnvase(req, res) {
     })
 }
 function changeStateEnvase(req,res){
-    let data = matchedData(req, {locations:['query','params','body']});
+    const data = matchedData(req, {locations:['query','params','body']});
     
     Envase.changeStateEnvase( data.IdEnvase, data.Habilitado )
     .then((results) => {

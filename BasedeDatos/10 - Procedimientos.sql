@@ -142,60 +142,6 @@ CREATE PROCEDURE USP_UPDATE_SUBCLASIFICACION(
 		END
 END 
 GO
-IF OBJECT_ID('USP_GET_SUBCLASIFICACIONES_BY_IDCLASIFICACION','P') IS NOT NULL
-	DROP PROCEDURE USP_GET_SUBCLASIFICACIONES_BY_IDCLASIFICACION
-GO
-CREATE PROCEDURE USP_GET_SUBCLASIFICACIONES_BY_IDCLASIFICACION(
-	@IdClasificacion INT
-)
-AS BEGIN
-	SELECT s.IdSubClasificacion
-			, s.NombSubClasificacion
-			, s.DescSubClasificacion
-			, s.IdClasificacion
-			, c.NombClasificacion
-			, s.Habilitado
-			, s.CreatedAt
-			, s.UpdatedAt 
-	FROM	SUBCLASIFICACION_PRODUCTO s
-			INNER JOIN dbo.CLASIFICACION_PRODUCTO c 
-				ON s.IdClasificacion = c.IdClasificacion 
-	WHERE s.IdClasificacion = @IdClasificacion;
-END
-GO
-IF OBJECT_ID('USP_GET_SUBCLASIFICACIONES','P') IS NOT NULL
-	DROP PROCEDURE USP_GET_SUBCLASIFICACIONES
-GO
---Nombre anterios USP_ListSubClasificaciones 
-CREATE PROCEDURE USP_GET_SUBCLASIFICACIONES 
-	@Habilitado BIT  NULL
-AS BEGIN
-	IF @Habilitado IS NULL
-	BEGIN
-		SELECT	s.IdSubClasificacion,
-				s.NombSubClasificacion,
-				s.DescSubClasificacion,
-				s.IdClasificacion,
-				c.NombClasificacion,
-				s.Habilitado,
-				s.CreatedAt,
-				s.UpdatedAt FROM SUBCLASIFICACION_PRODUCTO s
-			INNER JOIN dbo.CLASIFICACION_PRODUCTO c ON s.IdClasificacion = c.IdClasificacion
-	END
-	ELSE
-		BEGIN
-			SELECT	s.IdSubClasificacion,
-				s.NombSubClasificacion,
-				s.DescSubClasificacion,
-				s.IdClasificacion,
-				c.NombClasificacion,
-				s.Habilitado,
-				s.CreatedAt,
-				s.UpdatedAt FROM SUBCLASIFICACION_PRODUCTO s
-			INNER JOIN dbo.CLASIFICACION_PRODUCTO c ON s.IdClasificacion = c.IdClasificacion WHERE c.Habilitado = @Habilitado
-		END
-END
-GO
 IF OBJECT_ID('USP_DISP_SUBCLASIFICACION','P') IS NOT NULL
 	DROP PROCEDURE USP_DISP_SUBCLASIFICACION
 GO

@@ -191,19 +191,6 @@ exports.updateSucursal = createSucursal.concat([
     sanitize('IdSucursal').toInt()
 ])
 
-const createRol = [
-    body('NombreRol', 'El nombre del rol es requerido').isString().isLength({max: 50}),
-    body('DescripcionRol','La Descripcion debe tener un maximo de 150 caracteres!').isLength({max:150}).optional({nullable: true}),
-    sanitize('NombreRol').toString(),
-    sanitize('DescripcionRol').toString()
-];
-exports.createRol = createRol;
-
-exports.updateRol = createRol.concat([
-    param('IdRol', 'Id del Rol es requerido!').isInt(),
-    sanitize('IdRol').toInt()
-])
-
 const createProducto = [
     body('IdProveedor', 'Selecciona Un proveedor.').isInt(),
     body('IdSubClasificacion', 'Selecciona Una SubClasificacion.').isInt(),
@@ -242,18 +229,6 @@ exports.createUnidadMedida = createUnidadMedida;
 exports.updateUnidadMedida = createUnidadMedida.concat([
     param('IdUnidadMedida').isInt()
 ]);
-
-let createTipoDocumento = [
-    body('NombTipDoc', 'Tipo de Documento necesario.').isLength({min:2,max:50 }),
-    body('DescTipDoc','Es Necesaria la Descripcion del Tipo de Documento').isLength({min:2, max:50}),
-];
-
-exports.createTipoDocumentoI = createTipoDocumento
-
-exports.updateTipoDocumentoI = createTipoDocumento.concat([
-    param('IdTipDoc').isInt(),
-    sanitize('IdTipDoc').toInt()
-])
 
 exports.createFacturaCompra  = [
     body('NumRefFactura').isString(),

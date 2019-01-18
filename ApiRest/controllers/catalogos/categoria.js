@@ -1,5 +1,5 @@
-const {matchedData, mssqlErrors} = require('../Utils/defaultImports')
-let CategoriaModel = require('../models/Categoria');
+const {matchedData, mssqlErrors} = require('../../Utils/defaultImports')
+let CategoriaModel = require('../../models/catalogos/Categoria');
 let Categoria = new CategoriaModel();
 
 function createCategoria(req,res){ 

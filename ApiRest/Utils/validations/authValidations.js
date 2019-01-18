@@ -1,8 +1,5 @@
-const { query, body, check }    = require('express-validator/check');
+const { query, body, check, param }    = require('express-validator/check');
 const { sanitize }              = require('express-validator/filter');
-const generic                   = require('./genericValidations');
-
-Object.assign(exports, generic);
 
 exports.userSignUpValidation = [
     body('IdRol', 'IdRol es requerido y debe ser un entero').isInt(),
@@ -56,3 +53,14 @@ exports.userUpdate = [
 exports.userFindEmail = [
     check('Email', 'Campo Email no es una direccion de correo electronico valida!').isEmail()
 ];
+
+const createRol = [
+    body('NombreRol', 'El nombre del rol es requerido').isLength({min: 4, max: 50}),
+    body('DescRol','La Descripcion debe tener un maximo de 150 caracteres!').isLength({max:150}).optional({nullable: true}),
+];
+exports.createRol = createRol;
+
+exports.updateRol = createRol.concat([
+    param('IdRol', 'Id del Rol es requerido!').isInt(),
+    sanitize('IdRol').toInt()
+])

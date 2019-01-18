@@ -1,5 +1,5 @@
-const { pushAOJParam, sql, storedProcExecute, queryExecute }  = require('../Utils/defaultImports')
-const { addLikeParamInFilter, addEqualParamInFilter } = require('../Utils/util');
+const { pushAOJParam, sql, storedProcExecute, queryExecute }  = require('../../Utils/defaultImports')
+const { addLikeParamInFilter, addEqualParamInFilter } = require('../../Utils/util');
 const baseSelect = 'SELECT IdCategoria,NombCategoria,DescCategoria,Habilitado,CreatedAt, UpdatedAt FROM CATEGORIA_PRODUCTO'
 const queryUpdate = `UPDATE CATEGORIA_PRODUCTO 
 SET NombCategoria = @NombCategoria, DescCategoria = @DescCategoria, UpdatedAt= GETDATE()
@@ -27,7 +27,7 @@ class CategoriaModel {
             filter += addLikeParamInFilter( filter, 'NombCategoria' );
             pushAOJParam(this.aoj, 'NombCategoria', sql.NVarChar(50), data.NombCategoria)
         }
-        if ( !!data.Habilitado  ) {
+        if ( undefined != data.Habilitado  ) {
             filter += addEqualParamInFilter( filter, 'Habilitado' );
             pushAOJParam(this.aoj, 'Habilitado',  sql.Bit() , +data.Habilitado)
         }

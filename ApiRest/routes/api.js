@@ -11,7 +11,6 @@ const ImagenController          = require('../controllers/imagenes');
 const UploadController          = require('../controllers/upload');
 const SucursalController        = require('../controllers/sucursal')
 const UnidadMedidaController    = require('../controllers/catalogos/unidadmedida');
-const RoleController            = require('../controllers/auth/rol.controller');
 const TrabajadorController      = require('../controllers/trabajador/trabajador');
 const CargoController           = require('../controllers/trabajador/cargo')
 const clasifUDMController       = require('../controllers/clasificacionudm')
@@ -95,11 +94,6 @@ Router
     .post('/unidadmedida',                          validations.createUnidadMedida,         validsParams,   UnidadMedidaController.createUnidadMedida)
     .put('/unidadmedida/:IdUnidadMedida(\\d+)',     validations.updateUnidadMedida,         validsParams,   UnidadMedidaController.updateUnidadMedida)
     .delete('/unidadmedida/:IdUnidadMedida(\\d+)',  changeStateGeneric('IdUnidadMedida'),   validsParams,   UnidadMedidaController.changeStateUnidadMedida)
-    //Rutas para Rol Controller
-    .post('/rol',               validations.createRol,      validsParams,       RoleController.createRol)
-    .get('/roles',              habilitadoValid,            validsParams,       RoleController.getRoles)
-    .get('/rol/:IdRol(\\d+)',   RoleController.getRolbyId)
-    .put('/rol/:IdRol(\\d+)',   validations.updateRol,      validsParams,       RoleController.updateRol)
     //Rutas clasificacionUnidadmedida controller
     .get('/clasificacionunidadmedida/:IdClasifUDM(\\d+)',   clasifUDMController.getClasificacionUdmById)
     .get('/clasificacionesunidadmedida',                    clasifUDMController.getClasificacionesUdm)

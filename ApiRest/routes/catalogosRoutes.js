@@ -3,7 +3,7 @@ const   PaisController      = require('../controllers/paises')
 const   TipDocIdentController = require('../controllers/tipoDocumento')
 const   {validsParams, Habilitado, changeStateGeneric}      = require('../Utils/validations/genericValidations');
 const   router              = express.Router();
-const   validations         = require('../Utils/validations/validations')
+const   validations         = require('../Utils/validations/catalogsValidation')
 
 router
     //Rutas para Manejo de catalogos

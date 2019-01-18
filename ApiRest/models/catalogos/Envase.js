@@ -1,6 +1,6 @@
 const baseSelect        = 'SELECT IdEnvase,NombEnvase,DescEnvase,Habilitado,createdAt,updatedAt FROM ENVASE';
 const baseSelectMinified = 'SELECT IdEnvase,NombEnvase, DescEnvase FROM ENVASE';
-const { sql, pushAOJParam, storedProcExecute, queryExecute } = require('../Utils/defaultImports');
+const { sql, pushAOJParam, storedProcExecute, queryExecute } = require('../../Utils/defaultImports');
 
 
 class EnvaseModel {
