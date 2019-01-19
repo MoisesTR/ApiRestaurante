@@ -1,6 +1,6 @@
 let {matchedData}   = require('express-validator/filter');
-let {mssqlErrors}   = require('../Utils/util');
-const TipoDocumentoModel    = require('../models/TipoDocumento');
+let {mssqlErrors}   = require('../../Utils/util');
+const TipoDocumentoModel    = require('../../models/catalogos/TipoDocumento');
 const TipoDocumento         = new TipoDocumentoModel();
 
 

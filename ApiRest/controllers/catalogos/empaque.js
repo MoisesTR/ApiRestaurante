@@ -1,6 +1,6 @@
-const { matchedData, sanitize } = require('express-validator/filter');
+const { matchedData } = require('express-validator/filter');
 const { mssqlErrors } = require('../../Utils/util')
-const EmpaqueModel = require('../../models/Empaque');
+const EmpaqueModel = require('../../models/catalogos/Empaque');
 const Empaque = new EmpaqueModel();
 
 function getEmpaqueById(req, res) {

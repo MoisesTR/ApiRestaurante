@@ -1,5 +1,5 @@
 const {mssqlErrors, matchedData} = require('../../Utils/defaultImports');
-const  UnidadMedidaModel = require('../../models/UnidadMedida')
+const  UnidadMedidaModel = require('../../models/catalogos/UnidadMedida')
 const  { Habilitado}    = require( '../../Utils/validations/genericValidations');
 const   UnidadMedida    = new UnidadMedidaModel();
 

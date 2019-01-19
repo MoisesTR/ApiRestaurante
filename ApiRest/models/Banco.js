@@ -1,11 +1,11 @@
 'use strict';
 const { addLikeParamInFilter, addEqualParamInFilter }   =  require( '../Utils/util');
 const { sql, pushAOJParam, queryExecute, storedProcExecute } = require('../Utils/defaultImports')
-const baseSelect = 'SELECT IdBanco, IdPais, Banco, Siglas, Direccion, Telefono1, Telefono2, Correo, Web FROM FACTURACION_BANCOS';
+const baseSelect = 'SELECT IdBanco, IdPais, Banco, Siglas, Direccion, Telefono1, Telefono2, Correo, Web FROM FACTURACION_BANCOS ';
 
 module.exports = class BancoModel {
 
-    getBancos( {IdPais, Banco, Habilitado, Siglas} ) {
+    static async getBancos( {IdPais, Banco, Habilitado, Siglas} ) {
         const   aoj = [];
         let filter = '';
 
@@ -25,17 +25,20 @@ module.exports = class BancoModel {
             filter += addEqualParamInFilter(filter, 'Habilitado');
             pushAOJParam( aoj,  'Habilitado',   sql.Bit,        Habilitado );
         }
-        return queryExecute( baseSelect + filter, aoj )
+        
+        const bancos=  await queryExecute( baseSelect + filter, aoj )
+        return bancos.recordset
     }
 
-    getBanco( IdBanco ) {
+    static async getBanco( IdBanco ) {
         const aoj = [];
 
         pushAOJParam( aoj,  'IdBanco',      sql.Int,        IdBanco);
-        return queryExecute(baseSelect+ ' WHERE IdBanco = @IdBanco', aoj);
+        const response =  await queryExecute(baseSelect+ ' WHERE IdBanco = @IdBanco', aoj);
+        return response.recordset[0];
     }
 
-    createBanco( IdPais, Banco, Siglas, Direccion, Telefono1, Telefono2, Correo, Web ) {
+    static createBanco( IdPais, Banco, Siglas, Direccion, Telefono1, Telefono2, Correo, Web ) {
         const aoj = [];
         
         pushAOJParam( aoj, 'IdPais',        sql.Int,        IdPais);
@@ -46,6 +49,6 @@ module.exports = class BancoModel {
         pushAOJParam( aoj, 'Telefono2',     sql.NVarChar,   Telefono2);
         pushAOJParam( aoj, 'Correo',        sql.NVarChar,   Correo);
         pushAOJParam( aoj, 'Web',           sql.NVarChar,   Web);
-        return storedProcExecute('', aoj);
+        return  storedProcExecute('USP_CREATE_BANCO', aoj);
     }
 }

@@ -1,4 +1,4 @@
-const {sql, pushAOJParam, storedProcExecute} = require('../Utils/defaultImports');
+const {sql, pushAOJParam, storedProcExecute} = require('../../Utils/defaultImports');
 
 
 class UnidadMedidaModel {
