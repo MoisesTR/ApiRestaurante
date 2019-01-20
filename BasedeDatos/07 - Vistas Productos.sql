@@ -8,7 +8,7 @@ AS
 SELECT	p.IdProducto
 		, p.IdProveedor
 		, p.NombProducto
-		, p.Descripcion
+		, p.DescProducto
 		, cl.IdCategoria
 		, cp.NombCategoria
 		, p.IdSubClasificacion
@@ -76,7 +76,7 @@ IF OBJECT_ID('dbo.V_ProductosDetallados','V') IS NOT NULL
 GO
 CREATE VIEW dbo.V_ProductosDetallados
 AS
-SELECT	p.IdProducto,	p.NombProducto,	p.Descripcion,	cl.IdCategoria,	cp.NombCategoria,
+SELECT	p.IdProducto,	p.NombProducto,	p.DescProducto,	cl.IdCategoria,	cp.NombCategoria,
 		p.IdSubClasificacion,	sp.NombSubClasificacion,	cl.IdClasificacion,		cl.NombClasificacion,
 		p.IdEnvase,	e.NombEnvase,		p.IdEmpaque,	em.NombEmpaque,    p.CantidadEmpaque,
 		p.Imagen,	p.IdUnidadMedida,	um.NombUnidad,	p.ValorUnidadMedida,	p.IdEstado,

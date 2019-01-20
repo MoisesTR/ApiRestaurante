@@ -287,7 +287,6 @@ CREATE VIEW dbo.VIEW_BASIC_GET_PRODUCT
 AS
 SELECT IdProducto
 		, PRO.IdProveedor
-		, C.IdTipInsumo
 		, C.IdCategoria
 		, CP.NombCategoria
 		, P.IdSubClasificacion
@@ -296,7 +295,7 @@ SELECT IdProducto
 		, C.NombClasificacion
 		, p.IdEstado
 		, p.NombProducto
-		, p.Descripcion
+		, p.DescProducto
 		, p.Imagen
 		, P.DiasRotacion
 		, P.IdTipInsumo
@@ -314,7 +313,7 @@ SELECT IdProducto
 		INNER JOIN dbo.CATEGORIA_PRODUCTO CP 
 			ON C.IdCategoria = CP.IdCategoria
 		INNER JOIN	dbo.TIPO_INSUMO	AS TI
-			ON C.IdTipInsumo	= TI.IdTipInsumo
+			ON CP.IdTipInsumo	= TI.IdTipInsumo
 		INNER JOIN dbo.PROVEEDOR PRO
 			ON P.IdProveedor = PRO.IdProveedor
 

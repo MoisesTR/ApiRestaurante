@@ -1,6 +1,9 @@
 USE ATOMIC_RESTAURANTE;
 GO
 
+IF OBJECT_ID('USP_CREATE_BANCO','P') IS NOT NULL
+	DROP PROCEDURE USP_CREATE_BANCO;
+GO
 CREATE PROCEDURE USP_CREATE_BANCO (
 	@IdPais		TINYINT,
 	@Banco		NVARCHAR(50),
@@ -60,7 +63,7 @@ CREATE PROCEDURE USP_CREATE_PRODUCTO(
 			IdProveedor
 			, IdSubClasificacion
 			, IdEstado,NombProducto
-			, Descripcion,Imagen
+			, DescProducto,Imagen
 			, IdEnvase,IdEmpaque
 			, IdUnidadMedida
 			, ValorUnidadMedida
@@ -127,7 +130,7 @@ CREATE PROCEDURE USP_UPDATE_PRODUCTO(
 		,	IdEstado = @IdEstado
 		,	NombProducto = @NombProducto
 		,	cantidadEmpaque = @CantidadEmpaque
-		,   Descripcion	= @Descripcion
+		,   DescProducto	= @Descripcion
 		,	Imagen		= @Imagen
 		,	IdEnvase	= @IdEnvase
 		,	IdEmpaque	= @IdEmpaque
@@ -166,7 +169,7 @@ AS BEGIN
 			, P.CodOriginal
 			, P.CodBarra
 			, P.NombProducto
-			, P.Descripcion
+			, P.DescProducto
 			, P.Imagen
 			, P.Habilitado
 			, P.CreatedAt
@@ -201,7 +204,7 @@ AS BEGIN
 		, C.NombClasificacion
 		, p.IdEstado
 		, p.NombProducto
-		, p.Descripcion
+		, p.DescProducto
 		, p.Imagen
 		, P.DiasRotacion
 		, P.IdTipInsumo
@@ -234,7 +237,7 @@ AS BEGIN
 		, C.NombClasificacion
 		, P.IdEstado
 		, P.NombProducto
-		, P.Descripcion
+		, P.DescProducto
 		, P.Imagen
 		, P.DiasRotacion
 		, P.Habilitado

@@ -72,11 +72,11 @@ SET IDENTITY_INSERT dbo.CLASIFICACION_UNIDAD_MEDIDA OFF;
 GO
 SET IDENTITY_INSERT dbo.CATEGORIA_PRODUCTO ON;
 GO
-INSERT INTO  CATEGORIA_PRODUCTO(IdCategoria,NombCategoria,DescCategoria) 
-VALUES	(1,'Producto Seco','Todos aquellos productos que no necesitan refrigeracion.')
-		,(2,'Carnes','Todas los tipos de carnes.'),(3,'Salsas','Todos los tipos de salsas')
-		,(4,'Bebidas','Todos los distINTos tipos de bebidas y marcas.')
-		,(5,'Verduras','Todos los distINTos tipos de verduras.');
+INSERT INTO  CATEGORIA_PRODUCTO(IdCategoria, IdTipInsumo, NombCategoria,DescCategoria) 
+VALUES	(1,1,'Producto Seco','Todos aquellos productos que no necesitan refrigeracion.')
+		,(2,1,'Carnes','Todas los tipos de carnes.'),(3,'Salsas','Todos los tipos de salsas')
+		,(4,1,'Bebidas','Todos los distINTos tipos de bebidas y marcas.')
+		,(5,1,'Verduras','Todos los distINTos tipos de verduras.');
 GO
 SET IDENTITY_INSERT dbo.CATEGORIA_PRODUCTO OFF;
 GO

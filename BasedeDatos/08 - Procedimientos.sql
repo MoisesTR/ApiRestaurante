@@ -122,15 +122,15 @@ GO
 CREATE PROCEDURE USP_GET_DETALLE_BODEGA_AP
 	@IdBodegaAreaP INT
 AS BEGIN
-	SELECT	IdDetalle,	IdBodegaAreaP,	IdDetalleEntradaAP,	IdEntradaBodegaAP,	PP.IdProveedor,	
+	SELECT	IdDetalle,	IdBodegaAreaP,	IdDetalleEntradaAP,	IdEntradaBodegaAP,	P.IdProveedor,	
 			DAP.IdProductoProveedor,	P.IdProducto, P.NombProducto,	CP.IdCategoria,	C.NombCategoria,
 			P.IdSubClasificacion,	SP.NombSubClasificacion,	SP.IdClasificacion,	CP.NombClasificacion,
 			Cantidad,	FechaHoraIngreso,	FechaHoraProduccion,	DAP.Habilitado 
 	FROM dbo.DETALLE_BODEGA_AP DAP
-	INNER JOIN PRODUCTO_PROVEEDOR PP 
-		ON DAP.IdProductoProveedor = PP.IdProductoProveedor
 	INNER JOIN PRODUCTO  P 
-		ON PP.IdProducto = P.IdProducto
+		ON DAP.IdProductoProveedor = P.IdProducto
+	INNER JOIN PROVEEDOR PROV
+		ON P.IdProveedor = PROV.IdProveedor
 	INNER JOIN SUBCLASIFICACION_PRODUCTO SP 
 		ON P.IdSubClasificacion = SP.IdSubClasificacion
 	INNER JOIN CLASIFICACION_PRODUCTO CP 
@@ -252,17 +252,17 @@ AS BEGIN
 END
 
 GO
-IF OBJECT_ID('USP_CREATE_UNIDAD_MEDIDA', N'P') IS NOT NULL
-	DROP PROCEDURE USP_CREATE_UNIDAD_MEDIDA
+IF OBJECT_ID('USP_CREATE_UNIDAD_MEDIDA_FUNCIONAL', N'P') IS NOT NULL
+	DROP PROCEDURE USP_CREATE_UNIDAD_MEDIDA_FUNCIONAL
 GO
-CREATE PROCEDURE USP_CREATE_UNIDAD_MEDIDA(
+CREATE PROCEDURE USP_CREATE_UNIDAD_MEDIDA_FUNCIONAL(
 	@IdUdmFuncional		INT				OUTPUT,
 	@IdUnidadMedida		INT,
 	@Nombre				NVARCHAR(50),
 	@Descripcion		NVARCHAR(50)	NULL,
 	@ValorUdm			NUMERIC(10,5)
 ) AS BEGIN
-	INSERT INTO dbo.UNIDAD_MEDIDA_FUNCIONAL(IdUnidadMedida, NombUdmFunc, Descripcion, ValorUdm)
+	INSERT INTO dbo.UNIDAD_MEDIDA_FUNCIONAL(IdUnidadMedida, NombUdmFunc, DescUdmFunc, ValorUdm)
 	VALUES(@IdUnidadMedida, @Nombre, @Descripcion, @ValorUdm)
 	
 	SELECT @IdUdmFuncional = @@IDENTITY
