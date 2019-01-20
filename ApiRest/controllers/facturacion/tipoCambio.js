@@ -24,7 +24,7 @@ exports.getTipoCambio = (req, res) => {
             .json(tipoCambio);
     }).catch((err) => {
         res.status(err.status || 500)
-            .json(mssqlErrors(err))
+            .json( mssqlErrors(err) )
     });
 };
 

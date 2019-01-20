@@ -2,13 +2,8 @@ const { sql, pushAOJParam, queryExecute,storedProcExecute } = require('../Utils/
 const { addLikeParamInFilter, addEqualParamInFilter }   =  require( '../Utils/util');
 
 class ProductoModel {
-
-    constructor() {
-        this.aoj = [];
-    }
-    
     getProductoById( IdProducto ) {
-        this.aoj = [];
+        const aoj = [];
 
         pushAOJParam(aoj, 'IdProducto',      sql.Int,    IdProducto)
         return  storedProcExecute('dbo.USP_GET_PRODUCTO', aoj)
@@ -38,7 +33,7 @@ class ProductoModel {
     }
     
     createProducto( data ) {
-        this.aoj = [];
+        const aoj = [];
 
         pushAOJParam(aoj, 'IdProveedor',        sql.Int,            data.IdProveedor)
         pushAOJParam(aoj, 'IdSubClasificacion', sql.Int,            data.IdSubClasificacion)
@@ -54,14 +49,14 @@ class ProductoModel {
         pushAOJParam(aoj, 'CantidadEmpaque',    sql.Int,            data.CantidadEmpaque);
         pushAOJParam(aoj, 'DiasRotacion',       sql.Int,            data.DiasRotacion);
         pushAOJParam(aoj, 'IdTipInsumo',        sql.Int,            data.IdTipInsumo);
-        pushAOJParam(aoj, 'CodigoProducto',     sql.NVarChar(200),  data.CodigoProducto);
-        pushAOJParam(aoj, 'CodigoInterno',      sql.NVarChar(200),  data.CodigoInterno);
-        pushAOJParam(aoj, 'CodigoBarra',        sql.NVarChar(200),  data.CodigoBarra);
+        pushAOJParam(aoj, 'CodOriginal',        sql.NVarChar(25),   data.CodOriginal);
+        pushAOJParam(aoj, 'CodProd',            sql.NVarChar(25),   data.CodProd);
+        pushAOJParam(aoj, 'CodBarra',           sql.NVarChar(200),  data.CodBarra);
         return  storedProcExecute('dbo.USP_CREATE_PRODUCTO', aoj)
     }
     
     updateProducto( data ) {
-        this.aoj = [];
+        const aoj = [];
         
         pushAOJParam(aoj, 'IdProveedor',        sql.Int,            data.IdProveedor)
         pushAOJParam(aoj, 'IdProducto',         sql.Int,            data.IdProducto)
@@ -78,14 +73,15 @@ class ProductoModel {
         pushAOJParam(aoj, 'CantidadEmpaque',    sql.Int,            data.CantidadEmpaque);
         pushAOJParam(aoj, 'DiasRotacion',       sql.Int,            data.DiasCaducidad);
         pushAOJParam(aoj, 'TipoInsumo',         sql.Int,            data.TipoInsumo);
-        pushAOJParam(aoj, 'CodigoProducto',     sql.NVarChar(200),  data.CodigoProducto);
-        pushAOJParam(aoj, 'CodigoInterno',      sql.NVarChar(200),  data.CodigoInterno);
-        pushAOJParam(aoj, 'CodigoBarra',        sql.NVarChar(200),  data.CodigoBarra);
+        pushAOJParam(aoj, 'CodOriginal',        sql.NVarChar(200),  data.CodOriginal);
+        pushAOJParam(aoj, 'CodProd',            sql.NVarChar(200),  data.CodProd);
+        pushAOJParam(aoj, 'CodBarra',           sql.NVarChar(200),  data.CodBarra);
         return  storedProcExecute('USP_UPDATE_PRODUCTO', aoj)
     }
     
     changeStateProducto( IdProducto, Habilitado ) {
-        this.aoj = [];
+        const aoj = [];
+
         pushAOJParam(aoj, 'IdProducto', sql.Int(),   IdProducto)
         pushAOJParam(aoj, 'Habilitado', sql.Bit(),   +Habilitado)
         return  storedProcExecute('USP_DISP_PRODUCTO', aoj)

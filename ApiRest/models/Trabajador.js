@@ -1,4 +1,4 @@
-const { pushAOJParam, storedProcExecute, queryExecute, sql} = require('../Utils/defaultImports')
+const { pushAOJParam, storedProcExecute,whereHabilitadoFilter, queryExecute, sql} = require('../Utils/defaultImports')
 const baseSelect = `SELECT T.IdTrabajador, T.IdSucursal, S.NombSucursal, T.IdCargo, C.NombCargo,
         T.Nombres, T.Apellidos, T.IdTipDoc, T.Documento, T.Imagen,
         T.FechaNacimiento, T.Direccion, T.Telefono1, T.Telefono2, T.FechaIngreso,
@@ -22,9 +22,17 @@ class TrabajadorModel {
         const aoj = [];
         let filter = '';
         
-        pushAOJParam(aoj,   'Habilitado',   sql.Bit,    +Habilitado);
-        pushAOJParam(aoj,   'IdSucursal',   sql.Int,    IdSucursal);
-        pushAOJParam(aoj,   'IdPais',       sql.Int,    IdPais);
+        if ( !Habilitado != null ) {
+            filter += ' WHERE T.Habilitado = @Habilitado';
+            pushAOJParam(aoj,   'Habilitado',   sql.Bit,    +Habilitado);
+        }
+        if ( !!IdSucursal ) {
+            pushAOJParam(aoj,   'IdSucursal',   sql.Int,    IdSucursal);
+        }
+        if ( !!IdPais ) {
+
+            pushAOJParam(aoj,   'IdPais',       sql.Int,    IdPais);
+        }
         return queryExecute( baseSelect + filter, aoj)
     }
     

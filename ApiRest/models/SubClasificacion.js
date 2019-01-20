@@ -50,9 +50,9 @@ class SubClasificacionModel {
     
     async getSubclasificacionesByIdClasificacion( IdClasificacion ) {
         const aoj = [];
-
+        let     filter = ' WHERE s.IdClasificacion = @IdClasificacion';
         pushAOJParam(aoj, 'IdClasificacion', sql.Int, IdClasificacion)
-        return  storedProcExecute('USP_GET_SUBCLASIFICACIONES_BY_IDCLASIFICACION', aoj)
+        return  queryExecute(baseSelect + filter, aoj)
     }
     
     async changeStateSubClasificacion( IdSubClasificacion, Habilitado ) {

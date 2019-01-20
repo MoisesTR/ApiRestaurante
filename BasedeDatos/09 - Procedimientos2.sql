@@ -28,18 +28,19 @@ CREATE PROCEDURE USP_CREATE_PRODUCTO(
     @IdSubClasificacion INT,
     @IdEstado			INT,
     @NombProducto		NVARCHAR(50),
-    @Descripcion		NVARCHAR(200),
+    @DescProducto		NVARCHAR(200),
     @Imagen				NVARCHAR(100),
 	@IdEnvase			INT,
 	@IdEmpaque			INT,
+	@IsGranel			BIT,
 	@IdUnidadMedida		INT,
-	@ValorUnidadMedida	NUMERIC(10,5),
-	@CantidadEmpaque	INT, 
-	@DiasRotacion		INT,
+	@ValorUnidadMedida		NUMERIC(10,5),
+	@CantidadEmpaque		INT, 
+	@DiasRotacion			INT,
 	@IdTipInsumo			INT,
 	@CodProd			NVARCHAR(200),
 	@CodOriginal		NVARCHAR(200),
-	@CodBarra		NVARCHAR(200)
+	@CodBarra			NVARCHAR(200)
 
 ) AS BEGIN
 	IF EXISTS (SELECT NombProducto FROM dbo.PRODUCTO WHERE IdProveedor = @IdProveedor 
@@ -55,8 +56,6 @@ CREATE PROCEDURE USP_CREATE_PRODUCTO(
 		RAISERROR('Ya existe un Producto con el mismo codigo ingresado',16,1)
 		RETURN	
 	END
-	
-	
 		--BEGIN TRANSACTION
 		--BEGIN TRY
 			INSERT INTO dbo.PRODUCTO(
@@ -79,7 +78,7 @@ CREATE PROCEDURE USP_CREATE_PRODUCTO(
 			, @IdSubClasificacion
 			, @IdEstado
 			, @NombProducto
-			, @Descripcion
+			, @DescProducto
 			, @Imagen
 			, @IdEnvase
 			, @IdEmpaque
@@ -589,12 +588,12 @@ IF OBJECT_ID('dbo.USP_UPDATE_SUCURSAL',N'P') IS NOT NULL
 GO
 CREATE PROCEDURE [dbo].USP_UPDATE_SUCURSAL(
 	@IdSucursal			INT,
-    @NombreSucursal		NVARCHAR(100) ,
+    @NombSucursal		NVARCHAR(100) ,
     @Direccion			NVARCHAR(250) ,
 	@Telefono1			NVARCHAR(20) ,
 	@Telefono2			NVARCHAR(20) NULL
 ) AS BEGIN
-	UPDATE dbo.SUCURSAL_RESTAURANTE SET NombSucursal=@NombreSucursal,Direccion=@Direccion,
+	UPDATE dbo.SUCURSAL_RESTAURANTE SET NombSucursal=@NombSucursal,Direccion=@Direccion,
     Telefono1 = @Telefono1,Telefono2 = ISNULL(@Telefono2, Telefono2), UpdatedAt=GETDATE() 
 	WHERE IdSucursal = @IdSucursal;
 END 

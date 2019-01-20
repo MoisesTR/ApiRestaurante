@@ -65,9 +65,9 @@ Router
     .get('/estadosproducto',                        habilitadoValid,        validsParams,   EstadoProductoController.getEstados)
     .get('/estadoproducto/:IdEstado(\\d+)',         EstadoProductoController.getEstadoById)
     //Rutas producto controller
-    .get('/productos',                              habilitadoValid,    validations.getProducts,    validsParams,   ProductoController.getProductos)
+    .get('/productos\$',                              habilitadoValid,    validations.getProducts,    validsParams,   ProductoController.getProductos)
     .get('/productos/:IdProducto(\\d+)',            ProductoController.getProductoById)
-    .post('/productos',                             validations.createProducto,         validsParams,   ProductoController.createProducto)
+    .post('/productos\$',                             validations.createProducto,         validsParams,   ProductoController.createProducto)
     .put('/productos/:IdProducto(\\d+)',            validations.updateProducto,         validsParams,   ProductoController.updateProducto)
     .delete('/productos/:IdProducto(\\d+)',         changeStateGeneric('IdProducto'),   validsParams,   ProductoController.changeStateProducto)
 

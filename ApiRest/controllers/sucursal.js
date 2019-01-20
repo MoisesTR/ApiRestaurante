@@ -44,7 +44,7 @@ function createSucursal(req, res) {
 function updateSucursal(req, res) {
     const data =  matchedData(req, {locations:['body','params']});
 
-    Sucursal.updateSucursal( data )
+    SucursalModel.updateSucursal( data )
     .then((results) => {
         let afectadas = results.rowsAffected[0];
         res.status(200)
@@ -57,9 +57,9 @@ function updateSucursal(req, res) {
 }
 
 function changeStateSucursal(req, res) {
-    let data = matchedData(req, {locations:['query','params','body']});
+    const data = matchedData(req, {locations:['query','params','body']});
 
-    SucursalModel.changeStateSucursal( data.IdSucursal. data.Habilitado )
+    SucursalModel.changeStateSucursal( data.IdSucursal, data.Habilitado )
     .then((results) => {
         let afectadas   = results.rowsAffected[0]
         let accion      = (data.Habilitado == 0) ? 'Deshabilitada' : 'Habilitada';

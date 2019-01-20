@@ -3,7 +3,7 @@ const  UnidadMedidaModel = require('../../models/catalogos/UnidadMedida')
 const  { Habilitado}    = require( '../../Utils/validations/genericValidations');
 const   UnidadMedida    = new UnidadMedidaModel();
 
-function getUnidadById(req,res){
+exports.getUnidadById = (req,res) => {
     const data = req.params;
    
     UnidadMedida.getUnidadById( data.IdUnidadMedida ) 
@@ -17,7 +17,8 @@ function getUnidadById(req,res){
             .json( mssqlErrors(err) );
     });
 }
-function getUnidadesMedida(req,res){
+
+exports.getUnidadesMedida = (req, res) => {
     const data    = matchedData(req, {locations:['query']})
 
     UnidadMedida.getUnidadesMedida( data )
@@ -29,7 +30,8 @@ function getUnidadesMedida(req,res){
             .json( mssqlErrors(err) );
     });
 }
-function createUnidadMedida(req,res){
+
+exports.createUnidadMedida = (req, res) => {
     const data = matchedData(req);
     
     UnidadMedida.createUnidadMedida( data )
@@ -40,9 +42,9 @@ function createUnidadMedida(req,res){
         res.status(500).json( mssqlErrors(err) );
     })
 }
-function updateUnidadMedida(req,res){
+
+exports.updateUnidadMedida = (req, res) => {
     const data = matchedData(req);
-    var aoj = [];
 
     UnidadMedida.updateUnidadMedida( data )
     .then((results) => {
@@ -52,7 +54,8 @@ function updateUnidadMedida(req,res){
         res.status(500).json( mssqlErrors(err) );
     })
 }
-function changeStateUnidadMedida(req,res){
+
+exports.changeStateUnidadMedida = (req, res) => {
     let data = matchedData(req, {locations:['query','params','body']});
 
     UnidadMedida.changeStateUnidadMedida( data.IdUnidadMedida, Habilitado )
@@ -65,11 +68,4 @@ function changeStateUnidadMedida(req,res){
         res.status(500).json(mssqlErrors(err));
         console.log('Error:', err)
     });
-}
-module.exports={
-    createUnidadMedida,
-    getUnidadById,
-    getUnidadesMedida,
-    updateUnidadMedida,
-    changeStateUnidadMedida
 }

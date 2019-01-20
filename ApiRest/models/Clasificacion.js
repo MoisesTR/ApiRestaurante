@@ -26,15 +26,15 @@ module.exports =  class ClasificacionController {
         return queryExecute(baseSelect + filter, aoj)
     }
     
-    getClasificacionesByIdCategoria(  ){
+    getClasificacionesByIdCategoria( IdCategoria, Habilitado ){
         let filter  = '';
         let aoj = [];
     
         filter +=   ' WHERE IdCategoria = @IdCategoria';
-        pushAOJParam(aoj, 'IdCategoria',    sql.Int, data.IdCategoria)
+        pushAOJParam(aoj, 'IdCategoria',    sql.Int, IdCategoria)
         if ( Habilitado ) {
             filter  += addEqualParamInFilter(filter, 'Habilitado');
-            pushAOJParam(aoj, 'Habilitado', sql.Int, data.Habilitado)
+            pushAOJParam(aoj, 'Habilitado', sql.Int, Habilitado)
         }
         return  queryExecute(baseSelect + filter, aoj)
     }

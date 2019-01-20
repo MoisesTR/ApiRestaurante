@@ -38,4 +38,27 @@ exports.getRestaurantes = [
         query('Habilitado').isBoolean()
     ]),
     sanitize('Habilitado').toBoolean()
-]
+];
+
+exports.createTipoCambio = [
+    body('IdMonedaPrincipal').isInt(),
+    body('IdMonedaCambio').isInt(),
+    body('ValorMonedaPrincipal').isNumeric(),
+    body('ValorCambioOficial').isNumeric(),
+    body('ValorCambioParalelo').isNumeric(),
+    isDate('Fecha'),
+    sanitize('Fecha').toDate()
+];
+
+exports.getTiposCambio = [
+    query('IdMonedaPrincipal').isInt(),
+    query('IdMonedaCambio').isInt(),
+];
+
+exports.getTipoCambio = [
+    query('IdTipCambio').isInt(),
+    query('IdMonedaPrincipal').isInt(),
+    query('IdMonedaCambio').isInt(),
+    isDate('Fecha'),
+    sanitize('Fecha').toDate()
+];

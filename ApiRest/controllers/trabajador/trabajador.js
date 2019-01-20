@@ -13,7 +13,7 @@ function getTrabajadorById(req, res) {
 }
 
 function getTrabajadores(req, res) {
-    const data = matchedData(req,{locations:['query']});
+    const data = matchedData(req);
 
     TrabajadorModel.getTrabajadores( data.Habilitado, data.IdSucursal, data.IdPais)
         .then((results) => {
@@ -51,7 +51,7 @@ function updateTrabajador(req, res) {
 function changeStateTrabajador(req, res) {
     const data = matchedData(req,{locations:['query','params','body']})
 
-    TrabajadorModel
+    TrabajadorModel.changeStateTrabajador( data.IdTrabajador, data.Habilitado )
     .then((results) => {
         let afectadas = results.rowsAffected[0]
             let accion = (data.Habilitado == 0) ? 'Deshabilitado' : 'Habilitado';
