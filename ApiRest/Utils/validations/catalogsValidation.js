@@ -43,6 +43,17 @@ exports.getUdmFuncionales = [
     query('IdUnidadMedida').isInt(),
 ];
 
+exports.createTipoInsumo = [
+    body('NombTipInsumo').isLength({min: 3, max: 50}),
+    body('DescTipInsumo').isLength({min: 3, max: 150})
+];
+
+exports.getTiposInsumo = [
+    query('Habilitado').isBoolean().optional({nullable: true}),
+    query('NombTipInsumo').isLength({min:2, max:50}).optional({nullable: true}),
+    sanitize('Habilitado').toBoolean()  
+];
+
 const createCategoria = [
     body('IdTipInsumo', 'Selecciona el tipo de insumo').isInt(),
     body('NombCategoria', 'El nombre de la categoria es requerido').isString(),
