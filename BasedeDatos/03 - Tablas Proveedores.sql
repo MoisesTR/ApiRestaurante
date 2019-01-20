@@ -13,7 +13,7 @@ CREATE TABLE dbo.PROVEEDOR(
     Email				NVARCHAR(100)		NULL,
 	Imagen				NVARCHAR(50)		NOT NULL	DEFAULT 'proveedor.png',
     DescProveedor		NVARCHAR(200)		NULL,
-    NombRepresentante	NVARCHAR(100)		NOT NULL,
+    NombRepresentante	NVARCHAR(100)		NULL,
 	Documento			NVARCHAR(50)		NULL,
 	Abreviatura			NVARCHAR(20)		NULL,
     Retencion2			Bit					NULL	DEFAULT 0,

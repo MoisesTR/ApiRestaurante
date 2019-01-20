@@ -31,3 +31,14 @@ exports.createBanco = [
     body('Correo').isEmail(),
     body('Web').isLength({min:3, max:100}).isURL(),
 ];
+
+exports.createUdMFuncional = [
+    body('IdUnidadMedida').isInt(),
+    body('NombUdmFunc').isLength({min: 3, max:50}),
+    body('DescUdmFunc').isLength({min:3, max:150}),
+    body('ValorUdm').isNumeric(),
+]
+
+exports.getUdmFuncionales = [
+    query('IdUnidadMedida').isInt(),
+]

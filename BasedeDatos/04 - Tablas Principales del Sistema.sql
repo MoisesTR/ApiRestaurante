@@ -75,16 +75,16 @@ CREATE TABLE CLASIFICACION_UNIDAD_MEDIDA_FUNCIONAL(
 GO
 CREATE TABLE UNIDAD_MEDIDA_FUNCIONAL(
 	IdUdmFuncional			INT	IDENTITY(1,1),
-	IdClasificacionUdmF		INT				NOT NULL,
+	--IdClasificacionUdmF		INT				NOT NULL,
 	IdUnidadMedida			INT				NOT NULL,
 	NombUdmFunc				NVARCHAR(50)	NOT NULL,
-	Descripcion				NVARCHAR(50)	NULL,
+	DescUdmFunc				NVARCHAR(50)	NULL,
 	ValorUdm				NUMERIC(10,5)	NOT NULL	CHECK( ValorUdm > 0),
 	CreatedAt				DATE			NOT NULL	DEFAULT GETDATE(),
 	UpdatedAt				DATE			NULL,
 	CONSTRAINT Pk_UnidadMedidaFuncional		PRIMARY KEY(IdUdmFuncional),
 	CONSTRAINT FK_UnidadDeMedidaFuncional	FOREIGN KEY(IdUnidadMedida) REFERENCES dbo.UNIDAD_MEDIDA(IdUnidadMedida),
-	CONSTRAINT FK_ClasificacionUdmFuncional FOREIGN KEY(IdClasificacionUdmF) REFERENCES dbo.CLASIFICACION_UNIDAD_MEDIDA_FUNCIONAL(IdClasificacionUdmF)
+	--CONSTRAINT FK_ClasificacionUdmFuncional FOREIGN KEY(IdClasificacionUdmF) REFERENCES dbo.CLASIFICACION_UNIDAD_MEDIDA_FUNCIONAL(IdClasificacionUdmF)
 )
 GO
 

@@ -7,7 +7,7 @@ class ProveedorModel {
         this.aoj = [];
     }
     
-    async getProveedorById( IdProveedor ) {
+    getProveedorById( IdProveedor ) {
         this.aoj    = [];
         let filter  = ' WHERE IdProveedor = @IdProveedor';
 
@@ -15,7 +15,7 @@ class ProveedorModel {
         return queryExecute(baseSelect+ filter, this.aoj)
     }
     
-    async getProveedores( Habilitado ) {
+    getProveedores( Habilitado ) {
         this.aoj    = [];
         let filter  = '';
     
@@ -25,7 +25,7 @@ class ProveedorModel {
         return queryExecute(baseSelect + filter, this.aoj)
     }
     
-    async createProveedor( data ) {
+    createProveedor( data ) {
         this.aoj = [];
 
         pushAOJParam(this.aoj, 'IdPais',                sql.Int,            data.IdPais);
@@ -44,7 +44,7 @@ class ProveedorModel {
         return storedProcExecute('USP_CREATE_PROVEEDOR', this.aoj)
     }
     
-    async updateProveedor( data ) {
+    updateProveedor( data ) {
         this.aoj = [];
 
         pushAOJParam(this.aoj, 'IdProveedor',           sql.Int(),          data.IdProveedor);
@@ -62,7 +62,7 @@ class ProveedorModel {
         return storedProcExecute('USP_UPDATE_PROVEEDOR', this.aoj);
     }
     
-    async changeStateProveedor( IdProveedor, Habilitado ) {
+    changeStateProveedor( IdProveedor, Habilitado ) {
         this.aoj = [];
 
         pushAOJParam(this.aoj, 'IdProveedor',       sql.Int(),      IdProveedor);
@@ -70,7 +70,7 @@ class ProveedorModel {
         return storedProcExecute('USP_DISP_PROVEEDOR', this.aoj);
     }
     
-    async createTelefonoProveedor( data ) {
+    createTelefonoProveedor( data ) {
         this.aoj = [];
 
         pushAOJParam(this.aoj, 'IdProveedor', sql.Int(),         data.IdProveedor);
@@ -81,7 +81,7 @@ class ProveedorModel {
         return storedProcExecute('USP_CREATE_TELEFONO_PROVEEDOR', this.aoj);
     }
     
-    async changeStateTelefonoProveedor( IdTelefono, Habilitado ) {
+    changeStateTelefonoProveedor( IdTelefono, Habilitado ) {
         this.aoj = [];
 
         pushAOJParam(this.aoj, 'IdTelefono', sql.Int(),   IdProveedor);

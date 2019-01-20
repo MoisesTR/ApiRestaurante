@@ -56,7 +56,7 @@ exports.singIn = ( req, res ) => {
     let     user =  null;
 
     User.getUserByUsername( userData.Username )
-    .then((userResult) => {
+    .then( userResult => {
         user = userResult.recordset[0];
         if (user) {
             const passh = user.Password;
@@ -64,8 +64,7 @@ exports.singIn = ( req, res ) => {
             return  bcrypt.compare(userData.Password, passh);
         } else {
             console.log('Usuario no encontrado!');
-            res.status(404)
-                .json({ status: '401', code: 'NEXIST', message: 'El usuario ingresado no existe en la base de dato!' });
+            throw { status: '401', code: 'NEXIST', message: 'El usuario ingresado no existe en la base de dato!' };
         }
     })
     .then((isequal) => {
@@ -76,20 +75,21 @@ exports.singIn = ( req, res ) => {
                 let {_token : tokenGen, expiration} = jwt.createToken(user);
                 //console.log('Devolviendo token, del usuario '+user.username);
                 console.log('token:' + tokenGen);
-                res.status(200).json({ token: tokenGen, expiration });
+                res.status(200)
+                    .json({ token: tokenGen, expiration });
             } else {
                 //delete user.password
-                res.status(200).json(user);
+                res.status(200)
+                    .json(user);
             }
         } else {
             console.log('Las contrasenas no coinciden');
-            res.status(401)
-                .json({ status: 401, code: 'EPASSW', message: 'La contraseña es incorrecta' })
+            throw { status: 401, code: 'EPASSW', message: 'La contraseña es incorrecta' };
         }
     })
     .catch((err) => {
         console.log('Error principal: ' + err);
-        res.status( res.status | 500)
+        res.status( res.status || 500)
             .json(err)
     })
 }
@@ -130,7 +130,8 @@ exports.updateUser = (req, res) => {
             });
     })
     .catch( err => {
-
+        res.status(err.status || 500)
+            .json(mssqlErrors(err))
     })
 }
 
@@ -153,8 +154,9 @@ exports.changeStateUser = ( req, res ) => {
 }
 
 exports.getAuthenticateUserInfo = ( req, res ) => {
-    req.status(200)
-        .json(req)
+    
+    res.status(200)
+        .json(req.user)
 }
 
 exports.refreshToken = ( req, res ) => {

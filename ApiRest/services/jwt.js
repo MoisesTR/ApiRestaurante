@@ -25,7 +25,7 @@ exports.createToken = ( user )  => {
     //If iat is inserted in the payload, it will be used instead of the real timestamp for calculating other things like exp given a timespan in options.expiresIn.
     //En este caso la fecha de expiracion la calculamos con moment
     console.log('Creando payload')
-    _token  = jwt.sign(payload,secret);
+    _token  = jwt.sign(payload, secret);
     return { _token, expiration: payload.exp}
 }
 
@@ -51,25 +51,26 @@ exports.createToken = ( user )  => {
 //         })
 //     })
 // }
-async function verifyToken( token ) {
-    jwt.verify( token, secret, (err, decoded) => {
-        if( !!err ) {
-            if ( err.name === 'TokenExpiredError' ) {
-                decoded     = jwt.decode(token, {complete: true});
-                decoded.payload.isExpired   = true;
-                return decoded;
-            } else {
-                console.error('Error, token invalido')
-                err.code    = 'EITOKEN';
-                throw {
-                    ...{code, name, message } = err ,
-                    status: 401
-                };
-            }
+async function verifyToken( token, expiredIsValid ) {
+    let _decoded;
+    try {
+        _decoded = await jwt.verify( token, secret );
+        
+        return _decoded.payload;
+    } catch( _err ) {
+        if ( _err.name === 'TokenExpiredError') {
+            _decoded     = jwt.decode(token, {complete: true});
+            _decoded.payload.isExpired   = true;
+            return _decoded.payload;
         } else {
-            return decoded;
+            let error   = {..._err};
+            error.code    = 'EITOKEN';
+            throw {
+                ...error,
+                status: 401
+            };
         }
-    })
+    }
 }
 
 exports.containToken = ( req, res, next ) => {
@@ -92,32 +93,34 @@ exports.containToken = ( req, res, next ) => {
  * @param {Middleware} next 
  */
 exports.ensureAuth = ( req, res, next ) => {
-    let token   = req.headers.authorization.replace(/['"]+/g,'');
-    const {addOtherUInfo}   =   'true' === req.query.addOtherUInfo;
+    const token   = req.headers.authorization.replace(/['"]+/g,'').replace('Bearer ', '');
+    let     decoded;
+    // console.log(req.headers.authorization);
+    const addOtherUInfo   =   'true' === req.query.addOtherUInfo;
 
-    console.log('Comprobando validez del token', req.query);
     verifyToken( token )
     .then( _decoded => {
+        decoded = _decoded;
         //A continuacion procedemos a buscar el usuario para validar que se encuentre habilitado
         return User.getUserByUsername( _decoded.Username )
     })
     .then( userResult => {
         //en caso de encontrarlo refrescaremos su informacion por si ha habido un cambio
-        console.log('Busqueda de usuarios realizada');
+        console.log('Busqueda de usuarios realizada', userResult);
         //Resultado del procedimiento
         let user = userResult.recordset[0];
         //Si encontramos el usuario
         if ( !!user ) {
             console.log('Se encontro el usuario');
-            if ( user.habilitado == false ) {
+            if ( user.Habilitado == false ) {
                 //si el usuario se encuentra deshabilitado
                 return res.status(401)
-                        .json({status:401,code:'EPUSER',message:'Usuario deshabilitado,favor contactar con soporte Casa Cross'});
+                        .json({status:401,code:'EPUSER',message:'Usuario deshabilitado,favor contactar con soporte AtomicDev.'});
             } 
             //Si el usuario esta habilitado se procede a actualizar el username y el email
             //por si ha habido un cambio en estos
             //Verificamos que no ah habido cambio en la informacion del usuario, desde la creacion del token
-            if( moment(user.update_at).unix() > decoded.iat ){
+            if( moment(user.UpdatedAt).unix() > decoded.iat ){
                 // si su info cambio no lo dejamos procedere
                 return res.status(401)
                         .json({
@@ -127,23 +130,22 @@ exports.ensureAuth = ( req, res, next ) => {
             }
             //setear el valor del payload en la request, para poder acceder a esta informacion
             //en todas la funciones de nuestros controladores
-            req.user    = decoded;
-            if ( !keepUserPass ) {
-                delete user.Password;
-            }
+            req.user    = {...decoded};
+            delete user.Password;
             if ( addOtherUInfo ) {
                 req.user    = {...req.user, ...user };
             }
             next(); //next para pasar al siguiente controlador
         } else {
-            return res.status(404)
-                    .json({
-                        status: 404, code:'EPUSER',
-                        message:'Usuario no encontrado, favor contactar con soporte Casa Cross'
-                    });
+            throw {
+                    status: 404, code:'EPUSER',
+                    message:'Usuario no encontrado, favor contactar con soporte AtomicDev'
+                };
         }
     })
     .catch( error => {
+        console.log('Error del catch', error);
+        
         res.status(error.status | 500)
             .json(error)
     })

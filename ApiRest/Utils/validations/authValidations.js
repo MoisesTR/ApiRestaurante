@@ -13,7 +13,7 @@ exports.userSignUpValidation = [
 ];
 
 exports.meInfo = [
-    query('addOtherUInfo', 'Es requerido y debe ser un booleano.').isBoolean(),
+    query('addOtherUInfo', 'Es requerido y debe ser un booleano.').isBoolean().optional({nullable: true}),
     query('addRolAndPermissions', 'Es requerido y debe ser un booleano.').toBoolean(),
     sanitize('addOtherUInfo').toBoolean(),
     sanitize('addRoleAndPermissions').toBoolean()
