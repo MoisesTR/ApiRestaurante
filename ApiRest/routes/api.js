@@ -125,6 +125,7 @@ Router
     .get('/listarfacturas',         habilitadoValid,                    validations.obtenerFacturasC,       validsParams ,          FactCompController.obtenerFacturasCompra)
     //Rutas para los menues
     .post('/menu', menuController.createMenu)
-    .get('/menu/:IdRol(\\d+)',validations.getMenuesByRol,menuController.getMenuesByRol)
+    .get('/menus/rol/:IdRol(\\d+)',validations.getMenuesByRol,menuController.getMenuesByRol)
+    .get('/menus/:IdMenu(\\d+)',validations.getMenuesByRol,menuController.getMenuesByRol)
 
 module.exports = Router

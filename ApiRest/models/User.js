@@ -45,17 +45,14 @@ class UserModel {
     createUser( userData ) {
         const aoj = [];
 
+        console.log('Creando',userData);
         pushAOJParam(aoj, 'Username',   sql.NVarChar(50),   userData.Username);
         pushAOJParam(aoj, 'Email',      sql.NVarChar(100),  userData.Email);
         pushAOJParam(aoj, 'Imagen',     sql.NVarChar(100),  userData.Imagen);
         pushAOJParam(aoj, 'Password',   sql.NVarChar(100),  userData.Password);
-        if ( !!userData.IdTrabajador ) {
-            pushAOJParam(aoj, 'IdRol',          sql.Int,    userData.IdRol);
-            pushAOJParam(aoj, 'IdTrabajador',   sql.Int,    userData.IdTrabajador)
-            return storedProcExecute('USP_CREATE_USUARIO', aoj)
-        } else {
-            return storedProcExecute('USP_CREATE_USUARIO_ADMIN', aoj)
-        }
+        pushAOJParam(aoj, 'IdRol',          sql.Int,    userData.IdRol);
+        pushAOJParam(aoj, 'IdTrabajador',   sql.Int,    userData.IdTrabajador)
+        return storedProcExecute('USP_CREATE_USUARIO', aoj)
     }
 
     changeStateUser( IdUsuario, Habilitado ) {

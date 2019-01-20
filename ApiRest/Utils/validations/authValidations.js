@@ -55,7 +55,7 @@ exports.userFindEmail = [
 ];
 
 const createRol = [
-    body('NombreRol', 'El nombre del rol es requerido').isLength({min: 4, max: 50}),
+    body('NombRol', 'El nombre del rol es requerido').isLength({min: 4, max: 50}),
     body('DescRol','La Descripcion debe tener un maximo de 150 caracteres!').isLength({max:150}).optional({nullable: true}),
 ];
 exports.createRol = createRol;

@@ -87,14 +87,18 @@ CREATE TABLE UNIDAD_MEDIDA_FUNCIONAL(
 	CONSTRAINT FK_ClasificacionUdmFuncional FOREIGN KEY(IdClasificacionUdmF) REFERENCES dbo.CLASIFICACION_UNIDAD_MEDIDA_FUNCIONAL(IdClasificacionUdmF)
 )
 GO
+
 CREATE TABLE  CATEGORIA_PRODUCTO(
     IdCategoria				INT IDENTITY(1,1),
+	IdTipInsumo				TINYINT				NOT NULL,
     NombCategoria			NVARCHAR(50)		NOT NULL,
     DescCategoria			NVARCHAR(150)		NULL,
     Habilitado				BIT DEFAULT 1		NOT NULL,
     CreatedAt				SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
     UpdatedAt				SMALLDATETIME		NULL,
     CONSTRAINT Pk_Categoria_Producto PRIMARY KEY (IdCategoria),
+	CONSTRAINT	FK_Categoria_Insumo_Tipo_Product	FOREIGN KEY(IdTipInsumo)
+				REFERENCES dbo.TIPO_INSUMO(IdTipInsumo),
     CONSTRAINT U_Nombre_Categoria UNIQUE(NombCategoria)
 );
 GO
@@ -173,14 +177,15 @@ CREATE TABLE dbo.PRODUCTO (
     IdEstado			INT					NOT NULL,
 	IdEnvase			INT					NULL, --id del envase si es que tiene
     IdEmpaque			INT					NULL, --id del empaque si es que tiene
-	IdUnidadMedida		INT					NOT NULL,
+	IdUnidadMedida		INT					NULL,
 	IdProveedor			INT					NOT NULL,
 	IdTipInsumo			TINYINT				NOT NULL,
+	IsGranel			BIT					NOT NULL,
 	CodProd				VARCHAR(25)			NOT NULL	UNIQUE,
 	CodOriginal			VARCHAR(25)			NULL,
 	CodBarra			VARCHAR(25)			NOT NULL,
 	CodBarraOriginal	VARCHAR(25)			NULL,
-    ValorUnidadMedida	NUMERIC(10,5)		NOT NULL,
+    ValorUnidadMedida	NUMERIC(10,5)		NULL,
 	CantidadEmpaque		INT					NULL, --si tiene empaque 
 	DiasRotacion		INT					NOT NULL,
     NombProducto		NVARCHAR(50)		NOT NULL,

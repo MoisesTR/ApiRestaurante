@@ -1,9 +1,9 @@
 const {matchedData, mssqlErrors} = require('../../Utils/defaultImports')
-let CategoriaModel = require('../../models/catalogos/Categoria');
-let Categoria = new CategoriaModel();
+const CategoriaModel = require('../../models/catalogos/Categoria');
+const Categoria = new CategoriaModel();
 
 function createCategoria(req,res){ 
-    let data = matchedData(req)
+    const data = matchedData(req)
 
     Categoria.createCategoria( data.NombCategoria, data.DescCategoria )
     .then((results) => {
@@ -15,7 +15,7 @@ function createCategoria(req,res){
     })
 }
 function getCategorias(req,res){
-    let data    = matchedData(req, {locations:['query']});
+    const data    = matchedData(req, {locations:['query']});
 
     Categoria.getCategorias( data )
     .then((results) => {
@@ -27,7 +27,7 @@ function getCategorias(req,res){
     });
 }
 function updateCategoria(req,res){
-    let data = matchedData(req,{locations: ['body','params']});
+    const data = matchedData(req,{locations: ['body','params']});
     
     Categoria.updateCategoria( data )
     .then((results) => {

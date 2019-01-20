@@ -1,64 +1,64 @@
 const { pushAOJParam, sql, storedProcExecute, queryExecute }  = require('../../Utils/defaultImports')
 const { addLikeParamInFilter, addEqualParamInFilter } = require('../../Utils/util');
-const baseSelect = 'SELECT IdCategoria,NombCategoria,DescCategoria,Habilitado,CreatedAt, UpdatedAt FROM CATEGORIA_PRODUCTO'
+const baseSelect = 'SELECT IdCategoria,IdTipInsumo,NombCategoria,DescCategoria,Habilitado,CreatedAt, UpdatedAt FROM CATEGORIA_PRODUCTO'
 const queryUpdate = `UPDATE CATEGORIA_PRODUCTO 
 SET NombCategoria = @NombCategoria, DescCategoria = @DescCategoria, UpdatedAt= GETDATE()
 WHERE IdCategoria = @IdCategoria `;
 
-class CategoriaModel {
+class CategoriaModel {    
+    static createCategoria( NombCategoria, DescCategoria ){ 
+        const aoj = [];
 
-    constructor() {
-        this.aoj = [];
-    }
-    
-    createCategoria( NombCategoria, DescCategoria ){ 
-        this.aoj = [];
-
-        pushAOJParam(this.aoj, 'NombCategoria',   sql.NVarChar(50),  NombCategoria)
-        pushAOJParam(this.aoj, 'DescCategoria',   sql.NVarChar(150), DescCategoria)
-        return storedProcExecute('USP_CREATE_CATEGORIA', this.aoj)
+        pushAOJParam(aoj,   'IdTipInsumo',      sql.Bit,            IdTipInsumo);
+        pushAOJParam(aoj,   'NombCategoria',    sql.NVarChar(50),   NombCategoria)
+        pushAOJParam(aoj,   'DescCategoria',    sql.NVarChar(150),  DescCategoria)
+        return storedProcExecute('USP_CREATE_CATEGORIA', aoj)
     }
 
-    getCategorias( data ){
-        this.aoj     = [];
+    static getCategorias( data ){
+        const aoj     = [];
         let filter  = '';    
     
+        if ( !!data.IdTipInsumo ) {
+            filter += addLikeParamInFilter( filter, 'IdTipInsumo');
+            pushAOJParam(aoj, 'IdTipInsumo',   sql.Bit,    data.IdTipInsumo);
+        }
         if ( !!data.NombCategoria  ) {
             filter += addLikeParamInFilter( filter, 'NombCategoria' );
-            pushAOJParam(this.aoj, 'NombCategoria', sql.NVarChar(50), data.NombCategoria)
+            pushAOJParam(aoj, 'NombCategoria', sql.NVarChar(50), data.NombCategoria)
         }
         if ( undefined != data.Habilitado  ) {
             filter += addEqualParamInFilter( filter, 'Habilitado' );
-            pushAOJParam(this.aoj, 'Habilitado',  sql.Bit() , +data.Habilitado)
+            pushAOJParam(aoj, 'Habilitado',  sql.Bit() , +data.Habilitado)
         }
 
-        return queryExecute(baseSelect +  filter, this.aoj)
+        return queryExecute(baseSelect +  filter, aoj)
     }
 
-    updateCategoria( data ){
-        this.aoj    = [];
+    static updateCategoria( data ){
+        const aoj    = [];
 
-        pushAOJParam(this.aoj, 'IdCategoria',     sql.Int,            data.IdCategoria)
-        pushAOJParam(this.aoj, 'NombCategoria',   sql.NVarChar(50),   data.NombCategoria)
-        pushAOJParam(this.aoj, 'DescCategoria',   sql.NVarChar(150),  data.DescCategoria)
+        pushAOJParam(aoj, 'IdCategoria',     sql.Int,            data.IdCategoria)
+        pushAOJParam(aoj, 'NombCategoria',   sql.NVarChar(50),   data.NombCategoria)
+        pushAOJParam(aoj, 'DescCategoria',   sql.NVarChar(150),  data.DescCategoria)
         
-        return queryExecute(queryUpdate, this.aoj)
+        return queryExecute(queryUpdate, aoj)
     }
 
-    getCategoriaById( IdCategoria ){
-        this.aoj    = [];
+    static getCategoriaById( IdCategoria ){
+        const aoj    = [];
         let filter = ' WHERE IdCategoria = @IdCategoria;';
     
-        pushAOJParam(this.aoj, 'IdCategoria',     sql.Int,    IdCategoria);
-        return queryExecute(baseSelect +filter, this.aoj)
+        pushAOJParam(aoj, 'IdCategoria',     sql.Int,    IdCategoria);
+        return queryExecute(baseSelect +filter, aoj)
     }
 
-    changeStateCategoria( IdCategoria, Habilitado ){
-        this.aoj    = [];
+    static changeStateCategoria( IdCategoria, Habilitado ){
+        const aoj    = [];
         
-        pushAOJParam(this.aoj, 'IdCategoria',    sql.Int(),  IdCategoria);
-        pushAOJParam(this.aoj, 'Habilitado',     sql.Bit(),  +Habilitado);
-        return storedProcExecute('USP_DISP_CATEGORIA', this.aoj)
+        pushAOJParam(aoj, 'IdCategoria',    sql.Int(),  IdCategoria);
+        pushAOJParam(aoj, 'Habilitado',     sql.Bit(),  +Habilitado);
+        return storedProcExecute('USP_DISP_CATEGORIA', aoj)
     }
 }
 

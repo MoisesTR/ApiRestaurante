@@ -100,11 +100,12 @@ CREATE PROCEDURE USP_CREATE_USUARIO(
 AS BEGIN 
 	INSERT INTO USUARIO(IdRol,IdTrabajador,Username,Email,Imagen,Password)
 	VALUES(@IdRol,@IdTrabajador,@Username,@Email,@Imagen,@Password)
-	SELECT U.IdUsuario,U.IdTrabajador,T.Nombres,U.IdRol,R.NombRol,C.NombCargo,Username,Email,Password,U.Habilitado,U.CreatedAt,U.UpdatedAt
-	FROM USUARIO U
-	INNER JOIN TRABAJADOR T ON U.IdTrabajador = T.IdTrabajador
-	INNER JOIN CARGO_TRABAJADOR C ON T.IdCargo= C.IdCargo
-	INNER JOIN ROL_USUARIO R ON U.IdRol = R.IdRol
+	SELECT U.IdUsuario,U.IdTrabajador,T.Nombres,U.IdRol,R.NombRol,C.NombCargo,Username,Email,U.Habilitado,U.CreatedAt,U.UpdatedAt
+		FROM USUARIO U
+		INNER JOIN TRABAJADOR T ON U.IdTrabajador = T.IdTrabajador
+		INNER JOIN CARGO_TRABAJADOR C ON T.IdCargo= C.IdCargo
+		INNER JOIN ROL_USUARIO R ON U.IdRol = R.IdRol
+	WHERE U.IdUsuario = @@IDENTITY
 END
 GO
 IF OBJECT_ID('dbo.USP_GET_USUARIOS','P') IS NOT NULL

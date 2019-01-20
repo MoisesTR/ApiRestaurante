@@ -1,5 +1,22 @@
 USE ATOMIC_RESTAURANTE;
 GO
+
+CREATE PROCEDURE USP_CREATE_BANCO (
+	@IdPais		TINYINT,
+	@Banco		NVARCHAR(50),
+	@Siglas		NVARCHAR(10),
+	@Direccion	NVARCHAR(10),
+	@Telefono1	NVARCHAR(20),
+	@Telefono2	NVARCHAR(20),
+	@Correo		NVARCHAR(100),
+	@Web		NVARCHAR(10)
+)
+AS BEGIN
+	INSERT INTO FACTURACION_BANCOS(IdPais, Banco, Siglas, Direccion, Telefono1, Telefono2, Correo, Web)
+	VALUES(@IdPais, @Banco, @Siglas, @Direccion, @Telefono1, @Telefono2, @Correo, @Web)
+END
+
+GO
 IF OBJECT_ID('USP_CREATE_PRODUCTO','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_PRODUCTO
 GO

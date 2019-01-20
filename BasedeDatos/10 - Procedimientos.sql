@@ -4,8 +4,9 @@ IF OBJECT_ID('USP_CREATE_CATEGORIA','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_CATEGORIA
 GO
 CREATE PROCEDURE USP_CREATE_CATEGORIA(
-	@NombCategoria NVARCHAR(50),
-    @DescCategoria NVARCHAR(150) 
+	@IdTipInsumo	TINYINT,
+	@NombCategoria	NVARCHAR(50),
+    @DescCategoria	NVARCHAR(150) 
 ) 
 AS 
 BEGIN
@@ -13,8 +14,8 @@ BEGIN
 		RAISERROR('Nombre de Categoria duplicado.',16,1)
 	ELSE
 		BEGIN
-			INSERT INTO CATEGORIA_PRODUCTO(NombCategoria,DescCategoria)
-			VALUES(@NombCategoria,@DescCategoria);
+			INSERT INTO CATEGORIA_PRODUCTO(IdTipInsumo, NombCategoria,DescCategoria)
+			VALUES(@IdTipInsumo, @NombCategoria, @DescCategoria);
 			SELECT @@IDENTITY AS IdCategoria
 		END
 END

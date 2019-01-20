@@ -9,9 +9,11 @@ exports.getTelefonoSucursal = [
 ]
     
 const createCategoria = [
+        body('IdTipInsumo', 'Selecciona el tipo de insumo').isInt(),
         body('NombCategoria', 'El nombre de la categoria es requerido').isString(),
-        body('DescCategoria', 'La descripcion de la categoria es requerida!').isString()
-    ];
+        body('DescCategoria', 'La descripcion de la categoria es requerida!').isString(),
+        sanitize('IdTipInsumo').toInt()
+];
 
 exports.createCategoria = createCategoria;
 
@@ -38,7 +40,7 @@ const createProveedor = [
     body('IsProvServicio').isInt().isIn([0,1]),
     body('NombProveedor', 'Ingrese el Nombre del proveedor.').isString(),
     body('Direccion', 'Ingrese la direccion del proveedor.').isString().trim(),
-    body('Email','Ingrese el Email del Proveedor.').isEmail(),
+    body('Email','Ingrese el Email del Proveedor.').isEmail().optional({nullable: true}),
     body('Imagen').isString().optional({nullable: true}),
     body('Descripcion').optional({nullable:true}),
     body('NombRepresentante','Ingrese el Nombre del representante.').isString(),
@@ -200,6 +202,7 @@ const createProducto = [
     body('Imagen','Ingresa el nombre de la Imagen.').optional({nullable:true}),
     body('IdEnvase').isInt().optional({nullable:true}),
     body('IdEmpaque', 'Debes seleccionar un empaque.').isInt().optional({nullable:true}),
+    body('IsGranel', 'Debes especificar si el producto es granel o no.').isBoolean(),
     body('CantidadEmpaque').optional({nullable:true}),
     body('IdUnidadMedida','Debes seleccionar una unidad de medida.').isInt(),
     body('ValorUnidadMedida').isNumeric(),
@@ -210,7 +213,8 @@ const createProducto = [
     body('CodigoBarra').optional({nullable:true}),
     sanitize('ValorUnidadMedida').toFloat(),
     sanitize('DiasRotacion').toInt(),
-    sanitize('CodigoProducto').toString()
+    sanitize('CodigoProducto').toString(),
+    sanitize('IsGranel').toBoolean()
 ];
 exports.createProducto = createProducto;
 

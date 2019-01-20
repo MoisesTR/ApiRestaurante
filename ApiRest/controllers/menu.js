@@ -1,12 +1,11 @@
 const { mssqlErrors }   = require('../Utils/util');
 const { matchedData }   = require('express-validator/filter');
 const MenuModel         = require('../models/Menu');
-const Menu              = new MenuModel();
 
 function createMenu(req, res) {
-    var menuData = matchedData(req, { locations: 'body' });
+    const menuData = matchedData(req, { locations: 'body' });
 
-    Menu.createMenu( menuData )
+    MenuModel.createMenu( menuData )
     .then((result) => {
         res.status(200)
             .json({success: 'Menu creado con exito'})
@@ -16,9 +15,9 @@ function createMenu(req, res) {
 }
 
 function updateMenu(req, res) {
-    var menuData = matchedData(req, { locations: 'body' });
+    const menuData = matchedData(req, { locations: 'body' });
 
-    Menu.updateMenu( menuData )
+    MenuModel.updateMenu( menuData )
     .then((result) => {
         res.status(200)
             .json({success: 'Menu editado con exito!'})
@@ -43,13 +42,15 @@ function updateMenu(req, res) {
 // }
 
 function getMenuesByRol(req, res) {
-    let data = matchedData(req,{locations:['query','params']});
+    const data = matchedData(req,{locations:['query','params']});
     
-    Menu.getMenuesByRol( data.IdRol )
+    MenuModel.getMenuesByRol( data.IdRol )
     .then((result) => {
-        var jsonString = result.recordset[0];
-        jsonString = JSON.parse(jsonString['JSON_F52E2B61-18A1-11d1-B105-00805F49916B']);
-        res.status(200).json(jsonString)
+        // console.log(result.recordset[0]);
+        
+        // var jsonString = result.recordset[0];
+        // jsonString = JSON.parse(jsonString['JSON_F52E2B61-18A1-11d1-B105-00805F49916B']);
+        res.status(200).json(result.recordset[0])
     }).catch((err) => {
         console.log(err)
         res.status(500).json(err)

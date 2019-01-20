@@ -2,7 +2,7 @@ const jwt = require('../../services/jwt');
 const moment = require('moment');
 const bcrypt = require('bcryptjs');
 const saltRounds    = 10;
-const {mssqlErrors, matchedData, db, sql} = require('../../Utils/defaultImports')
+const {mssqlErrors, matchedData, pushAOJParam, pushAOJOuput, sql} = require('../../Utils/defaultImports')
 const UserModel     =require( "../../models/User");
 let User = new UserModel();
 
@@ -14,14 +14,12 @@ exports.signUp = ( req, res ) => {
     bcrypt.hash(userData.Password, saltRounds)
     .then((_hashPassw) => {
         hashPassw = _hashPassw;
-
-        console.log(userData);
-        
+        userData.Password = hashPassw;
         return User.getUserByUsernameOREmail( userData.Username, userData.Email)
     }).then((usersfind) => {
         const   users = usersfind.recordset;
-        console.log(usersfind)
-            //Si se encontro mas de un usuario
+        
+        //Si se encontro mas de un usuario
         if ( users.length > 1 ) {
             // console.log(usersfind.recordset[0])
             throw { status: 401, code: "UEEXIST", message: "No se registro el usuario, email y username ya se encuentran registrados!" };
@@ -29,14 +27,14 @@ exports.signUp = ( req, res ) => {
         } else if ( users.length === 1 ) {
             // if(usersfind[0].username == userData.username || usersfind[1].username== userData.username)
             if ( users[0].Username === userData.Username )
-                throw { status: 401, code: "UEXIST", message: 'No se registro el usuario username:' + userData.username + ', ya se encuentra registrado!' };
+                throw { status: 401, code: "UEXIST", message: 'El usuario:' + userData.Username + ', ya se encuentra registrado!' };
             else
-                throw { status: 401, code: "EEXIST", message: 'No se registro el usuario email:' + userData.email + ', ya se encuentra registrado!' };
+                throw { status: 401, code: "EEXIST", message: 'No se registro el usuario con email:' + userData.Email + ', ya se encuentra registrado!' };
         } else {
-            return User.createUser({...userData, hashPassw})
+            
+            return User.createUser({...userData})
         }
     }).then((result) => {
-        console.log("Creado")
         res.status(200)
             .json({ 
                 user: result.recordset[0] 
@@ -44,7 +42,7 @@ exports.signUp = ( req, res ) => {
     }).catch((err) => {
         console.error('Error principal', err)
         res.status(err.status | 500)
-            .json(err)
+            .json(mssqlErrors(err))
     })
 }
 
@@ -97,9 +95,8 @@ exports.singIn = ( req, res ) => {
 }
 
 exports.getUsers = (req, res) => {
-    let Habilitado = req.query.Habilitado;
-    var aoj = [];
-    db.pushAOJParam(aoj, 'Habilitado', sql.Int, +Habilitado);
+    const Habilitado = req.query.Habilitado;
+    
     User.getUsers( {Habilitado} )
     .then((result) => {
         res.status(200)
@@ -113,7 +110,7 @@ exports.getUsers = (req, res) => {
 }
 //
 exports.updateUser = (req, res) => {
-    var userData = matchedData(req, { locations: ['body', 'query']});
+    const userData = matchedData(req, { locations: ['body', 'query']});
     if (IdUsuario != req.user.sub) {
         return res.status(403)
                 .json({ 
@@ -122,7 +119,7 @@ exports.updateUser = (req, res) => {
                     message: 'Este no es tu usuario' 
                 });
     }
-    User.updateUser( )
+    User.updateUser( userData )
     .then( result => {
 
         res.status(200)

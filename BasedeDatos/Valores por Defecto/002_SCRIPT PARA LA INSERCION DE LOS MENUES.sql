@@ -1,3 +1,5 @@
+USE ATOMIC_RESTAURANTE
+GO
 --Opciones Generales del menu(Menues Padres)
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUES ('Inicio','Pantalla inicial del sistema','/','./assets/img/icon/home.png','no-collase',1)
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUES ('Insumos','Insumos (Inventario)','#','./assets/img/icon/product.png','',2)
