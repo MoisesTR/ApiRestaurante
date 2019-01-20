@@ -125,7 +125,6 @@ exports.updateUser = (req, res) => {
         res.status(200)
             .json({ 
                 status: 200, 
-                code: '', 
                 message: 'Usuario actualizado' 
             });
     })
@@ -136,8 +135,7 @@ exports.updateUser = (req, res) => {
 }
 
 exports.changeStateUser = ( req, res ) => {
-    let data = matchedData(req, {locations: ['body', 'params']});
-    console.log(data)
+    const data = matchedData(req, {locations: ['body', 'params']});
 
     User.changeStateUser( data.IdUsuario, data.Habilitado )
     .then((results) => {
