@@ -6,21 +6,7 @@ exports.getTelefonoSucursal = [
     param('IdTelefonoSucursal').isInt(),
     check('IdSucursal', 'IdSucursal es requerido.').isInt(),
     sanitize('IdSucursal').toInt()
-]
-    
-const createCategoria = [
-        body('IdTipInsumo', 'Selecciona el tipo de insumo').isInt(),
-        body('NombCategoria', 'El nombre de la categoria es requerido').isString(),
-        body('DescCategoria', 'La descripcion de la categoria es requerida!').isString(),
-        sanitize('IdTipInsumo').toInt()
 ];
-
-exports.createCategoria = createCategoria;
-
-exports.updateCategoria = createCategoria.concat([
-        check('IdCategoria').isInt(),
-        sanitize('IdCategoria').toInt(),
-    ]);
 
 const createCargo = [
     check('NombCargo', 'El nombre del cargo es requerido!').isString(),
@@ -207,7 +193,7 @@ const createProducto = [
     body('IdUnidadMedida','Debes seleccionar una unidad de medida.').isInt(),
     body('ValorUnidadMedida').isNumeric(),
     body('DiasRotacion').isInt(),
-    body('IdTipoInsumo').isInt(),
+    body('IdTipInsumo').isInt(),
     body('CodigoProducto').isString(),
     body('CodigoInterno').optional({nullable:true}),
     body('CodigoBarra').optional({nullable:true}),
@@ -312,6 +298,14 @@ exports.getCambiosFacturaById = [
 
 ];
 
+exports.getProducts = [
+    query('IdProveedor').isInt().optional({nullable: true}),
+    query('IdTipInsumo').isInt().optional({nullable: true}),
+    query('IsGranel').isBoolean().optional({nullable: true}),
+    query('Habilitado').isBoolean().optional({nullable: true}),
+    sanitize('IsGranel').toBoolean(),
+    sanitize('Habilitado').toBoolean()
+];
 
 exports.obtenerFacturasC = [
     check('IdFechaFiltro').toInt().optional({nullable:true}),

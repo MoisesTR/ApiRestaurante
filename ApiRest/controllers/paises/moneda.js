@@ -1,6 +1,6 @@
 'use strict';
 const { matchedData, mssqlErrors} = require('../../Utils/defaultImports');
-const MonedaModel   =   require('../../models/Moneda');
+const MonedaModel   =   require('../../models/facturacion/Moneda');
 const moneda        =   new MonedaModel();
 
 exports.getMonedas = ( req, res ) => {
@@ -44,3 +44,7 @@ exports.getMonedaByIdPais =( req, res ) => {
 exports.getMonedaByCodIso = (req, res) => {
     ejectPromiseSingleResponse( moneda.get)
 }
+
+exports.createMoneda = (req, res) => {
+    
+};

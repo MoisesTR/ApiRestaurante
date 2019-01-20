@@ -1,4 +1,5 @@
-const { sql, pushAOJParam, storedProcExecute } = require('../Utils/defaultImports');
+const { sql, pushAOJParam, queryExecute,storedProcExecute } = require('../Utils/defaultImports');
+const { addLikeParamInFilter, addEqualParamInFilter }   =  require( '../Utils/util');
 
 class ProductoModel {
 
@@ -13,11 +14,27 @@ class ProductoModel {
         return  storedProcExecute('dbo.USP_GET_PRODUCTO', aoj)
     }
     
-    getProductos( Habilitado ) {
-        this.aoj = [];
+    static getProductos( {Habilitado, IdProveedor, IdTipInsumo, IsGranel} ) {
+        const aoj = [];
+        let     filter = '';
 
-        pushAOJParam(aoj, 'Habilitado',      sql.Int,     +Habilitado)
-        return storedProcExecute('USP_GET_PRODUCTOS', aoj)
+        if ( !!IdProveedor ) {
+            filter += addEqualParamInFilter(filter, 'IdProveedor');
+            pushAOJParam(aoj,   'IdProveedor',      sql.Int,    IdProveedor);
+        }
+        if ( !!IdTipInsumo ) {
+            filter += addEqualParamInFilter(filter, 'IdTipInsumo');
+            pushAOJParam(aoj,   'IdTipInsumo',      sql.Int,    IdTipInsumo);
+        }
+        if ( !!IsGranel ) {
+            filter +=  addEqualParamInFilter(filter, 'IsGranel');
+            pushAOJParam(aoj,   'IsGranel',     sql.Bit,    +IsGranel);
+        }
+        if ( undefined !== Habilitado ) {
+            filter  += addEqualParamInFilter(filter, 'Habilitado');
+            pushAOJParam(aoj,   'Habilitado',       sql.Bit,    +Habilitado);
+        }
+        return queryExecute('SELECT * FROM VIEW_BASIC_GET_PRODUCT' + filter, aoj)
     }
     
     createProducto( data ) {
@@ -36,7 +53,7 @@ class ProductoModel {
         pushAOJParam(aoj, 'ValorUnidadMedida',  sql.Numeric(10, 5), data.IsGranel  ? null : data.ValorUnidadMedida)
         pushAOJParam(aoj, 'CantidadEmpaque',    sql.Int,            data.CantidadEmpaque);
         pushAOJParam(aoj, 'DiasRotacion',       sql.Int,            data.DiasRotacion);
-        pushAOJParam(aoj, 'IdTipoInsumo',       sql.Int,            data.IdTipoInsumo);
+        pushAOJParam(aoj, 'IdTipInsumo',       sql.Int,            data.IdTipInsumo);
         pushAOJParam(aoj, 'CodigoProducto',     sql.NVarChar(200),  data.CodigoProducto);
         pushAOJParam(aoj, 'CodigoInterno',      sql.NVarChar(200),  data.CodigoInterno);
         pushAOJParam(aoj, 'CodigoBarra',        sql.NVarChar(200),  data.CodigoBarra);

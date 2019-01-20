@@ -49,6 +49,7 @@ INCLUDE(NombPais, CodNumerico, PrefijoTelefonico)
 GO
 --// Tabla para almacenar el tipo de cambio oficial y paralelo de la moneda
 CREATE TABLE dbo.FACTURACION_TIPO_CAMBIO_MONEDA (
+	IdTipCambio				INT			IDENTITY(1,1),
 	IdMonedaPrincipal		TINYINT				NOT NULL,
 	IdMonedaCambio			TINYINT				NOT NULL,
 	ValorMonedaPrincipal	NUMERIC(19,7)		NOT NULL,
@@ -58,6 +59,7 @@ CREATE TABLE dbo.FACTURACION_TIPO_CAMBIO_MONEDA (
 	Habilitado				BIT				NOT NULL	DEFAULT 1,
 	CreatedAt				SMALLDATETIME	NOT NULL DEFAULT GETDATE(),
 	UpdatedAt				SMALLDATETIME	NULL,
+	CONSTRAINT	PK_Tipo_Cambio_Moneda	PRIMARY KEY(IdTipCambio),
 	CONSTRAINT FK_IdMoneda_Principal	FOREIGN KEY(IdMonedaPrincipal)	
 				REFERENCES dbo.FACTURACION_MONEDA(IdMoneda),
 	CONSTRAINT FK_IdMoneda_Cambio		FOREIGN KEY(IdMonedaCambio)		

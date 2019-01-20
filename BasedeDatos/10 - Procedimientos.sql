@@ -278,3 +278,46 @@ BEGIN
 		SET @RETORNO	= 2;
 	RETURN @RETORNO;
 END
+
+GO
+IF OBJECT_ID('dbo.VIEW_BASIC_GET_PRODUCT','U') IS NOT NULL	
+	DROP VIEW dbo.VIEW_BASIC_GET_PRODUCT;
+GO
+CREATE VIEW dbo.VIEW_BASIC_GET_PRODUCT 
+AS
+SELECT IdProducto
+		, PRO.IdProveedor
+		, C.IdTipInsumo
+		, C.IdCategoria
+		, CP.NombCategoria
+		, P.IdSubClasificacion
+		, SC.NombSubClasificacion
+		, C.IdClasificacion
+		, C.NombClasificacion
+		, p.IdEstado
+		, p.NombProducto
+		, p.Descripcion
+		, p.Imagen
+		, P.DiasRotacion
+		, P.IdTipInsumo
+		, P.CodProd
+		, P.CodOriginal
+		, P.CodBarra
+		, P.Habilitado
+		, P.CreatedAt
+		, P.UpdatedAt 
+		FROM dbo.PRODUCTO P
+		INNER JOIN dbo.SUBCLASIFICACION_PRODUCTO SC 
+			ON P.IdSubClasificacion = SC.IdSubClasificacion
+		INNER JOIN dbo.CLASIFICACION_PRODUCTO C 
+			ON SC.IdClasificacion = C.IdClasificacion
+		INNER JOIN dbo.CATEGORIA_PRODUCTO CP 
+			ON C.IdCategoria = CP.IdCategoria
+		INNER JOIN	dbo.TIPO_INSUMO	AS TI
+			ON C.IdTipInsumo	= TI.IdTipInsumo
+		INNER JOIN dbo.PROVEEDOR PRO
+			ON P.IdProveedor = PRO.IdProveedor
+
+GO
+
+USE master;

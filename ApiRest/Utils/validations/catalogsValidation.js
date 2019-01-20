@@ -37,8 +37,22 @@ exports.createUdMFuncional = [
     body('NombUdmFunc').isLength({min: 3, max:50}),
     body('DescUdmFunc').isLength({min:3, max:150}),
     body('ValorUdm').isNumeric(),
-]
+];
 
 exports.getUdmFuncionales = [
     query('IdUnidadMedida').isInt(),
-]
+];
+
+const createCategoria = [
+    body('IdTipInsumo', 'Selecciona el tipo de insumo').isInt(),
+    body('NombCategoria', 'El nombre de la categoria es requerido').isString(),
+    body('DescCategoria', 'La descripcion de la categoria es requerida!').isString(),
+    sanitize('IdTipInsumo').toInt()
+];
+
+exports.updateCategoria = createCategoria.concat([
+    query('IdCategoria').isInt(),
+    sanitize('IdCategoria').toInt(),
+]);
+
+exports.createCategoria = createCategoria;

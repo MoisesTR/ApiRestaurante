@@ -1,19 +1,18 @@
-const express = require('express')
-const CategoriaController       = require('../controllers/catalogos/categoria')
-const ClasificacionController   = require('../controllers/clasificacion')
-const EmpaqueController         = require('../controllers/catalogos/empaque')
-const EnvaseController          = require('../controllers/catalogos/envase')
-const ProveedorController       = require('../controllers/proveedor')
-const SubClasifController       = require('../controllers/subclasificacion')
-const EstadoProductoController  = require('../controllers/estadoproducto')
-const ProductoController        = require('../controllers/producto')
+const express = require('express');
+const ClasificacionController   = require('../controllers/clasificacion');
+const EmpaqueController         = require('../controllers/catalogos/empaque');
+const EnvaseController          = require('../controllers/catalogos/envase');
+const ProveedorController       = require('../controllers/proveedor');
+const SubClasifController       = require('../controllers/subclasificacion');
+const EstadoProductoController  = require('../controllers/estadoproducto');
+const ProductoController        = require('../controllers/producto');
 const ImagenController          = require('../controllers/imagenes');
 const UploadController          = require('../controllers/upload');
-const SucursalController        = require('../controllers/sucursal')
+const SucursalController        = require('../controllers/sucursal');
 const UnidadMedidaController    = require('../controllers/catalogos/unidadmedida');
 const TrabajadorController      = require('../controllers/trabajador/trabajador');
-const CargoController           = require('../controllers/trabajador/cargo')
-const clasifUDMController       = require('../controllers/clasificacionudm')
+const CargoController           = require('../controllers/trabajador/cargo');
+const clasifUDMController       = require('../controllers/clasificacionudm');
 const bodegaApController        = require('../controllers/bodegaAp');
 const menuController            = require('../controllers/menu');
 const validations               = require('../Utils/validations/validations');
@@ -28,12 +27,6 @@ Router
             isApi: true
         })
     })
-    //Rutas categoria controller
-    .get('/categoria/:IdCategoria(\\d+)',   CategoriaController.getCategoriaById)
-    .get('/categorias',                     habilitadoValid,                    validsParams,   CategoriaController.getCategorias)
-    .post('/categoria',                     validations.createCategoria,        validsParams,   CategoriaController.createCategoria)
-    .put('/categoria/:IdCategoria(\\d+)',   validations.updateCategoria,        validsParams,   CategoriaController.updateCategoria)
-    .delete('/categoria/:IdCategoria(\\d+)',changeStateGeneric('IdCategoria'),  validsParams,   CategoriaController.changeStateCategoria)
     //Rutas clasificacion controller
     .get('/clasificacion/:IdClasificacion(\\d+)',                           ClasificacionController.getClasificacionById)
     .get('/clasificaciones/:IdCategoria(\\d+)/:Habilitado(\\d+)',           ClasificacionController.getClasificacionesByIdCategoria)
@@ -69,14 +62,14 @@ Router
     .put('/subclasificacion/:IdSubClasificacion(\\d+)', validations.updateSubclasificacion,         validsParams,       SubClasifController.updateSubclasificacion)
     .delete('/subclasificacion/:IdSubClasificacion(\\d+)',changeStateGeneric('IdSubClasificacion'), validsParams,       SubClasifController.changeStateSubClasificacion)
     //Rutas estadoproducto controller
-    .get('/estadosproducto',                        habilitadoValid,            validsParams,   EstadoProductoController.getEstados)
+    .get('/estadosproducto',                        habilitadoValid,        validsParams,   EstadoProductoController.getEstados)
     .get('/estadoproducto/:IdEstado(\\d+)',         EstadoProductoController.getEstadoById)
     //Rutas producto controller
-    .get('/productos',                              habilitadoValid,                    validsParams,   ProductoController.getProductos)
-    .get('/producto/:IdProducto(\\d+)',             ProductoController.getProductoById)
-    .post('/producto',                              validations.createProducto,         validsParams,   ProductoController.createProducto)
-    .put('/producto/:IdProducto(\\d+)',             validations.updateProducto,         validsParams,   ProductoController.updateProducto)
-    .delete('/producto/:IdProducto(\\d+)',          changeStateGeneric('IdProducto'),   validsParams,   ProductoController.changeStateProducto)
+    .get('/productos',                              habilitadoValid,    validations.getProducts,    validsParams,   ProductoController.getProductos)
+    .get('/productos/:IdProducto(\\d+)',            ProductoController.getProductoById)
+    .post('/productos',                             validations.createProducto,         validsParams,   ProductoController.createProducto)
+    .put('/productos/:IdProducto(\\d+)',            validations.updateProducto,         validsParams,   ProductoController.updateProducto)
+    .delete('/productos/:IdProducto(\\d+)',         changeStateGeneric('IdProducto'),   validsParams,   ProductoController.changeStateProducto)
 
     .get('/getImage/:path/:ImageFile',  ImagenController.getImageFile)
     .get('/getImagen/:tipo/:img',       ImagenController.getImage)

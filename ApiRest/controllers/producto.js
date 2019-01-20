@@ -17,9 +17,9 @@ function getProductoById(req, res) {
 }
 
 function getProductos(req, res) {
-    let data = matchedData(req,{locations:['query']});
+    const data = matchedData(req,{locations:['query']});
     
-    Producto.getProductos( data.Habilitado )
+    ProductoModel.getProductos( data )
     .then((results) => {
         res.status(200).json({
             productos: results.recordset
