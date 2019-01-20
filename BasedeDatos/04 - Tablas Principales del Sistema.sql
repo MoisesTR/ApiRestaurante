@@ -189,7 +189,7 @@ CREATE TABLE dbo.PRODUCTO (
 	CantidadEmpaque		INT					NULL, --si tiene empaque 
 	DiasRotacion		INT					NOT NULL,
     NombProducto		NVARCHAR(50)		NOT NULL,
-    Descripcion			NVARCHAR(200)		NOT NULL,
+    DescProducto		NVARCHAR(200)		NOT NULL,
     Imagen				NVARCHAR(100)		NOT NULL	DEFAULT 'nodisponible.png', --	
 	Habilitado			BIT DEFAULT 1		NOT NULL,
     CreatedAt			SMALLDATETIME		NOT NULL DEFAULT GETDATE(),
