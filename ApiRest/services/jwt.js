@@ -114,19 +114,17 @@ exports.ensureAuth = ( req, res, next ) => {
             console.log('Se encontro el usuario');
             if ( user.Habilitado == false ) {
                 //si el usuario se encuentra deshabilitado
-                return res.status(401)
-                        .json({status:401,code:'EPUSER',message:'Usuario deshabilitado,favor contactar con soporte AtomicDev.'});
+                throw {status:401, code:'EPUSER', message:'Usuario deshabilitado,favor contactar con soporte AtomicDev.'};
             } 
             //Si el usuario esta habilitado se procede a actualizar el username y el email
             //por si ha habido un cambio en estos
             //Verificamos que no ah habido cambio en la informacion del usuario, desde la creacion del token
             if( moment(user.UpdatedAt).unix() > decoded.iat ){
                 // si su info cambio no lo dejamos procedere
-                return res.status(401)
-                        .json({
-                                status: 401, code:'EUCHAN',
-                                message: 'La informacion del usuario cambio por favor vuelve a iniciar sesion!'
-                            });
+                throw {
+                        status: 401, code:'EUCHAN',
+                        message: 'La informacion del usuario cambio por favor vuelve a iniciar sesion!'
+                    };
             }
             //setear el valor del payload en la request, para poder acceder a esta informacion
             //en todas la funciones de nuestros controladores
