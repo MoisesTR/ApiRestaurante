@@ -4,7 +4,7 @@ const CargoModel = require('../../models/Cargo');
 function createCargo(req, res) {
     const data = matchedData(req);
     
-    CargoModel.createCargo( data.NombCargo, data.DescCargo )
+    CargoModel.createCargo( data.NombCargo, data.DescCargo, data.CodCargo )
     .then((results) => {
         res.status(200).json(results.recordset[0])
     }).catch((err) => {
@@ -29,7 +29,7 @@ function updateCargo(req, res) {
     const data = matchedData(req, {locations: ['body','params']});
    
 
-    CargoModel.updateCargo( data.IdCargo, data.NombCargo, data.DescCargo )
+    CargoModel.updateCargo( data.IdCargo, data.NombCargo, data.DescCargo, data.CodCargo )
     .then((results) => {
         const afectadas = results.rowsAffected[0];
         res.status(200)

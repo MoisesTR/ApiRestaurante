@@ -29,7 +29,7 @@ SELECT	p.IdProducto
 		, p.Habilitado
 		, P.DiasRotacion
 		, im.IdTipInsumo 
-		, DescripcionInsumo = im.Descripcion
+		, im.DescTipInsumo
 		, p.CodProd
 		, p.CodOriginal
 		, p.CodBarra

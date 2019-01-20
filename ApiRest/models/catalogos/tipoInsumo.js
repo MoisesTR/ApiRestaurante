@@ -1,7 +1,7 @@
 const { sql, pushAOJParam, storedProcExecute, queryExecute } = require('../../Utils/defaultImports')
 const { addLikeParamInFilter, addEqualParamInFilter }   =  require( '../../Utils/util');
 const sqlInsert = 'INSERT INTO dbo.TIPO_INSUMO(NombTipInsumo, DescTipInsumo) VALUES(@NombTipInsumo, @DescTipInsumo)'
-const baseSelect = `SELECT IdTipInsumo, Descripcion, Habilitado, CreatedAt, UpdatedAt FROM TIPO_INSUMO`;
+const baseSelect = `SELECT IdTipInsumo, NombTipInsumo, DescTipInsumo, Habilitado, CreatedAt, UpdatedAt FROM TIPO_INSUMO`;
 
 class TipoInsumo {
     static createTipoInsumo( NombTipInsumo, DescTipInsumo ) {

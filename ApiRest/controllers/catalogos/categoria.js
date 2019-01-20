@@ -1,6 +1,5 @@
 const {matchedData, mssqlErrors} = require('../../Utils/defaultImports')
-const CategoriaModel = require('../../models/catalogos/Categoria');
-const Categoria = new CategoriaModel();
+const Categoria = require('../../models/catalogos/Categoria');
 
 function createCategoria(req,res){ 
     const data = matchedData(req)

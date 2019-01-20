@@ -7,7 +7,10 @@ exports.Habilitado = [
 
 exports.validsParams = (req, res, next) => {
     let errors = validationResult(req);
-    (!errors.isEmpty()) ? res.status(400).json(errors.array()): next();
+    // (!errors.isEmpty()) ? res.status(400).json(errors.array()): next();
+    if (!errors.isEmpty()) {
+     res.status(400).json(errors.array()) 
+    } else next();
 }
 
 exports.isDate = (nombreCampo ) => {

@@ -4,14 +4,14 @@ const baseSelect    = 'SELECT IdEstado, NombEstado,DescEstado, Habilitado, Creat
 class EstadoProductoModel {
 
     getEstados( data ){
-        let aoj = [];
+        const aoj = [];
     
         pushAOJParam(aoj,    'Habilitado',   sql.Int,    +data.Habilitado)
         return queryExecute(baseSelect + ' WHERE Habilitado = @Habilitado', aoj)
     }
 
     getEstadoById( IdEstado ){
-        let aoj     = [];
+        const aoj     = [];
         let filters = '';
 
         filters += ' WHERE IdEstado = @IdEstado';

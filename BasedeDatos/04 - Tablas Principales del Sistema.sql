@@ -339,7 +339,7 @@ CREATE TABLE	dbo.DETALLE_BODEGA_AP	(
 
 GO
 
-INSERT INTO dbo.TIPO_INSUMO(Descripcion) VALUES ('Alimento')
-INSERT INTO dbo.TIPO_INSUMO(Descripcion) VALUES('Limpieza')
+INSERT INTO dbo.TIPO_INSUMO(NombTipInsumo) VALUES ('Alimento')
+INSERT INTO dbo.TIPO_INSUMO(NombTipInsumo) VALUES('Limpieza')
 
 USE master;

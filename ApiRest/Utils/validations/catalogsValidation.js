@@ -62,7 +62,7 @@ const createCategoria = [
 ];
 
 exports.updateCategoria = createCategoria.concat([
-    query('IdCategoria').isInt(),
+    param('IdCategoria').isInt(),
     sanitize('IdCategoria').toInt(),
 ]);
 

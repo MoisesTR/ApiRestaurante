@@ -55,8 +55,7 @@ async function verifyToken( token, expiredIsValid ) {
     let _decoded;
     try {
         _decoded = await jwt.verify( token, secret );
-        
-        return _decoded.payload;
+        return _decoded;
     } catch( _err ) {
         if ( _err.name === 'TokenExpiredError') {
             _decoded     = jwt.decode(token, {complete: true});
@@ -100,6 +99,8 @@ exports.ensureAuth = ( req, res, next ) => {
 
     verifyToken( token )
     .then( _decoded => {
+        console.log(_decoded);
+        
         decoded = _decoded;
         //A continuacion procedemos a buscar el usuario para validar que se encuentre habilitado
         return User.getUserByUsername( _decoded.Username )

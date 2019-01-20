@@ -22,11 +22,12 @@ class TipoCambio {
         const aoj  = [];
         let     filter =  '';
 
-        return queryExecute( baseSelect, aoj );
+        return queryExecute( baseSelect + filter, aoj );
     }
 
     static getTipoCambio( IdTipCambio, IdMonedaPrincipal, IdMonedaCambio, Fecha ) {
         const   aoj = [];
+        let select  = baseSelect;
         let     filter = '';
         if ( !IdTipCambio && (!IdMonedaPrincipal && !IdMonedaCambio) ) {
             throw new Error('Para obtener el tipo de cambio envia su id o la fecha esperada.')
@@ -45,12 +46,14 @@ class TipoCambio {
                 pushAOJParam(aoj,   'Fecha',    sql.SmallDateTime(),    Fecha);
             } 
             else {
-                filter = addEqualParamInFilter(filter, 'Habilitado');
+                select = select.replace('SELECT ','SELECT TOP 1 ');
+                filter += addEqualParamInFilter(filter, 'Habilitado');
+                filter += ' ORDER BY FECHA DESC';
                 pushAOJParam(aoj,   'Habilitado',   sql.Bit,    1);
             }
         }
 
-        return queryExecute( baseSelect + filter, aoj );
+        return queryExecute( select + filter, aoj );
     }
 
     static disHableTipoCambio( IdTipCambio ) {

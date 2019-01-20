@@ -1,4 +1,4 @@
-const  moneda = require('./moneda');
+const  moneda = require('../facturacion/moneda');
 const pais = require('./pais');
 
 module.exports = {

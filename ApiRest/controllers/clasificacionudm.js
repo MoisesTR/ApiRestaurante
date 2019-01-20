@@ -1,12 +1,11 @@
 const {mssqlErrors} =  require('../Utils/util');
 const {matchedData} = require('express-validator/filter');
 const ClasificacionUdmModel = require('../models/ClasificacionUdm');
-const ClasificacionUdm = new ClasificacionUdmModel();
 
 function getClasificacionesUdm(req,res){
     let data = matchedData(req,{locations:['query']});
     
-    ClasificacionUdm.getClasificaciones( data )
+    ClasificacionUdmModel.getClasificaciones( data )
     .then((results) => {
         res.status(200).json({
             clasificaciones:results.recordset
@@ -19,7 +18,7 @@ function getClasificacionesUdm(req,res){
 function getClasificacionUdmById(req,res){
     var data = req.params;
     
-    ClasificacionUdm.getClasificacion( data.IdClasifUDM )
+    ClasificacionUdmModel.getClasificacion( data.IdClasifUDM )
     .then((results) => {
         res.status(200)
             .json({

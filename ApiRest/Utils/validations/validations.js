@@ -9,9 +9,9 @@ exports.getTelefonoSucursal = [
 ];
 
 const createCargo = [
-    check('NombCargo', 'El nombre del cargo es requerido!').isString(),
-    check('DescCargo', 'La descripcion del cargo es requerida!').isString(),
-    sanitize('NombCargo').toString()
+    body('NombCargo', 'El nombre del cargo es requerido!').isLength({min: 3, max:50}),
+    body('DescCargo', 'La descripcion del cargo es requerida!').isLength({min: 3, max:100}).optional({nullable: true}),
+    body('CodCargo', 'El codigo del cargo es requerido!').isLength({min:2, max: 4}).optional({nullable: true}),
 ];
 exports.createCargo = createCargo;
 
@@ -22,23 +22,22 @@ exports.updateCargo = createCargo.concat([
 ]);
 
 const createProveedor = [
-    body('IdPais').isInt(),
-    body('IsProvServicio').isInt().isIn([0,1]),
+    body('IdPais', 'Selecciona el Pais del Proveedor').isInt(),
+    body('IsProvServicio', 'Selecciona si es Proveedor de Servicios.').isBoolean(),
     body('NombProveedor', 'Ingrese el Nombre del proveedor.').isString(),
     body('Direccion', 'Ingrese la direccion del proveedor.').isString().trim(),
-    body('Email','Ingrese el Email del Proveedor.').isEmail().optional({nullable: true}),
+    body('Email','Ingrese el Email del Proveedor.').optional({nullable: true}),
     body('Imagen').isString().optional({nullable: true}),
     body('DescProveedor').isLength({min: 4, max:200}).optional({nullable:true}),
     body('NombRepresentante','Ingrese el Nombre del representante.').isLength({min: 3, max:100}).optional({nullable: true}),
     body('IdTipDoc').isInt(),
     body('Documento','El campo de Ruc es requerido!.'),
-    body('Abreviatura').isString().isLength({min:2, max:15}),
-    body('Retencion2','El campo de retencion es requerido.').isInt(),
-    body('IsMercado','El campo de mercado es requerido.').isInt(),
+    body('Abreviatura').isLength({min:2, max:15}),
+    body('IsMercado','El campo de mercado es requerido.').isBoolean(),
     sanitize('IdPais').toInt(),
-    sanitize('IsProvServicio').toInt(),
+    sanitize('IsProvServicio').toBoolean(),
     sanitize('IdTipDoc').toInt(),
-    sanitize('IsMercado').toInt()
+    sanitize('IsMercado').toBoolean()
 ];
 exports.createProveedor = createProveedor;
 
@@ -120,10 +119,8 @@ exports.updateTrabajador = [
 ];
 
 const createEmpaque = [
-    body('NombEmpaque', 'Nombre de Empaque requerido').isString(),
-    body('DescEmpaque'  , 'La descripcion debe ser texto!').isString().optional({nullable: true}),
-    sanitize('NombEmpaque').toString(),
-    sanitize('DescEmpaque').toString()
+    body('NombEmpaque', 'Nombre de Empaque requerido').isLength({min: 3, max:50}),
+    body('DescEmpaque'  , 'La descripcion debe ser texto!').isLength({min: 3, max:150}).optional({nullable: true}),
 ];
 
 exports.createEmpaque = createEmpaque;
@@ -327,12 +324,11 @@ const createTelefonoProveedor = [
     body('IdProveedor', 'Selecciona Un proveedor.').isInt(),
     body('Telefono', 'Ingresa un telefono.').isString(),
     body('NombPAsignada','Ingresa un nombre.').isString(),
-    body('Cargo').optional({nullable:true}),
-    body('IsTitular').isInt(),
+    body('Cargo').isLength({min:3, max:20}).optional({nullable:true}),
+    body('Extension').isLength({min:1, max:10}).optional({nullable:true}),
+    body('IsTitular').isBoolean(),
     sanitize('IdProveedor').toInt(),
-    sanitize('Telefono').toString(),
-    sanitize('NombPAsignada').toString(),
-    sanitize('IsTitular').toInt()
+    sanitize('IsTitular').toBoolean()
 ];
 
 exports.createTelefonoProveedor = createTelefonoProveedor;

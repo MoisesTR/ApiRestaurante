@@ -182,7 +182,7 @@ CREATE PROCEDURE USP_CREATE_PROVEEDOR(
 	@IdTipDoc			INT				NULL,
 	@Documento			NVARCHAR(20), --Por defecto sera el numero ruc
 	@Abreviatura		NVARCHAR(20),
-	@Retencion2			BIT NULL,
+	--@Retencion2			BIT NULL,
 	@IsMercado			BIT NULL
 ) AS BEGIN
 	BEGIN TRANSACTION myTran
@@ -207,9 +207,9 @@ CREATE PROCEDURE USP_CREATE_PROVEEDOR(
 		END
 
 		INSERT INTO PROVEEDOR( IdPais,	IsProvServicio, NombProveedor,	Direccion,	Email,	DescProveedor,	NombRepresentante, 
-								IdTipDoc,	Documento,	Abreviatura,	Retencion2,		IsMercado)
+								IdTipDoc,	Documento,	Abreviatura,		IsMercado)
 		VALUES(	@IdPais,	@IsProvServicio,	@NombProveedor,	@Direccion,	@Email,	@DescProveedor,	@NombRepresentante,
-								@IdTipDoc,	@Documento,	@Abreviatura,	@Retencion2,	@IsMercado);
+								@IdTipDoc,	@Documento,	@Abreviatura,	@IsMercado);
 		SELECT @@IDENTITY AS IdProveedor
 		COMMIT TRANSACTION myTran;
 	END TRY
@@ -234,14 +234,13 @@ CREATE PROCEDURE USP_UPDATE_PROVEEDOR(
     @NombRepresentante	NVARCHAR(100) NULL, -- NOT NULL,
 	@IdTipDoc			INT,
 	@Documento			NVARCHAR(20),
-	@Abreviatura		NVARCHAR(20),
-	@Retencion2			BIT NULL
+	@Abreviatura		NVARCHAR(20)
+	--@Retencion2			BIT NULL
 ) AS BEGIN
 	UPDATE dbo.	PROVEEDOR 
 	SET		IdPais = @IdPais, IsMercado = @IsMercado,NombProveedor = @NombProveedor,	Direccion=@Direccion,	Email=@Email,	DescProveedor=@DescProveedor,
 			NombRepresentante	=ISNULL(@NombRepresentante, NombRepresentante), IdTipDoc= @IdTipDoc, Documento=ISNULL(@Documento,Documento),
-			Abreviatura= @Abreviatura,Retencion2 = ISNULL(@Retencion2, Retencion2),
-			UpdatedAt=GETDATE() 
+			Abreviatura= @Abreviatura,	UpdatedAt=GETDATE() 
 	WHERE IdProveedor = @IdProveedor;
 END 
 GO
@@ -280,7 +279,7 @@ BEGIN
 END
 
 GO
-IF OBJECT_ID('dbo.VIEW_BASIC_GET_PRODUCT','U') IS NOT NULL	
+IF OBJECT_ID('dbo.VIEW_BASIC_GET_PRODUCT','V') IS NOT NULL	
 	DROP VIEW dbo.VIEW_BASIC_GET_PRODUCT;
 GO
 CREATE VIEW dbo.VIEW_BASIC_GET_PRODUCT 

@@ -82,7 +82,7 @@ Router
     .put('/sucursal/:IdSucursal(\\d+)',     validations.updateSucursal,         validsParams,       SucursalController.updateSucursal)
     .delete('/sucursal/:IdSucursal(\\d+)',  changeStateGeneric('IdSucursal'),   validsParams,       SucursalController.changeStateSucursal)
     //Rutas para unidad de Medida Controller
-    .get('/unidadesmedida',                         habilitadoValid,validsParams,           UnidadMedidaController.getUnidadesMedida)
+    .get('/unidadesmedida',                         habilitadoValid,    validsParams,           UnidadMedidaController.getUnidadesMedida)
     .get('/unidadmedida/:IdUnidadMedida(\\d+)',     UnidadMedidaController.getUnidadById)
     .post('/unidadmedida',                          validations.createUnidadMedida,         validsParams,   UnidadMedidaController.createUnidadMedida)
     .put('/unidadmedida/:IdUnidadMedida(\\d+)',     validations.updateUnidadMedida,         validsParams,   UnidadMedidaController.updateUnidadMedida)

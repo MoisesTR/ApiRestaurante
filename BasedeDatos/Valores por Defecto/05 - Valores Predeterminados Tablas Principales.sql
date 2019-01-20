@@ -45,7 +45,7 @@ SET IDENTITY_INSERT dbo.TIPO_DOCUMENTO_IDENTIFICACION OFF;
 GO
 SET IDENTITY_INSERT dbo.CARGO_TRABAJADOR ON;
 GO
-INSERT INTO CARGO_TRABAJADOR(IdCargo,NombCargo, CodCargo, DescripcionCargo) 
+INSERT INTO CARGO_TRABAJADOR(IdCargo,NombCargo, CodCargo, DescCargo) 
 VALUES (1,'Propietario','PROP','Propietario del restaurante')
 		,(2, 'Gerente General','GEGN',		NULL)
 		,(3, 'Gerente Produccion','GEPR',	NULL)
@@ -69,6 +69,12 @@ VALUES	(1,'Masa','Miden el peso del producto.')
 		,(2,'Volumen','Miden el espacio que ocupa el producto.');
 GO
 SET IDENTITY_INSERT dbo.CLASIFICACION_UNIDAD_MEDIDA OFF;
+GO
+SET IDENTITY_INSERT dbo.TIPO_INSUMO ON;
+GO
+INSERT INTO TIPO_INSUMO(IdTipInsumo, 
+GO
+SET IDENTITY_INSERT dbo.TIPO_INSUMO OFF;
 GO
 SET IDENTITY_INSERT dbo.CATEGORIA_PRODUCTO ON;
 GO
@@ -134,14 +140,14 @@ GO
 
 SET IDENTITY_INSERT dbo.EMPAQUE ON
 
-INSERT INTO EMPAQUE(NombEmpaque) 
-VALUES	('Caja Carton')
-		,('Caja plastica')
-		,('Bolsa Plastica')
-		,('Bolsa Papel Craft')
-		,('Cajilla Plastica')
-		,('Cajilla Carton')
-		,('Saco');
+INSERT INTO EMPAQUE(IdEmpaque,NombEmpaque) 
+VALUES	(1,'Caja Carton')
+		,(2,'Caja plastica')
+		,(3,'Bolsa Plastica')
+		,(4,'Bolsa Papel Craft')
+		,(5,'Cajilla Plastica')
+		,(6,'Cajilla Carton')
+		,(7,'Saco');
 GO
 
 SET IDENTITY_INSERT dbo.EMPAQUE OFF;

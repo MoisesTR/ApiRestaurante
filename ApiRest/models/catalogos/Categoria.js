@@ -6,7 +6,7 @@ SET NombCategoria = @NombCategoria, DescCategoria = @DescCategoria, UpdatedAt= G
 WHERE IdCategoria = @IdCategoria `;
 
 class CategoriaModel {    
-    static createCategoria( NombCategoria, DescCategoria ){ 
+    static createCategoria( IdTipInsumo,NombCategoria, DescCategoria ){ 
         const aoj = [];
 
         pushAOJParam(aoj,   'IdTipInsumo',      sql.Bit,            IdTipInsumo);

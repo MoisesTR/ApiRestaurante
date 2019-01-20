@@ -1,19 +1,55 @@
 USE ATOMIC_RESTAURANTE
 GO
+USE ATOMIC_RESTAURANTE;
+
+GO
+IF OBJECT_ID('USP_CREATE_RESTAURANTE', 'P') IS NOT NULL
+	DROP PROCEDURE USP_CREATE_RESTAURANTE;
+GO
+CREATE PROCEDURE USP_CREATE_RESTAURANTE ( 
+--@IdRestaurante	INT,
+@IdMoneda		TINYINT,
+@IdPais			TINYINT,
+@IdMonedaFacturacion	TINYINT,
+@IsAutoBackup			BIT,
+@IsCuotaFija			BIT,
+@NombRestaurante		NVARCHAR(100),
+@DescRestaurante		NVARCHAR(150),
+@CuotaFija				NUMERIC(17,7),
+@PorcIva				NUMERIC(5,2),
+@RazonSocial			NVARCHAR(100),
+@SitioWeb				NVARCHAR(100),
+@Correo					NVARCHAR(100),
+@TelPrincipal			NVARCHAR(20),
+@TelPrincipal2			NVARCHAR(20),
+@FechaFundacion			SMALLDATETIME,
+@Login					NVARCHAR(150),
+@Workspace				NVARCHAR(150)
+)
+AS BEGIN
+
+INSERT INTO RESTAURANTE(IdMoneda,IdPais,IdMonedaFacturacion,IsAutoBackup,IsCuotaFija,NombRestaurante
+	,DescRestaurante,CuotaFija,PorcIva,RazonSocial,SitioWeb,Correo,TelPrincipal,TelPrincipal2,FechaFundacion,Login,Workspace)
+	VALUES(@IdMoneda,@IdPais,@IdMonedaFacturacion,@IsAutoBackup,@IsCuotaFija,@NombRestaurante
+	,@DescRestaurante,@CuotaFija,@PorcIva,@RazonSocial,@SitioWeb,@Correo,@TelPrincipal,@TelPrincipal2,@FechaFundacion,@Login,@Workspace)
+
+END
+GO
 IF OBJECT_ID('USP_CREATE_CARGO','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_CARGO
 GO
 CREATE PROCEDURE USP_CREATE_CARGO(
-	@NombCargo NVARCHAR(50),
-    @DescripcionCargo NVARCHAR(150)
+	@NombCargo	NVARCHAR(50),
+    @DescCargo	NVARCHAR(150),
+	@CodCargo	Nvarchar(4)
 )
 AS BEGIN
-	IF EXISTS (SELECT NombCargo FROM dbo.CARGO WHERE NombCargo = @NombCargo )  
+	IF EXISTS (SELECT NombCargo FROM dbo.CARGO_TRABAJADOR WHERE NombCargo = @NombCargo )  
 		RAISERROR('Ya existe un cargo con este Nombre',14,1)  
 	ELSE
 	BEGIN
-		INSERT INTO dbo.CARGO(NombCargo,DescripcionCargo)
-		VALUES(@NombCargo,@DescripcionCargo)
+		INSERT INTO dbo.CARGO_TRABAJADOR(NombCargo,	DescCargo, CodCargo)
+		VALUES(@NombCargo,	@DescCargo,	@CodCargo)
 		SELECT @@IDENTITY AS IdCargo
 	END
 END
@@ -22,42 +58,14 @@ IF OBJECT_ID('USP_UPDATE_CARGO','P') IS NOT NULL
 	DROP PROCEDURE USP_UPDATE_CARGO
 GO
 CREATE PROCEDURE USP_UPDATE_CARGO(
-	@IdCargo INT,
-	@NombCargo NVARCHAR(50),
-    @DescripcionCargo NVARCHAR(150)
+	@IdCargo	INT,
+	@NombCargo	NVARCHAR(50),
+    @DescCargo	NVARCHAR(150),
+	@CodCargo	NVARCHAR(4)
 )
 AS BEGIN
-	UPDATE CARGO SET NombCargo=@NombCargo,DescripcionCargo=@DescripcionCargo, UpdatedAt = GETDATE()
+	UPDATE CARGO_TRABAJADOR SET NombCargo=@NombCargo, DescCargo = @DescCargo,CodCargo = @CodCargo, UpdatedAt = GETDATE()
 	WHERE IdCargo = @IdCargo
-END
-GO
-IF OBJECT_ID('USP_GET_CARGO','P') IS NOT NULL
-	DROP PROCEDURE USP_GET_CARGO
-GO
-CREATE PROCEDURE USP_GET_CARGO(
-	@IdCargo INT
-)
-AS BEGIN
-	SELECT IdCargo,NombCargo,DescripcionCargo,Habilitado,CreatedAt,UpdatedAt 
-	FROM CARGO WHERE IdCargo = @IdCargo
-END
-go
-IF OBJECT_ID('USP_GET_CARGOS','P') IS NOT NULL
-	DROP PROCEDURE USP_GET_CARGOS
-GO
-CREATE PROCEDURE USP_GET_CARGOS(
-	@Habilitado BIT NULL
-)
-AS BEGIN
-	IF @Habilitado IS NULL
-		BEGIN
-			SELECT IdCargo,NombCargo,DescripcionCargo,Habilitado,CreatedAt,UpdatedAt FROM CARGO
-		END
-	ELSE
-		BEGIN
-			SELECT IdCargo,NombCargo,DescripcionCargo,Habilitado,CreatedAt,UpdatedAt FROM CARGO
-			WHERE Habilitado=@Habilitado
-		END
 END
 GO
 IF OBJECT_ID('USP_DISP_CARGO','P') IS NOT NULL
@@ -67,7 +75,7 @@ CREATE PROCEDURE USP_DISP_CARGO(
 	@IdCargo	INT,
 	@Habilitado BIT
 ) AS BEGIN
-	UPDATE dbo.CARGO SET Habilitado = @Habilitado, UpdatedAt = GETDATE() 
+	UPDATE dbo.CARGO_TRABAJADOR SET Habilitado = @Habilitado, UpdatedAt = GETDATE() 
 	WHERE IdCargo=@IdCargo
 END
 GO
@@ -98,23 +106,6 @@ CREATE PROCEDURE USP_DISP_TRABAJADOR(
 	UPDATE dbo.TRABAJADOR SET Habilitado = @Habilitado,UpdatedAt=GETDATE() 
 	WHERE IdTrabajador = @IdTrabajador
 END
-GO
---IF OBJECT_ID('USP_GET_TELEFONOS_TRABAJADOR','P') IS NOT NULL
---	DROP PROCEDURE USP_GET_TELEFONOS_TRABAJADOR
---GO
---CREATE PROCEDURE USP_GET_TELEFONOS_TRABAJADOR(
---	@IdTrabajador INT,
---	@Habilitado BIT
---) AS BEGIN
---	IF @Habilitado IS NULL
---		SELECT IdTelefoNOTrabajador,IdTrabajador,NumeroTelefono,TT.Habilitado,TT.CreatedAt,TT.UpdatedAt 
---		FROM TELEFONO_TRABAJADOR TT
---		WHERE TT.IdTrabajador= @IdTrabajador
---	ELSE
---		SELECT IdTelefoNOTrabajador,IdTrabajador,NumeroTelefono,TT.Habilitado,TT.CreatedAt,TT.UpdatedAt 
---		FROM TELEFONO_TRABAJADOR TT
---		WHERE TT.IdTrabajador= @IdTrabajador AND TT.Habilitado= @Habilitado
---END
 GO
 IF OBJECT_ID('USP_GET_DETALLE_BODEGA_AP','P') IS NOT NULL
 	DROP PROCEDURE USP_GET_DETALLE_BODEGA_AP

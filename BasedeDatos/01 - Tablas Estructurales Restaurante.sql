@@ -232,8 +232,8 @@ GO
 CREATE TABLE	dbo.CARGO_TRABAJADOR(
     IdCargo				INT IDENTITY(1,1),
     NombCargo			NVARCHAR(50)		NOT NULL,
-	CodCargo			NVARCHAR(4)			NOT NULL,
-    DescripcionCargo	NVARCHAR(100)		NULL,
+    DescCargo			NVARCHAR(100)		NULL,
+	CodCargo			NVARCHAR(4)			NULL,
     Habilitado			BIT DEFAULT 1		NOT NULL,
     CreatedAt			SMALLDATETIME		NOT NULL DEFAULT GETDATE(),
     UpdatedAt			SMALLDATETIME		NULL,    

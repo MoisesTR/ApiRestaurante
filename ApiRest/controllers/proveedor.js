@@ -38,7 +38,9 @@ function createProveedor(req, res) {
         res.status(200)
             .json(results.recordset[0])
     }).catch((err) => {
-        res.status(500)
+        console.log(err);
+        
+        res.status(500 || err.status)
             .json(mssqlErrors(err));
     });
 }

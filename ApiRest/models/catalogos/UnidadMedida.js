@@ -1,28 +1,29 @@
-const {sql, pushAOJParam, storedProcExecute} = require('../../Utils/defaultImports');
-
+const {sql, pushAOJParam, storedProcExecute, queryExecute} = require('../../Utils/defaultImports');
+const { addLikeParamInFilter, addEqualParamInFilter } = require('../../Utils/util');
+const baseSelect = 'SELECT IdUnidadMedida, IdClasifUDM, IdUDMBase, NombUnidad, Simbolo, FactorConversion, Habilitado, CreatedAt,UpdatedAt FROM UNIDAD_MEDIDA';
 
 class UnidadMedidaModel {
 
-    constructor() {
-        this.aoj = [];
-    }
-
-    async getUnidadById( IdUnidadMedida ){
-        this.aoj  = [];
+    getUnidadById( IdUnidadMedida ){
+        const aoj  = [];
 
         pushAOJParam(aoj, 'IdUnidadMedida',  sql.Int,    IdUnidadMedida)
-        return storedProcExecute('USP_GET_UNIDAD_DE_MEDIDA', aoj)
+        return queryExecute(baseSelect + ' WHERE IdUnidadMedida = @IdUnidadMedida', aoj)
     }
 
-    async getUnidadesMedida( Habilitado ){
-        this.aoj = [];
+    getUnidadesMedida( {Habilitado} ){
+        const aoj = [];
+        let filter  = '';
     
-        pushAOJParam(aoj, 'Habilitado',      sql.Bit,   +Habilitado)
-        return storedProcExecute('USP_GET_UNIDADES_DE_MEDIDA', aoj) 
+        if ( Habilitado !== undefined ) {
+            filter += addEqualParamInFilter(filter, 'Habilitado');
+            pushAOJParam(aoj, 'Habilitado',      sql.Bit,   +Habilitado)
+        }
+        return queryExecute( baseSelect + filter, aoj) 
     }
 
-    async createUnidadMedida( params ){
-        this.aoj = [];
+    createUnidadMedida( params ){
+        const aoj = [];
         
         pushAOJParam(aoj, 'IdClasifUDM',    sql.Int,            params.IdClasifUDM)
         pushAOJParam(aoj, 'NombUnidad',     sql.NVarChar(50),   params.NombUnidad)
@@ -31,8 +32,9 @@ class UnidadMedidaModel {
         return storedProcExecute('dbo.USP_CREATE_UNIDAD_MEDIDA', aoj)
     }
 
-    async updateUnidadMedida( params ){
-        this.aoj = [];
+    updateUnidadMedida( params ){
+        const aoj = [];
+
         pushAOJParam(aoj, 'IdUnidadMedida',     sql.Int,            params.IdUnidadMedida)
         pushAOJParam(aoj, 'IdClasifUDM',        sql.Int,            params.IdClasifUDM)
         pushAOJParam(aoj, 'NombUnidad',         sql.NVarChar(50),   params.NombUnidad)
@@ -41,8 +43,9 @@ class UnidadMedidaModel {
         return storedProcExecute('dbo.USP_UPDATE_UNIDAD_MEDIDA', aoj)
     }
 
-    async changeStateUnidadMedida( IdUnidadMedida, Habilitado ){
-        this.aoj  = [];
+    changeStateUnidadMedida( IdUnidadMedida, Habilitado ){
+        const aoj  = [];
+
         pushAOJParam(aoj, 'IdUnidadMedida',          sql.Int,   IdUnidadMedida)
         pushAOJParam(aoj, 'Habilitado',              sql.Bit,   +Habilitado)
         return storedProcExecute('dbo.USP_DISP_UNIDAD_MEDIDA', aoj)
