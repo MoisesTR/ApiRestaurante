@@ -32,6 +32,6 @@ exports.addLikeParamInFilter =  (filter, param ) => {
     return  (filter === '' ? ' WHERE ' : ' AND ') + ` ${param} LIKE \'%\'+@${param }+\'%\'`;
 }
 
-exports.addEqualParamInFilter = ( filter , param ) => {
-    return  (filter === '' ? ' WHERE ' : ' AND ') + ` ${param} = @${param}`;
+exports.addEqualParamInFilter = ( filter , param, columnName ) => {
+    return  (filter === '' ? ' WHERE ' : ' AND ') + ` ${columnName || param} = @${param}`;
 }

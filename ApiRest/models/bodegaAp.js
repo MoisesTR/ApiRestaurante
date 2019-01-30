@@ -40,10 +40,10 @@ class BodegaAp {
         return storedProcExecute('USP_INSERT_DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION',aoj)
     }
     
-    getDetalleBodegaAp ( Habilitado ) {
+    getDetalleBodegaAp( IdBodegaAreaP ) {
         const aoj=[];
 
-        pushAOJParam( aoj,   'IdBodegaAreaP',    sql.Int,    Habilitado);
+        pushAOJParam( aoj,   'IdBodegaAreaP',    sql.Int,    IdBodegaAreaP);
         return storedProcExecute('USP_GET_DETALLE_BODEGA_AP',aoj)
     }
     

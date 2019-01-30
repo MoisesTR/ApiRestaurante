@@ -13,6 +13,7 @@ const catalogRoutes = require('./routes/catalogosRoutes');
 const reportsRoutes = require('./routes/reports');
 const authRoutes    = require('./routes/authRoutes');
 const restaurantRoutes = require('./routes/restaurantRoutes');
+const contabilidadRoutes = require('./routes/contabilidadRoutes');
 
 const app = express();
 
@@ -47,6 +48,7 @@ app.use('/api', apiRoutes);
 app.use('/api', catalogRoutes);
 app.use('/api', authRoutes);
 app.use('/api', restaurantRoutes);
+app.use('/api', contabilidadRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
