@@ -31,25 +31,23 @@ GO
 --Cuenta: Estara conformado por los primeros 4 digitos
 CREATE TABLE	CONTABILIDAD_CUENTA (
 	IdCuenta			TINYINT		IDENTITY(1,1),
-	IdTipCuenta			TINYINT		NOT NULL,
+	IdClasCuenta		TINYINT		NOT NULL,
+	IdGrupo				TINYINT		NOT NULL,
 	IdRestaurante		INT			NOT NULL,
-	IdSucursal			INT			NULL,
 	IdMoneda			TINYINT		NOT NULL,
-	NumCuenta			TINYINT		NOT NULL,
+	NumCuenta			NVARCHAR(4)		NOT NULL,
 	NombCuenta			NVARCHAR(50)	NOT NULL,
 	DescCuenta			NVARCHAR(150)	NULL,
 	Habilitado			BIT				NOT NULL	DEFAULT 1,
 	CreatedAt			SMALLDATETIME	NOT NULL	DEFAULT GETDATE(),
 	UpdatedAt			SMALLDATETIME	NULL,
-	CONSTRAINT	PK_Contabilidad_Cuenta		PRIMARY KEY(IdCuenta),
-	CONSTRAINT	FK_Contabilidad_Cuenta_Tipo		FOREIGN KEY(IdTipCuenta)
-				REFERENCES	dbo.CONTABILIDAD_TIPO_CUENTA(IdTipCuenta),
+	CONSTRAINT	PK_Contabilidad_Cuenta		PRIMARY KEY(NumCuenta),
+	CONSTRAINT	FK_Contabilidad_Cuenta_Grupo		FOREIGN KEY(IdClasCuenta, IdGrupo)
+				REFERENCES	dbo.CONTABILIDAD_GRUPO_CUENTA(IdClasCuenta, IdGrupo),
 	CONSTRAINT	FK_Contabilidad_Moneda_Cuenta	FOREIGN KEY(IdMoneda)
 				REFERENCES	dbo.FACTURACION_MONEDA(IdMoneda),
 	CONSTRAINT	PK_Contabilidad_Cuenta_Restaurante	FOREIGN KEY(IdRestaurante)
-				REFERENCES dbo.RESTAURANTE(IdRestaurante),
-	CONSTRAINT	PK_Contabilidad_Cuenta_Sucursal		FOREIGN KEY(IdSucursal)
-				REFERENCES dbo.SUCURSAL_RESTAURANTE(IdSucursal)
+				REFERENCES dbo.RESTAURANTE(IdRestaurante)
 );
 GO
 

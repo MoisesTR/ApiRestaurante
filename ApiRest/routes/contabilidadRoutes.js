@@ -1,5 +1,6 @@
 const express = require('express');
 // Controllers
+const CuentaController = require("../controllers/contabilidad/cuenta");
 const claseCuentaController = require('../controllers/contabilidad/claseCuenta');
 const grupoCuentaController = require('../controllers/contabilidad/grupoCuenta');
 // Validations
@@ -19,6 +20,9 @@ Router
     .get( '/cuentas/grupos/:IdGrupo(\\d+)',    validations.getGrupoCuenta, validsParams, grupoCuentaController.getGrupoCuenta)
     .post('/cuentas/grupos',    validations.createGrupoCuenta, validsParams, grupoCuentaController.createGrupoCuenta)
     // Cuentas
-    ;
+    .get( '/cuentas\$',     validations.getCuentas,     validsParams,   CuentaController.obtenerCuentas)
+    .get( '/cuentas/:NumCuenta([0-9]{4})',  CuentaController.obtenerCuenta)
+    .post('/cuentas\$',     validations.createCuenta,   validsParams,   CuentaController.createCuenta)
+    .put( '/cuentas/:NumCuenta([0-9]{4})',  validations.updateCuenta, validsParams, CuentaController.actualizarCuenta)
 
 module.exports = Router;
