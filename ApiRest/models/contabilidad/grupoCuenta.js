@@ -46,4 +46,13 @@ module.exports = class GrupoCuenta {
         pushAOJOuput(aoj,   'IdGrupo',          sql.TinyInt);
         return  storedProcExecute('USP_CREATE_GRUPO_CUENTA', aoj);
     }
+   
+    updateGrupoCuenta({ IdClasCuenta, IdGrupo,NombGrupo }) {
+        const aoj = []; 
+
+        pushAOJParam(aoj,   'IdClasCuenta',     sql.TinyInt,    +IdClasCuenta);
+        pushAOJParam(aoj,   'IdGrupo',          sql.TinyInt,    +IdGrupo);
+        pushAOJParam(aoj,   'NombGrupo',        sql.NVarChar(100),  NombGrupo);
+        return  storedProcExecute('USP_UPDATE_GRUPO_CUENTA', aoj);
+    }
 }

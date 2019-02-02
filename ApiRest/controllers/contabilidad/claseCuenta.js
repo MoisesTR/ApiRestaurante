@@ -40,3 +40,17 @@ exports.createClaseCuenta = (req, res) => {
             .json(mssqlErrors(err))
     });
 };
+
+exports.updateClaseCuenta = (req, res) => {
+    const data = matchedData(req);
+    const ClaseCuenta = new ClaseCuentaModel();
+
+    ClaseCuenta.updateClaseCuenta(data)
+    .then((result) => {
+        res.status(200)
+            .json({success: 'Cuenta actualizada con exito.'});
+    }).catch((err) => {
+        res.status(err.status || 500) 
+            .json(mssqlErrors(err))
+    });
+};

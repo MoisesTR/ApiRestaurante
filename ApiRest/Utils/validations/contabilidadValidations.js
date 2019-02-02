@@ -1,10 +1,16 @@
 const { query, body, oneOf, param }    = require('express-validator/check');
 const { sanitize }              = require('express-validator/filter');
 
-exports.createClaseCuenta = [
+const basicoClaseCuenta = [
     body('NombClasC').isLength({min:4, max:100}),
     body('DescClasC').isLength({min: 4, max:150}).optional({nullable: true}),
 ];
+exports.createClaseCuenta = basicoClaseCuenta;
+
+exports.updateClaseCuenta = basicoClaseCuenta.concat([
+    param('IdClasCuenta').isInt(),
+    sanitize('IdClasCuenta').toInt()
+]);
 
 exports.getClaseVenta = [
     param('IdClasCuenta').isInt()
@@ -16,10 +22,17 @@ exports.getClasesVentas = [
     sanitize('Habilitado').toBoolean()
 ];
 
-exports.createGrupoCuenta = [
+const basicoGrupoCuenta = [
     body('IdClasCuenta').isInt(),
     body('NombGrupo').isLength({min: 3, max: 100}),
 ];
+
+exports.createGrupoCuenta = basicoGrupoCuenta;
+
+exports.updateGrupoCuenta = basicoGrupoCuenta.concat([
+    param('IdGrupo').isInt(),
+    sanitize('IdGrupo').toInt()
+]);
 
 exports.getGrupoCuenta = [
     param('IdGrupo').isInt()

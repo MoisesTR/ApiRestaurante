@@ -28,12 +28,21 @@ module.exports = class ClaseCuenta {
         return resp.recordset;
     }
 
-    createClaseCuenta({NombClasC, DescClasC, IdClasCuenta}) {
+    createClaseCuenta({NombClasC, DescClasC}) {
         const aoj = [];
 
         pushAOJParam(aoj,   'NombClasC',    sql.NVarChar(100),  NombClasC);
         pushAOJParam(aoj,   'DescClasC',    sql.NVarChar(150),  DescClasC);
         pushAOJOuput(aoj,   'IdClasCuenta', sql.TinyInt);
         return storedProcExecute('USP_CREATE_CLASE_CUENTA', aoj);
+    }
+    
+    updateClaseCuenta({NombClasC, DescClasC, IdClasCuenta}) {
+        const aoj = [];
+    
+        pushAOJParam(aoj,   'IdClasCuenta', sql.TinyInt, IdClasCuenta);
+        pushAOJParam(aoj,   'NombClasC',    sql.NVarChar(100),  NombClasC);
+        pushAOJParam(aoj,   'DescClasC',    sql.NVarChar(150),  DescClasC);
+        return storedProcExecute('USP_UPDATE_CLASE_CUENTA', aoj);
     }
 }
