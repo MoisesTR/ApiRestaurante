@@ -13,8 +13,8 @@ const Router = express.Router();
 
 Router
     // Clases de Cuentas
-    .get( '/cuentas/clases\$',  validations.getClasesVentas,    validsParams,  claseCuentaController.getClasesCuenta)
-    .get( '/cuentas/clases/:IdClasCuenta(\\d+)',    validations.getClaseVenta,      validsParams,   claseCuentaController.getClaseCuenta)
+    .get( '/cuentas/clases\$',  validations.getClasesCuentas,    validsParams,  claseCuentaController.getClasesCuenta)
+    .get( '/cuentas/clases/:IdClasCuenta(\\d+)',    validations.getClaseCuenta,      validsParams,   claseCuentaController.getClaseCuenta)
     .post('/cuentas/clases',    validations.createClaseCuenta,  validsParams  ,claseCuentaController.createClaseCuenta)
     // Grupos de cuentas
     .get( '/cuentas/grupos\$',    validations.getGruposCuenta, validsParams, grupoCuentaController.getGruposCuenta)

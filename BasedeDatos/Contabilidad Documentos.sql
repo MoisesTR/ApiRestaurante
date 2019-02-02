@@ -1,6 +1,4 @@
 USE ATOMIC_RESTAURANTE;
-GO
-
 
 GO
 --Un documento puede afectar multiples cuentas
@@ -9,10 +7,11 @@ CREATE TABLE CONTABILIDAD_DOCUMENTO (
 	IdTipDoc		TINYINT			NOT NULL,
 	IdRestaurante	INT				NOT NULL,
 	IdSucursal		INT				NULL,
+	IdMoneda		TINYINT			NOT NULL,
 	Serie			NVARCHAR(10)	NOT NULL,
 	NumDoc			INT				NOT NULL,
 	NombDoc			NVARCHAR(50)	NOT NULL,
-	Valor			NUMERIC(17,7)	NOT NULL,
+	DescDoc			NVARCHAR(150)	NULL,
 	Habilitado		BIT				NOT NULL DEFAULT 1,
 	CreatedAt	SMALLDATETIME	NOT NULL DEFAULT GETDATE(),
 	UpdatedAt	SMALLDATETIME	NULL,
@@ -22,5 +21,44 @@ CREATE TABLE CONTABILIDAD_DOCUMENTO (
 	CONSTRAINT FK_Restaurante_Documento			FOREIGN KEY(IdRestaurante)
 				REFERENCES dbo.RESTAURANTE(IdRestaurante),
 	CONSTRAINT FK_Sucursal_Documento			FOREIGN KEY(IdSucursal)
-				REFERENCES dbo.RESTAURANTE_SUCURSAL(IdSucursal)
+				REFERENCES dbo.SUCURSAL_RESTAURANTE(IdSucursal),
+	CONSTRAINT FK_Moneda_Documento			FOREIGN KEY(IdMoneda)
+				REFERENCES	dbo.FACTURACION_MONEDA(IdMoneda)
 );
+GO
+IF OBJECT_ID('USP_CREATE_CONTABILIDAD_DOCUMENTO','P') IS NOT NULL
+	DROP PROCEDURE USP_CREATE_CONTABILIDAD_DOCUMENTO;
+GO
+CREATE PROCEDURE USP_CREATE_CONTABILIDAD_DOCUMENTO (
+	@IdTipDoc		TINYINT,
+	@IdRestaurante	INT,
+	@IdSucursal		INT,
+	@IdMoneda		INT,
+	@Serie			NVARCHAR(10),
+	@NumDoc			INT,
+	@NombDoc		NVARCHAR(50),
+	@DescDoc		NVARCHAR(150),
+	@IdDocumento	TINYINT	OUT
+)
+AS BEGIN
+	INSERT INTO dbo.CONTABILIDAD_DOCUMENTO(IdTipDoc,IdRestaurante,IdSucursal, IdMoneda, Serie, NumDoc, NombDoc, DescDoc)
+	VALUES(@IdTipDoc, @IdRestaurante, @IdSucursal, @IdMoneda, @Serie, @NumDoc, @NombDoc, @DescDoc)
+	SET @IdDocumento = @@IDENTITY
+END
+
+GO
+IF OBJECT_ID('USP_UPDATE_CONTABILIDAD_DOCUMENTO','P') IS NOT NULL
+	DROP PROCEDURE USP_UPDATE_CONTABILIDAD_DOCUMENTO;
+GO
+CREATE PROCEDURE USP_UPDATE_CONTABILIDAD_DOCUMENTO (
+	@IdDocumento	TINYINT,
+	@IdSucursal		INT,
+	@IdMoneda		INT,
+	@NombDoc		NVARCHAR(50),	
+	@DescDoc		NVARCHAR(150)
+)
+AS BEGIN
+
+	UPDATE dbo.CONTABILIDAD_DOCUMENTO SET IdSucursal = @IdSucursal, IdMoneda = @IdMoneda, NombDoc = @NombDoc, DescDoc = @DescDoc
+	WHERE IdDocumento = @IdDocumento
+END 

@@ -12,14 +12,16 @@ exports.updateClaseCuenta = basicoClaseCuenta.concat([
     sanitize('IdClasCuenta').toInt()
 ]);
 
-exports.getClaseVenta = [
+exports.getClaseCuenta = [
     param('IdClasCuenta').isInt()
 ];
 
-exports.getClasesVentas = [
+exports.getClasesCuentas = [
     query('NombClasC').isLength({min:2, max:100}).optional({nullable: true}),
+    query('Naturaleza').isBoolean().optional({nullable: true}),
     query('Habilitado').isBoolean().optional({nullable: true}),
-    sanitize('Habilitado').toBoolean()
+    sanitize('Habilitado').toBoolean(),
+    sanitize('Naturaleza').toBoolean()
 ];
 
 const basicoGrupoCuenta = [

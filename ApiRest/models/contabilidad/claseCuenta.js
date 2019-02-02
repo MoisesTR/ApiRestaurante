@@ -1,6 +1,6 @@
 const { sql, pushAOJParam, pushAOJOuput, queryExecute, storedProcExecute } = require('../../Utils/defaultImports');
 const { addLikeParamInFilter, addEqualParamInFilter }   =  require( '../../Utils/util');
-const baseSelect = 'SELECT IdClasCuenta,NombClasC,DescClasC,Habilitado,CreatedAt, UpdatedAt FROM CONTABILIDAD_CLASE_CUENTA';
+const baseSelect = 'SELECT IdClasCuenta,NombClasC,DescClasC,Naturaleza, Habilitado,CreatedAt, UpdatedAt FROM CONTABILIDAD_CLASE_CUENTA';
 
 
 module.exports = class ClaseCuenta {
@@ -12,13 +12,17 @@ module.exports = class ClaseCuenta {
         return resp.recordset[0];
     }
 
-    static async getClasesCuentas({NombClasC, Habilitado}) {
+    static async getClasesCuentas({NombClasC, Habilitado, Naturaleza}) {
         const aoj = [];
         let filter = '';
 
         if ( NombClasC ) {
             filter = addLikeParamInFilter(filter,'NombClasC');
             pushAOJParam(aoj,   'NombClasC',    sql.NVarChar(100),  NombClasC);
+        }
+        if ( Naturaleza != undefined ) {
+            filter += addEqualParamInFilter(filter, 'Naturaleza');
+            pushAOJParam(aoj,   'Naturaleza',   sql.Bit,            Naturaleza);
         }
         if ( Habilitado != undefined ) {
             filter  +=  addEqualParamInFilter(filter, 'Habilitado');
@@ -28,11 +32,12 @@ module.exports = class ClaseCuenta {
         return resp.recordset;
     }
 
-    createClaseCuenta({NombClasC, DescClasC}) {
+    createClaseCuenta({NombClasC, DescClasC, Naturaleza}) {
         const aoj = [];
 
         pushAOJParam(aoj,   'NombClasC',    sql.NVarChar(100),  NombClasC);
         pushAOJParam(aoj,   'DescClasC',    sql.NVarChar(150),  DescClasC);
+        pushAOJOuput(aoj,   'Naturaleza',   sql.Bit,            +Naturaleza);
         pushAOJOuput(aoj,   'IdClasCuenta', sql.TinyInt);
         return storedProcExecute('USP_CREATE_CLASE_CUENTA', aoj);
     }
