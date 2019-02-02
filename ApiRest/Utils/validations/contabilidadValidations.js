@@ -71,3 +71,24 @@ exports.updateCuenta = basicoCuentas.concat([
     param('NumCuenta').isLength(4),
     // sanitize('IdRestaurante').toInt()
 ]);
+
+const basicoSubCuenta = [
+    body('NombSubCuenta').isLength({min: 4, max: 100}),
+    body('DescSubCuenta').isLength({min: 3, max:150}).optional({nullable: true})
+];
+
+exports.createSubCuenta = basicoSubCuenta.concat([
+    body('NumCuenta').isInt(),
+    sanitize('NumCuenta').toInt()
+]);
+
+exports.updateSubCuenta = basicoSubCuenta.concat([
+    param('NumSubCuenta').isLength(6)
+]);
+
+exports.getSubCuentas = [
+    query('NumCuenta').isLength(6).optional({nullable: true}),
+    query('NombSubCuenta').isLength({min:3, max:100}).optional({nullable: true}),
+    query('Habilitado').isBoolean().optional({nullable: true}),
+    sanitize('Habilitado').toBoolean()
+];

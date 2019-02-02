@@ -1,7 +1,6 @@
 const { sql, pushAOJParam, pushAOJOuput, queryExecute, storedProcExecute } = require('../../Utils/defaultImports');
 const { addLikeParamInFilter, addEqualParamInFilter }   =  require( '../../Utils/util');
-const baseSelect = 'SELECT IdClasCuenta,NombClasC,DescClasC,Habilitado,CreatedAt, UpdatedAt FROM CONTABILIDAD_CLASE_CUENTA';
-
+const baseSelect = 'SELECT  IdSubCuenta, NumCuenta, NumSubCuenta,NombSubCuenta, DescSubCuenta,Habilitado, CreatedAt, UpdatedAt FROM dbo.CONTABILIDAD_SUBCUENTA';
 
 module.exports = class SubCuenta {
     static async getSubCuenta( NumSubCuenta ) {
@@ -37,9 +36,9 @@ module.exports = class SubCuenta {
 
         pushAOJParam(aoj,   'NumCuenta',            sql.NVarChar(4),  NumCuenta);
         pushAOJParam(aoj,   'NombSubCuenta',        sql.NVarChar(100),  NombSubCuenta);
-        pushAOJParam(aoj,   'DescDescSubCuenta',    sql.NVarChar(150),  DescSubCuenta);
+        pushAOJParam(aoj,   'DescSubCuenta',    sql.NVarChar(150),  DescSubCuenta);
         pushAOJOuput(aoj,   'NumSubCuenta',         sql.NVarChar(6));
-        return storedProcExecute('USP_CREATE_SUBCUENTA', aoj);
+        return storedProcExecute('USP_CREATE_CONTABILIDAD_SUBCUENTA', aoj);
     }
     
     updateSubCuenta({NumSubCuenta, NombSubCuenta, DescSubCuenta}) {
@@ -47,7 +46,7 @@ module.exports = class SubCuenta {
     
         pushAOJParam(aoj,   'NumSubCuenta',         sql.NVarChar(6),    NumSubCuenta);
         pushAOJParam(aoj,   'NombSubCuenta',        sql.NVarChar(100),  NombSubCuenta);
-        pushAOJParam(aoj,   'DescDescSubCuenta',    sql.NVarChar(150),  DescSubCuenta);
-        return storedProcExecute('USP_UPDATE_SUBCUENTA', aoj);
+        pushAOJParam(aoj,   'DescSubCuenta',    sql.NVarChar(150),  DescSubCuenta);
+        return storedProcExecute('USP_UPDATE_CONTABILIDAD_SUBCUENTA', aoj);
     }
 }
