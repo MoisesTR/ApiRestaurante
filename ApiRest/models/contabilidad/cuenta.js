@@ -1,6 +1,6 @@
 const { sql, pushAOJParam, pushAOJOuput, queryExecute, storedProcExecute } = require('../../Utils/defaultImports');
 const { addLikeParamInFilter, addEqualParamInFilter }   =  require( '../../Utils/util');
-const baseSelect = `SELECT IdCuenta, IdClasCuenta, IdGrupo, IdRestaurante, IdMoneda, NumCuenta, NombCuenta, DescCuenta, Habilitado, CreatedAt, UpdatedAt 
+const baseSelect = `SELECT IdCuenta, IdClasCuenta, IdGrupo, IdMoneda, NumCuenta, NombCuenta, DescCuenta, Habilitado, CreatedAt, UpdatedAt 
 FROM CONTABILIDAD_CUENTA`
 
 module.exports = class Cuenta {
@@ -13,7 +13,7 @@ module.exports = class Cuenta {
         return resp.recordset[0];
     }
 
-    static async getCuentas({IdClasCuenta,IdRestaurante, IdGrupo, Habilitado}) {
+    static async getCuentas({IdClasCuenta, IdGrupo, Habilitado}) {
         const aoj = [];
         let filter = '';
 
@@ -25,10 +25,10 @@ module.exports = class Cuenta {
             filter += addEqualParamInFilter(filter, 'IdGrupo');
             pushAOJParam(aoj,   'IdGrupo',      sql.TinyInt,    +IdGrupo);
         }
-        if ( IdRestaurante ) {
-            filter += addEqualParamInFilter(filter, 'IdRestaurante');
-            pushAOJParam(aoj,   'IdRestaurante',    sql.Int,    +IdRestaurante);
-        }
+        // if ( IdRestaurante ) {
+        //     filter += addEqualParamInFilter(filter, 'IdRestaurante');
+        //     pushAOJParam(aoj,   'IdRestaurante',    sql.Int,    +IdRestaurante);
+        // }
         if ( Habilitado != undefined ) {
             filter  +=  addEqualParamInFilter(filter, 'Habilitado');
             pushAOJParam(aoj,   'Habilitado',   sql.Bit,        +Habilitado);
@@ -37,12 +37,12 @@ module.exports = class Cuenta {
         return resp.recordset;
     }
 
-    createCuenta({IdClasCuenta, IdGrupo,IdRestaurante, NombCuenta, DescCuenta, IdMoneda}) {
+    createCuenta({IdClasCuenta, IdGrupo, NombCuenta, DescCuenta, IdMoneda}) {
         const aoj = [];
 
         pushAOJParam(aoj,   'IdClasCuenta', sql.TinyInt,    IdClasCuenta);
         pushAOJParam(aoj,   'IdGrupo',      sql.TinyInt,    IdGrupo);
-        pushAOJParam(aoj,   'IdRestaurante',    sql.Int,    IdRestaurante);
+        // pushAOJParam(aoj,   'IdRestaurante',    sql.Int,    IdRestaurante);
         pushAOJParam(aoj,   'IdMoneda',     sql.TinyInt,    IdMoneda);
         pushAOJParam(aoj,   'NombCuenta',   sql.NVarChar(100),  NombCuenta);
         pushAOJParam(aoj,   'DescCuenta',   sql.NVarChar(150),  DescCuenta);
@@ -50,10 +50,10 @@ module.exports = class Cuenta {
         return storedProcExecute('USP_CREATE_CUENTA', aoj);
     }
     
-    updateCuenta({IdRestaurante, NumCuenta, NombCuenta, DescCuenta}) {
+    updateCuenta({ NumCuenta, NombCuenta, DescCuenta}) {
         const aoj = [];
         
-        pushAOJParam(aoj,   'IdRestaurante',sql.Int,        IdRestaurante);
+        // pushAOJParam(aoj,   'IdRestaurante',sql.Int,        IdRestaurante);
         pushAOJParam(aoj,   'NumCuenta',    sql.NVarChar(4), NumCuenta);
         pushAOJParam(aoj,   'NombCuenta',   sql.NVarChar(100),  NombCuenta);
         pushAOJParam(aoj,   'DescCuenta',   sql.NVarChar(150),  DescCuenta);

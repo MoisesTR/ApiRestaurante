@@ -53,21 +53,21 @@ exports.createCuenta = basicoCuentas.concat([
     body('IdClasCuenta').isInt(),
     body('IdGrupo').isInt(),
     body('IdMoneda').isInt(),
-    body('IdRestaurante').isInt(),
+    // body('IdRestaurante').isInt(),
     sanitize('IdClasCuenta').toInt(),
     sanitize('IdGrupo').toInt(),
-    sanitize('IdRestaurante').toInt(),
+    // sanitize('IdRestaurante').toInt(),
 ]);
 
 exports.getCuentas = [
     query('IdClasCuenta').isInt().optional({nullable: true}),
     query('IdGrupo').isInt().optional({nullable: true}),
-    query('IdRestaurante').isInt().optional({nullable: true}),
+    // query('IdRestaurante').isInt().optional({nullable: true}),
     query('Habilitado').isBoolean().optional({nullable: true}),
     sanitize('Habilitado').toBoolean(),
 ];
 exports.updateCuenta = basicoCuentas.concat([
-    body('IdRestaurante').isInt(),
+    // body('IdRestaurante').isInt(),
     param('NumCuenta').isLength(4),
-    sanitize('IdRestaurante').toInt()
+    // sanitize('IdRestaurante').toInt()
 ]);

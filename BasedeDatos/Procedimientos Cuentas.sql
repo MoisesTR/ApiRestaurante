@@ -91,7 +91,7 @@ GO
 CREATE PROCEDURE USP_CREATE_CUENTA (
 	@IdClasCuenta		TINYINT,
 	@IdGrupo			TINYINT,
-	@IdRestaurante		INT,
+	--@IdRestaurante		INT,
 	@IdMoneda			TINYINT,
 	@NombCuenta			NVARCHAR(50),
 	@DescCuenta			NVARCHAR(150),
@@ -99,13 +99,13 @@ CREATE PROCEDURE USP_CREATE_CUENTA (
 )
 AS BEGIN
 	DECLARE @CANT_CUENTAS TINYINT
-	SELECT @CANT_CUENTAS = COUNT(*) FROM dbo.CONTABILIDAD_CUENTA WHERE IdClasCuenta = @IdClasCuenta AND IdGrupo =@IdGrupo AND IdRestaurante = @IdRestaurante;
+	SELECT @CANT_CUENTAS = COUNT(*) FROM dbo.CONTABILIDAD_CUENTA WHERE IdClasCuenta = @IdClasCuenta AND IdGrupo =@IdGrupo
 	IF ( @CANT_CUENTAS < 99 ) BEGIN
 		DECLARE @NUM_CUENTA NVARCHAR(4);
 
 	SET @NUM_CUENTA = CAST( @IdClasCuenta AS VARCHAR) + CAST( @IdGrupo AS VARCHAR) + RIGHT('00' + CAST((@CANT_CUENTAS + 1) AS VARCHAR),2)
-		INSERT INTO CONTABILIDAD_CUENTA(IdClasCuenta, IdGrupo, IdRestaurante, IdMoneda, NumCuenta, NombCuenta, DescCuenta)
-		VALUES(@IdClasCuenta, @IdGrupo, @IdRestaurante, @IdMoneda, @NUM_CUENTA, @NombCuenta, @DescCuenta);
+		INSERT INTO CONTABILIDAD_CUENTA(IdClasCuenta, IdGrupo, IdMoneda, NumCuenta, NombCuenta, DescCuenta)
+		VALUES(@IdClasCuenta, @IdGrupo, @IdMoneda, @NUM_CUENTA, @NombCuenta, @DescCuenta);
 	
 		SET @NumCuenta = @NUM_CUENTA
 	END
@@ -118,14 +118,14 @@ IF OBJECT_ID('USP_UPDATE_CONTABILIDAD_CUENTA','P') IS NOT NULL
 	DROP PROCEDURE USP_UPDATE_CONTABILIDAD_CUENTA;
 GO
 CREATE PROCEDURE USP_UPDATE_CONTABILIDAD_CUENTA (
-	@IdRestaurante	INT,
+	--@IdRestaurante	INT,
 	@NumCuenta		NVARCHAR(4),
 	@NombCuenta		NVARCHAR(100),
 	@DescCuenta		NVARCHAR(150)
 )
 AS BEGIN
 	UPDATE CONTABILIDAD_CUENTA SET NombCuenta = @NombCuenta, DescCuenta = @DescCuenta, UpdatedAt = GETDATE()
-	WHERE NumCuenta = @NumCuenta AND IdRestaurante = @IdRestaurante
+	WHERE NumCuenta = @NumCuenta 
 END
 
 GO
