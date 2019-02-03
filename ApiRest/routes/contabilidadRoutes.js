@@ -4,6 +4,7 @@ const CuentaController = require("../controllers/contabilidad/cuenta");
 const claseCuentaController = require('../controllers/contabilidad/claseCuenta');
 const grupoCuentaController = require('../controllers/contabilidad/grupoCuenta');
 const SubcCuentaController  = require('../controllers/contabilidad/subCuenta');
+const MovSubCuentaController  = require('../controllers/contabilidad/movimientoCuenta');
 // Validations
 const validations = require('../Utils/validations/contabilidadValidations');
 const   { containToken, ensureAuth }      = require('../services/jwt');
@@ -30,6 +31,11 @@ Router
     .get( '/subcuentas/:NumSubCuenta([0-9]{6})',  SubcCuentaController.getSubCuenta)
     .post('/subcuentas\$',     validations.createSubCuenta,   validsParams,   SubcCuentaController.createSubCuenta)
     .put( '/subcuentas/:NumSubCuenta([0-9]{6})',  validations.updateSubCuenta, validsParams, SubcCuentaController.updateSubCuenta)
+    //Movimientos
+    .get( '/subcuentas/movimientos\$',     validations.getMovimientosCuenta,     validsParams,   MovSubCuentaController.getMovimientosCuenta)
+    .get( '/subcuentas/movimientos/:IdMo([0-9]{6})',  MovSubCuentaController.getMovimientoCuenta)
+    .post('/subcuentas/movimientos\$',     validations.createMovimientoCuenta,   validsParams,   MovSubCuentaController.createMovimientoCuenta)
+    .put( '/subcuentas/movimientos/:NumSubCuenta([0-9]{6})',  validations.updateMovimientoCuenta, validsParams, MovSubCuentaController.updateMovimientoCuenta)
     
 
 module.exports = Router;

@@ -1,5 +1,6 @@
 const { query, body, oneOf, param }    = require('express-validator/check');
 const { sanitize }              = require('express-validator/filter');
+const { isDate } = require('./genericValidations')
 
 const basicoClaseCuenta = [
     body('NombClasC').isLength({min:4, max:100}),
@@ -94,3 +95,32 @@ exports.getSubCuentas = [
     query('Habilitado').isBoolean().optional({nullable: true}),
     sanitize('Habilitado').toBoolean()
 ];
+
+exports.getMovimientosCuenta = [
+    query('NumCuenta').isLength(6).optional({nullable: true}),
+    query('IdDocumento').isInt().optional({nullable: true}),
+    query('IdMoneda').isInt().optional({nullable: true}),
+    isDate('FechaMovimiento'),
+    isDate('FechaMin'),
+    isDate('FechaMax'),
+    sanitize('FechaMovimiento').toDate(),
+    sanitize('FechaMin').toDate(),
+    sanitize('FechaMax').toDate(),
+];
+const baseMovimientoCuenta = [
+    isDate('FechaMovimiento'),
+    body('Debe').isNumeric(),
+    body('DebeMonLocal').isNumeric(),
+    body('Haber').isNumeric(),
+    body('HaberMonLocal').isNumeric(),
+];
+
+exports.createMovimientoCuenta = baseMovimientoCuenta.concat([
+    body('NumSubCuenta').isLength(6),
+    body('IdDocumento').isInt(),
+    body('IdMoneda').isInt(),
+]);
+
+exports.updateMovimientoCuenta = baseMovimientoCuenta.concat([
+    param('IdMovimiento').isInt(),
+])
