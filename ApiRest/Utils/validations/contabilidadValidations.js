@@ -1,6 +1,11 @@
 const { query, body, oneOf, param }    = require('express-validator/check');
 const { sanitize }              = require('express-validator/filter');
-const { isDate } = require('./genericValidations')
+const { isDate } = require('./genericValidations');
+
+const habilitadoQuery = [
+    query('Habilitado').isBoolean().optional({nullable: true}),
+    sanitize('Habilitado').toBoolean(),
+];
 
 const basicoClaseCuenta = [
     body('NombClasC').isLength({min:4, max:100}),
@@ -20,9 +25,8 @@ exports.getClaseCuenta = [
 exports.getClasesCuentas = [
     query('NombClasC').isLength({min:2, max:100}).optional({nullable: true}),
     query('Naturaleza').isBoolean().optional({nullable: true}),
-    query('Habilitado').isBoolean().optional({nullable: true}),
-    sanitize('Habilitado').toBoolean(),
-    sanitize('Naturaleza').toBoolean()
+    sanitize('Naturaleza').toBoolean(),
+    ...habilitadoQuery
 ];
 
 const basicoGrupoCuenta = [
@@ -44,9 +48,9 @@ exports.getGrupoCuenta = [
 exports.getGruposCuenta = [
     query('IdClasCuenta').isInt().optional({nullable: true}),
     query('NombGrupo').isLength({min: 3, max:100}).optional({nullable: true}),
-    query('Habilitado').isBoolean().optional({nullable: true}),
-    sanitize('Habilitado').toBoolean()  
+    ...habilitadoQuery
 ];
+
 const basicoCuentas =  [
     body('NombCuenta').isLength({min: 4, max: 100}),
     body('DescCuenta').isLength({min: 5, max: 150}).optional({nullable: true})
@@ -66,8 +70,7 @@ exports.getCuentas = [
     query('IdClasCuenta').isInt().optional({nullable: true}),
     query('IdGrupo').isInt().optional({nullable: true}),
     // query('IdRestaurante').isInt().optional({nullable: true}),
-    query('Habilitado').isBoolean().optional({nullable: true}),
-    sanitize('Habilitado').toBoolean(),
+    ...habilitadoQuery
 ];
 exports.updateCuenta = basicoCuentas.concat([
     // body('IdRestaurante').isInt(),
@@ -92,8 +95,7 @@ exports.updateSubCuenta = basicoSubCuenta.concat([
 exports.getSubCuentas = [
     query('NumCuenta').isLength(6).optional({nullable: true}),
     query('NombSubCuenta').isLength({min:3, max:100}).optional({nullable: true}),
-    query('Habilitado').isBoolean().optional({nullable: true}),
-    sanitize('Habilitado').toBoolean()
+    ...habilitadoQuery
 ];
 
 exports.getMovimientosCuenta = [
@@ -123,4 +125,28 @@ exports.createMovimientoCuenta = baseMovimientoCuenta.concat([
 
 exports.updateMovimientoCuenta = baseMovimientoCuenta.concat([
     param('IdMovimiento').isInt(),
-])
+]);
+const basicoDocumento = [
+    body('IdSucursal').isInt(),
+    body('IdMoneda').isInt(),
+    body('NombDoc').isLength({min:4, max:50}),
+    body('DescDoc').isLength({min: 5, max: 150}),
+];
+
+exports.createDocumento = basicoDocumento.concat([
+    body('IdTipDoc').isInt(),
+    body('IdRestaurante').isInt(),
+    body('Serie').isLength({min: 2, max:10})
+]);
+
+exports.updateDocumento = basicoDocumento.concat([
+    param('IdDocumento').isInt(), 
+]);
+
+exports.getDocumentos = [
+    body('IdRestaurante').isInt(),
+    body('IdSucursal').isInt(),
+    body('IdMoneda').isInt(),
+    body('Serie').isLength({min: 2, max:10}),
+    ...habilitadoQuery
+];
