@@ -1,30 +1,29 @@
 USE ATOMIC_RESTAURANTE
-
 GO
 
 IF OBJECT_ID('dbo.USP_CREATE_TELEFONO_PROVEEDOR') IS NOT NULL
 	DROP PROCEDURE dbo.USP_CREATE_TELEFONO_PROVEEDOR
 GO
 CREATE PROCEDURE dbo.USP_CREATE_TELEFONO_PROVEEDOR (
-	@IdProveedor	INT, 
-	@Nombre			NVARCHAR(50), 
-	@Cargo			NVARCHAR(50), 
-	@Telefono		NVARCHAR(15), 
-	@Extension		NVARCHAR(10),
-	@IsTitular		BIT
+	@IdProveedor		INT, 
+	@NombPAsignada		NVARCHAR(50), 
+	@Cargo				NVARCHAR(50), 
+	@Extension			NVARCHAR(10),
+	@Telefono			NVARCHAR(15),
+	@IsTitular			BIT
 )
 AS	
 BEGIN
 
-	IF EXISTS (SELECT TOP 1 1 FROM dbo.TELEFONOS_PROVEEDOR  WHERE IdProveedor = @IdProveedor AND Telefono = @Telefono)
+	IF EXISTS (SELECT TOP 1 1 FROM dbo.TELEFONOS_PROVEEDOR WHERE	IdProveedor = @IdProveedor AND Telefono = @Telefono)
 	BEGIN
 		RAISERROR('Este telefono ya se encuentra registrado!', 16, 1)
 		RETURN
 	END
-	
+	ELSE
 	BEGIN 
-		INSERT INTO dbo.TELEFONOS_PROVEEDOR(IdProveedor, NombPAsignada, Cargo, Telefono, Extension, IsTitular) 
-		VALUES(@IdProveedor, @Nombre, @Cargo, @Telefono, @Extension, @IsTitular)
+		INSERT INTO dbo.TELEFONOS_PROVEEDOR(IdProveedor, NombPAsignada, Cargo, Telefono,Extension, IsTitular) 
+		VALUES(@IdProveedor, @NombPAsignada, @Cargo, @Telefono, @Extension, @IsTitular)
 		SELECT @@IDENTITY AS IdTelefono
 	END
 END

@@ -1,5 +1,6 @@
 use ATOMIC_RESTAURANTE;
 
+GO
 INSERT INTO TRABAJADOR(IdSucursal,IdCargo,Nombres,Apellidos,IdTipDoc,Documento,Imagen,FechaNacimiento,Direccion,Telefono1,Telefono2,FechaIngreso, IdPais) 
 VALUES(1,1,'Cristian','Chang',1,'00111960028E','chang.jpg','19800101','Rubenia','87792956',NULL,GETDATE(), 3)
 
