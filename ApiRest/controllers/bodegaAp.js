@@ -1,6 +1,6 @@
 const { mssqlErrors } = require('../Utils/util');
 const { matchedData } = require('express-validator/filter');
-const BodegaApModel = require('../models/restaurante/bodegaAp');
+const BodegaApModel = require('../models/areaProduccion.js/BodegaAp');
 const BodegaAp  = new BodegaApModel();
 
 exports.createEntradaBodegaAp = (req, res) => { 
@@ -32,7 +32,7 @@ exports.getDetalleBodegaAp = (req, res) => {
     BodegaAp.getDetalleBodegaAp( Habilitado )
     .then((results) => {
         res.status(200).json({
-            detalles:results.recordset
+            detalles:results
         })
     }).catch((err) => {
         res.status(500).json( mssqlErrors(err) );

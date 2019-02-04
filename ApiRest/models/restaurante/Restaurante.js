@@ -1,21 +1,23 @@
-const {pushAOJParam, queryExecute,sql, storedProcExecute, whereHabilitadoFilter} = require('../Utils/defaultImports')
+const {pushAOJParam, queryExecute,sql, storedProcExecute, whereHabilitadoFilter} = require('../../Utils/defaultImports')
 const baseSelect    = `SELECT IdRestaurante, IdMoneda, IdPais, IdMonedaFacturacion, IsAutoBackup, IsCuotaFija, NombRestaurante, DescRestaurante, CuotaFija, PorcIva, RazonSocial, SitioWeb, 
     Correo, TelPrincipal, TelPrincipal2, FechaFundacion, Login, Workspace, Habilitado, CreatedAt, UpdatedAt
     FROM            RESTAURANTE`;
 
 module.exports = class Restaurante {
-    static getRestaurantes( data ) {
+    static async getRestaurantes( data ) {
         const aoj =[];
 
         pushAOJParam( aoj, 'Habilitado',     sql.Bit,    +data.Habilitado);
-        return queryExecute( baseSelect + whereHabilitadoFilter, aoj) 
+        const resp = await queryExecute( baseSelect + whereHabilitadoFilter, aoj) 
+        return resp.recordset;
     }
     
-    static getRestaurante( IdRestaurante ) {
+    static async getRestaurante( IdRestaurante ) {
         const aoj = [];
 
         pushAOJParam( aoj, 'IdRestaurante',     sql.Int,    IdRestaurante);
-        return queryExecute( baseSelect + ' WHERE IdRestaurante = @IdRestaurante', aoj) 
+        const resp =  queryExecute( baseSelect + ' WHERE IdRestaurante = @IdRestaurante', aoj) 
+        return resp.recordset[0];
     }
 
     static createRestaurante( data ) {

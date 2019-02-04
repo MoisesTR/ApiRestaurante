@@ -1,5 +1,5 @@
 const { matchedData, mssqlErrors } = require('../../Utils/defaultImports');
-const RestauranteModel = require('../../models/Restaurante');
+const RestauranteModel = require('../../models/Restaurante/Restaurante');
 
 exports.getRestaurantes = ( req, res) => {
     const   data    = matchedData(req, {locations:'query'});
@@ -7,7 +7,7 @@ exports.getRestaurantes = ( req, res) => {
     RestauranteModel.getRestaurantes( data )
     .then( result => {
         res.status(200) 
-            .json({restaurantes: result.recordset})
+            .json({restaurantes: result})
     })
     .catch( error => res.status( error.status | 500).json( mssqlErrors(error) ))
 }
@@ -20,7 +20,7 @@ exports.getRestaurante = (req, res) => {
         console.log(result);
         
         res.status(200) 
-            .json(result.recordset[0])
+            .json(result)
     })
     .catch( error => res.status( error.status | 500).json( mssqlErrors(error) ))
 }
