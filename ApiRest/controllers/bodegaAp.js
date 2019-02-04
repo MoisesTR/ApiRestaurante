@@ -1,6 +1,6 @@
 const { mssqlErrors } = require('../Utils/util');
 const { matchedData } = require('express-validator/filter');
-const BodegaApModel = require('../models/bodegaAp');
+const BodegaApModel = require('../models/restaurante/bodegaAp');
 const BodegaAp  = new BodegaApModel();
 
 exports.createEntradaBodegaAp = (req, res) => { 

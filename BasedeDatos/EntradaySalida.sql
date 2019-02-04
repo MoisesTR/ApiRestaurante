@@ -1,28 +1,30 @@
 USE pruebas_node;
 GO
 create TABLE AREA_PRODUCCION(
-	IdAreaProduccion int IDENTITY(1,1),
-	IdSucursal INT NOT NULL,
-    Nombre NVARCHAR(50) NOT NULL,
-    Habilitado Bit DEFAULT 1 NOT NULL,
-	CreateAt SMALLDATETIME NOT NULL DEFAULT GETDATE(),
-	UpdateAt SMALLDATETIME NULL,
-    constraint pk_IdAreaProduccion primary key(IdAreaProduccion), 
-	CONSTRAINT FK_SUCURSAL_AREA_PRODUCCION FOREIGN KEY(IdSucursal) REFERENCES SUCURSAL(IdSucursal),
-	CONSTRAINT U_SUCURSAL_AREA_PRODUCCION UNIQUE(IdSucursal)
+	IdAreaProduccion	TINYINT IDENTITY(1,1),
+	IdSucursal			INT		NOT NULL,
+    NombAP				NVARCHAR(50)	NOT NULL,
+    Habilitado			BIT DEFAULT 1	NOT NULL,
+	CreateAt			SMALLDATETIME	NOT NULL DEFAULT GETDATE(),
+	UpdateAt			SMALLDATETIME	NULL,
+    constraint pk_IdAreaProduccion PRIMARY KEY(IdAreaProduccion), 
+	CONSTRAINT FK_SUCURSAL_AREA_PRODUCCION	FOREIGN KEY(IdSucursal) 
+				REFERENCES SUCURSAL_RESTAURANTE(IdSucursal)
+	--CONSTRAINT U_SUCURSAL_AREA_PRODUCCION UNIQUE(IdSucursal)
 )
 GO
 --NOMBRE ANTERIOR BODEGA_AREA_PRODUCCION
-create table BODEGA_AREA_PRODUCCION(
-	IdBodegaAreaP int IDENTITY(1,1),
-	IdAreaProduccion INT NOT NULL,
-    Nombre NVARCHAR(50) NOT NULL,
-    Descripcion NVARCHAR(300) NULL,
-    Habilitado Bit DEFAULT 1 NOT NULL,
-	CreateAt SMALLDATETIME NOT NULL DEFAULT GETDATE(),
-	UpdateAt SMALLDATETIME NULL,
-    constraint pk_IdBodegaAP primary key(IdBodegaAreaP),
-	constraint FK_BODEGA_AREA_PRODUCCION foreign key(IdAreaProduccion) references AREA_PRODUCCION(IdAreaProduccion),
+CREATE TABLE BODEGA_AREA_PRODUCCION(
+	IdBodegaAP			TINYINT		IDENTITY(1,1),
+	IdAreaProduccion	TINYINT NOT NULL,
+    NombBodegaAP		NVARCHAR(50) NOT NULL,
+    DescBodegaAP		NVARCHAR(300) NULL,
+    Habilitado	BIT	DEFAULT 1 NOT NULL,
+	CreateAt	SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+	UpdateAt	SMALLDATETIME NULL,
+    constraint pk_IdBodegaAP	PRIMARY KEY (IdBodegaAreaP),
+	constraint FK_BODEGA_AREA_PRODUCCION	FOREIGN KEY	(IdAreaProduccion) 
+			REFERENCES AREA_PRODUCCION(IdAreaProduccion),
 	constraint u_BODEA_PARA_AP UNIQUE(IdAreaProduccion)
 )
 GO

@@ -1,4 +1,4 @@
-const { sql, pushAOJParam } = require('../Utils/defaultImports')
+const { sql, pushAOJParam, storedProcExecute, queryExecute } = require('../../Utils/defaultImports')
 
 class BodegaAp {
     

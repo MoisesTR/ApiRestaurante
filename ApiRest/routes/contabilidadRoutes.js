@@ -37,7 +37,7 @@ Router
     .post('/subcuentas/movimientos\$',     validations.createMovimientoCuenta,   validsParams,   MovSubCuentaController.createMovimientoCuenta)
     .put( '/subcuentas/movimientos/:NumSubCuenta([0-9]{6})',  validations.updateMovimientoCuenta, validsParams, MovSubCuentaController.updateMovimientoCuenta)
     // Documentos
-    .get( '/documentos\$',     validations.getSubCuentas,     validsParams,   SubcCuentaController.getSubCuentas)
+    .get( '/documentos\$',     validations.get,     validsParams,   SubcCuentaController.getSubCuentas)
     .get( '/documentos/:IdDocumento(\\d+)',  SubcCuentaController.getSubCuenta)
     .post('/documentos\$',     validations.createSubCuenta,   validsParams,   SubcCuentaController.createSubCuenta)
     .put( '/documentos/:IdDocumento(\\d+)',  validations.updateSubCuenta, validsParams, SubcCuentaController.updateSubCuenta)

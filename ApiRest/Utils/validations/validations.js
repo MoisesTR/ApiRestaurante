@@ -292,7 +292,6 @@ exports.getFacturaById = [
 
 exports.getCambiosFacturaById = [
     check('IdFactura').isInt()
-
 ];
 
 exports.getProducts = [

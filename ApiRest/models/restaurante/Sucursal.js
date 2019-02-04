@@ -1,4 +1,4 @@
-const { sql, pushAOJParam, storedProcExecute, queryExecute } = require('../Utils/defaultImports')
+const { sql, pushAOJParam, storedProcExecute, queryExecute } = require('../../Utils/defaultImports')
 const baseSelect = 'SELECT IdSucursal,NombSucursal,Direccion, Telefono1, Telefono2,Habilitado from dbo.SUCURSAL_RESTAURANTE';
 
 class SucursalModel {
