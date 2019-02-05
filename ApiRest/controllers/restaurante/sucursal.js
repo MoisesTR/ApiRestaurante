@@ -1,6 +1,6 @@
-const { mssqlErrors }           = require('../Utils/util');
+const { mssqlErrors }           = require('../../Utils/util');
 const { matchedData } = require('express-validator/filter');
-const SucursalModel     = require('../models/Sucursal');
+const SucursalModel     = require('../../models/restaurante/Sucursal');
 
 function getSucursalById(req, res) {
     const data = req.params;
@@ -8,7 +8,7 @@ function getSucursalById(req, res) {
     SucursalModel.getSucursalById( data.IdSucursal )
     .then((results) => {
         res.status(200)
-            .json({ sucursal: results.recordset[0] })
+            .json({ sucursal: results })
     }).catch((err) => {
         res.status(500)
             .json(mssqlErrors(err));
@@ -21,7 +21,7 @@ function getSucursales(req, res) {
     SucursalModel.getSucursales( data.Habilitado )
     .then((results) => {
         res.status(200)
-            .json({ sucursales: results.recordset })
+            .json({ sucursales: results })
     }).catch((err) => {
         res.status(500)
             .json(mssqlErrors(err));

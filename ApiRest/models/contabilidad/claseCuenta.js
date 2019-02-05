@@ -37,7 +37,7 @@ module.exports = class ClaseCuenta {
 
         pushAOJParam(aoj,   'NombClasC',    sql.NVarChar(100),  NombClasC);
         pushAOJParam(aoj,   'DescClasC',    sql.NVarChar(150),  DescClasC);
-        pushAOJOuput(aoj,   'Naturaleza',   sql.Bit,            +Naturaleza);
+        pushAOJParam(aoj,   'Naturaleza',   sql.Bit,            +Naturaleza);
         pushAOJOuput(aoj,   'IdClasCuenta', sql.TinyInt);
         return storedProcExecute('USP_CREATE_CLASE_CUENTA', aoj);
     }

@@ -11,7 +11,10 @@ const basicoClaseCuenta = [
     body('NombClasC').isLength({min:4, max:100}),
     body('DescClasC').isLength({min: 4, max:150}).optional({nullable: true}),
 ];
-exports.createClaseCuenta = basicoClaseCuenta;
+exports.createClaseCuenta = basicoClaseCuenta.concat([
+    body('Naturaleza').isBoolean(),
+    sanitize('Naturaleza').toBoolean()
+]);
 
 exports.updateClaseCuenta = basicoClaseCuenta.concat([
     param('IdClasCuenta').isInt(),

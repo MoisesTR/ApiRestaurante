@@ -2,19 +2,21 @@ const { sql, pushAOJParam, storedProcExecute, queryExecute } = require('../../Ut
 const baseSelect = 'SELECT IdSucursal,NombSucursal,Direccion, Telefono1, Telefono2,Habilitado from dbo.SUCURSAL_RESTAURANTE';
 
 class SucursalModel {
-    static getSucursalById( IdSucursal ) {
+    static async getSucursalById( IdSucursal ) {
         const aoj = [];
 
         pushAOJParam(aoj, 'IdSucursal',      sql.Int,    IdSucursal)
-        return queryExecute( baseSelect + ' WHERE IdSucursal = @IdSucursal', aoj)
+        const resp = await queryExecute( baseSelect + ' WHERE IdSucursal = @IdSucursal', aoj)
+        return resp.recordset[0];
     }
     
-    static getSucursales( Habilitado ) {
+    static async getSucursales( Habilitado ) {
         const aoj = [];
         const filter = ' WHERE Habilitado = @Habilitado';
 
         pushAOJParam(aoj, 'Habilitado',      sql.Int,    +Habilitado)
-        return queryExecute( baseSelect+ filter, aoj)
+        const resp = await queryExecute( baseSelect+ filter, aoj)
+        return resp.recordset;
     }
     
     static createSucursal( data ) {

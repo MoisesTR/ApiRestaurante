@@ -34,7 +34,6 @@ CREATE TABLE	CONTABILIDAD_CUENTA (
 	IdCuenta			TINYINT		IDENTITY(1,1),
 	IdClasCuenta		TINYINT		NOT NULL,
 	IdGrupo				TINYINT		NOT NULL,
-	--IdRestaurante		INT			NOT NULL,
 	IdMoneda			TINYINT		NOT NULL,
 	NumCuenta			NVARCHAR(4)		NOT NULL,
 	NombCuenta			NVARCHAR(50)	NOT NULL,
@@ -43,8 +42,8 @@ CREATE TABLE	CONTABILIDAD_CUENTA (
 	CreatedAt			SMALLDATETIME	NOT NULL	DEFAULT GETDATE(),
 	UpdatedAt			SMALLDATETIME	NULL,
 	CONSTRAINT	PK_Contabilidad_Cuenta		PRIMARY KEY(NumCuenta),
-	CONSTRAINT	FK_Contabilidad_Cuenta_Grupo		FOREIGN KEY(IdClasCuenta, IdGrupo)
-				REFERENCES	dbo.CONTABILIDAD_GRUPO_CUENTA(IdClasCuenta, IdGrupo),
+	CONSTRAINT	FK_Contabilidad_Cuenta_Grupo		FOREIGN KEY(IdGrupo, IdClasCuenta)
+				REFERENCES	dbo.CONTABILIDAD_GRUPO_CUENTA(IdGrupo, IdClasCuenta),
 	CONSTRAINT	FK_Contabilidad_Moneda_Cuenta	FOREIGN KEY(IdMoneda)
 				REFERENCES	dbo.FACTURACION_MONEDA(IdMoneda),
 	--CONSTRAINT	PK_Contabilidad_Cuenta_Restaurante	FOREIGN KEY(IdRestaurante)
