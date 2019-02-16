@@ -174,7 +174,7 @@ GO
 
 CREATE TABLE dbo.PRODUCTO (
     IdProducto			INT IDENTITY(1,1),
-    IdSubClasificacion	INT					NOT NULL,
+    IdSubClasificacion	INT					NULL,
     IdEstado			INT					NOT NULL,
 	IdEnvase			INT					NULL, --id del envase si es que tiene
     IdEmpaque			INT					NULL, --id del empaque si es que tiene
@@ -188,7 +188,7 @@ CREATE TABLE dbo.PRODUCTO (
 	CodBarraOriginal	VARCHAR(25)			NULL,
     ValorUnidadMedida	NUMERIC(10,5)		NULL,
 	CantidadEmpaque		INT					NULL, --si tiene empaque 
-	DiasRotacion		INT					NOT NULL,
+	DiasRotacion		INT					NULL,
     NombProducto		NVARCHAR(50)		NOT NULL,
     DescProducto		NVARCHAR(200)		NOT NULL,
     Imagen				NVARCHAR(100)		NOT NULL	DEFAULT 'nodisponible.png', --	
