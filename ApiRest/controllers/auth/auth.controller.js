@@ -127,13 +127,14 @@ exports.updateUser = (req, res) => {
 }
 
 exports.changeStateUser = ( req, res ) => {
-    const data = matchedData(req, {locations: ['body', 'params']});
+    const data = matchedData(req, {locations: ['query', 'params']});
 
-    User.changeStateUser( data.IdUsuario, data.Habilitado )
+    const User  = new UserModel({IdUsuario: data.IdUsuario});
+    User.changeStateUser( data.Habilitado )
     .then((results) => {
         console.log(results)
         let afectadas = results.rowsAffected[0]
-        let accion = (Habilitado == 0) ? 'Deshabilitado' : 'Habilitado';
+        let accion = (data.Habilitado == 0) ? 'Deshabilitado' : 'Habilitado';
         res.status(200)
             .json((afectadas > 0) ? { success: 'Usuario ' + accion + ' con exito!' } : { failed: 'No se encontro el usuario solicitado!' })
         console.log('Usuario cambiado de estado con exito!')

@@ -4,7 +4,7 @@ const   RoleController            = require('../controllers/auth/rol.controller'
 const   validations         = require('../Utils/validations/authValidations');
 const   router              = express.Router();
 const   { containToken,ensureAuth }      = require('../services/jwt');
-const   { validsParams, Habilitado } = require('../Utils/validations/genericValidations');
+const   { validsParams, Habilitado,changeStateGeneric } = require('../Utils/validations/genericValidations');
 
 router
     //Rutas para manejo de Usuarios
@@ -14,7 +14,7 @@ router
     .post('/refreshtoken',  containToken,   ensureAuth,     validations.refreshToken,   validsParams,     AuthController.refreshToken)
     .get( '/users',         Habilitado,                 validsParams, AuthController.getUsers)
     .put( '/update-user/:IdUsuario(\\d+)',  validations.userSignInValidation, validations.userUpdate, validsParams, AuthController.updateUser)
-    .delete('/user/:IdUsuario(\\d+)',       AuthController.changeStateUser)
+    .delete('/user/:IdUsuario(\\d+)',       changeStateGeneric('IdUsuario'), validsParams, AuthController.changeStateUser)
     //Rutas para Rol Controller     
     .post('/rol',               validations.createRol,      validsParams,       RoleController.createRol)
     .get('/roles',              Habilitado,            validsParams,       RoleController.getRoles)

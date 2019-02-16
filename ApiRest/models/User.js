@@ -67,11 +67,11 @@ class UserModel {
         return storedProcExecute('USP_CREATE_USUARIO', aoj)
     }
 
-    changeStateUser( IdUsuario, Habilitado ) {
+    changeStateUser( Habilitado ) {
         const aoj = [];
         
-        pushAOJParam(aoj, 'IdUsuario',  sql.Int, IdUsuario)
-        pushAOJParam(aoj, 'Habilitado', sql.Int, Habilitado)
+        pushAOJParam(aoj, 'IdUsuario',  sql.Int, this.IdUsuario)
+        pushAOJParam(aoj, 'Habilitado', sql.Int, +Habilitado)
         return storedProcExecute('USP_DISP_USUARIO', aoj)
     }
     
