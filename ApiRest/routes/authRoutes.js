@@ -9,7 +9,7 @@ const   { validsParams, Habilitado } = require('../Utils/validations/genericVali
 router
     //Rutas para manejo de Usuarios
     .post('/signup',        validations.userSignUpValidation,       validsParams, AuthController.signUp)
-    .post('/signin',        validations.userSignInValidation,       validsParams, AuthController.singIn)
+    .post('/signin',        validations.userSignInValidation,       validsParams, AuthController.signIn)
     .get( '/me',            containToken,  ensureAuth,      validations.meInfo,     validsParams, AuthController.getAuthenticateUserInfo)
     .post('/refresh',       AuthController.refreshToken)
     .get( '/users',         Habilitado,                 validsParams, AuthController.getUsers)

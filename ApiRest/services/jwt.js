@@ -3,7 +3,6 @@ const jwt       = require('jsonwebtoken');
 const moment    = require('moment');
 const secret    = "R3st@urAn3_C4aN";
 const UserModel = require('../models/User');
-const User      = new UserModel();
 
 /**
  * @name createToken
@@ -103,13 +102,11 @@ exports.ensureAuth = ( req, res, next ) => {
         
         decoded = _decoded;
         //A continuacion procedemos a buscar el usuario para validar que se encuentre habilitado
-        return User.getUserByUsername( _decoded.Username )
+        return UserModel.getUserByUsername( _decoded.Username )
     })
-    .then( userResult => {
+    .then( user => {
         //en caso de encontrarlo refrescaremos su informacion por si ha habido un cambio
-        console.log('Busqueda de usuarios realizada', userResult);
-        //Resultado del procedimiento
-        let user = userResult.recordset[0];
+        console.log('Busqueda de usuarios realizada', user);
         //Si encontramos el usuario
         if ( !!user ) {
             console.log('Se encontro el usuario');
@@ -144,8 +141,6 @@ exports.ensureAuth = ( req, res, next ) => {
     })
     .catch( error => {
         console.log('Error del catch', error);
-        
-        res.status(error.status | 500)
-            .json(error)
+        next(error)
     })
 }

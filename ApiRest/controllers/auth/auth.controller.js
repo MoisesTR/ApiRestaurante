@@ -1,29 +1,21 @@
 const jwt = require('../../services/jwt');
-const moment = require('moment');
 const bcrypt = require('bcryptjs');
 const saltRounds    = 10;
-const {mssqlErrors, matchedData, pushAOJParam, pushAOJOuput, sql} = require('../../Utils/defaultImports')
+const {mssqlErrors, matchedData} = require('../../Utils/defaultImports')
+const randomstring = require('randomstring');
 const UserModel     =require( "../../models/User");
-let User = new UserModel();
 
 //funcion registro
-exports.signUp = ( req, res ) => {
+exports.signUp = async ( req, res ) => {
     const   userData    = matchedData(req);
-    let     hashPassw   = null;
-    
-    bcrypt.hash(userData.Password, saltRounds)
-    .then((_hashPassw) => {
-        hashPassw = _hashPassw;
-        userData.Password = hashPassw;
-        return User.getUserByUsernameOREmail( userData.Username, userData.Email)
-    }).then((usersfind) => {
-        const   users = usersfind.recordset;
-        
+    try {
+        const hassPassw = await bcrypt.hash(userData.Password, saltRounds);
+        userData.Password = hassPassw;
+        const users = await UserModel.getUserByUsernameOrEmail( userData.Username, userData.Email);
         //Si se encontro mas de un usuario
         if ( users.length > 1 ) {
             // console.log(usersfind.recordset[0])
             throw { status: 401, code: "UEEXIST", message: "No se registro el usuario, email y username ya se encuentran registrados!" };
-            //res.status(401).json({code:"UEXIST",message:"No se registro el usuario, email o username ya registrados!"})
         } else if ( users.length === 1 ) {
             // if(usersfind[0].username == userData.username || usersfind[1].username== userData.username)
             if ( users[0].Username === userData.Username )
@@ -31,77 +23,77 @@ exports.signUp = ( req, res ) => {
             else
                 throw { status: 401, code: "EEXIST", message: 'No se registro el usuario con email:' + userData.Email + ', ya se encuentra registrado!' };
         } else {
+            const User = new UserModel();
+            const userResult = await User.createUser({...userData})
             
-            return User.createUser({...userData})
+            res.status(201)
+                .json({ 
+                    success: 'Success the user are register!' 
+                });
         }
-    }).then((result) => {
-        res.status(200)
-            .json({ 
-                user: result.recordset[0] 
-            })
-    }).catch((err) => {
-        console.error('Error principal', err)
-        res.status(err.status | 500)
-            .json(mssqlErrors(err))
-    })
+    } catch( _err ) {
+        res.status(_err.status || 500)
+            .json(mssqlErrors(_err))
+    }
 }
 
 /**
- * @name singIn
+ * @name signIn
  * @param {*} req 
  * @param {*} res 
  */
-exports.singIn = ( req, res ) => {
+exports.signIn = async ( req, res ) => {
     const   userData = matchedData(req);
-    let     user =  null;
-
-    User.getUserByUsername( userData.Username )
-    .then( userResult => {
-        user = userResult.recordset[0];
+    
+    try {
+        const   user = await UserModel.getUserByUsername( userData.Username )
         if (user) {
             const passh = user.Password;
+            const isequal =  await bcrypt.compare(userData.Password, passh);
+            
+            if (isequal) {
+                console.log((!!userData.gettoken) ? 'Se retornara un token' : 'Se retornara la informacion del usuario');
+                if (!!userData.gettoken) {
+                    const {_token : tokenGen, expiration} = jwt.createToken(user);
 
-            return  bcrypt.compare(userData.Password, passh);
-        } else {
-            console.log('Usuario no encontrado!');
-            throw { status: '401', code: 'NEXIST', message: 'El usuario ingresado no existe en la base de dato!' };
-        }
-    })
-    .then((isequal) => {
-        if (isequal) {
-            console.log((!!userData.gettoken) ? 'Se retornara un token' : 'Se retornara la informacion del usuario');
-            if (!!userData.gettoken) {
-                console.log('Mande get token')
-                let {_token : tokenGen, expiration} = jwt.createToken(user);
-                //console.log('Devolviendo token, del usuario '+user.username);
-                console.log('token:' + tokenGen);
-                res.status(200)
-                    .json({ token: tokenGen, expiration });
+                    const User = new UserModel(user);
+                    const refreshT   = randomstring.generate(15) + new Date().getTime();
+                    const respInsert = await User.insertRefreshT(refreshT, req.headers['user-agent'])
+                    res.status(200)
+                        .json({ token: tokenGen, expiration, refreshT });
+                } else {
+                    res.status(200)
+                        .json(user);
+                }
             } else {
-                //delete user.password
-                res.status(200)
-                    .json(user);
+                console.log('Las contrasenas no coinciden');
+                throw { 
+                    status: 401, code: 'EPASSW', 
+                    message: 'La contraseña es incorrecta' 
+                };  
             }
         } else {
-            console.log('Las contrasenas no coinciden');
-            throw { status: 401, code: 'EPASSW', message: 'La contraseña es incorrecta' };
+            console.log('Usuario no encontrado!');
+            throw { 
+                    status: 401, code: 'NEXIST', 
+                    message: 'El usuario ingresado no existe en la base de dato!' 
+                };
         }
-    })
-    .catch((err) => {
-        console.log('Error principal: ' + err);
-        res.status( res.status || 500)
-            .json(err)
-    })
+    } catch( _err ) {
+        console.log('Error principal: ', _err);
+        res.status( _err.status || 500)
+            .json(_err)
+    }
 }
 
 exports.getUsers = (req, res) => {
     const Habilitado = req.query.Habilitado;
     
-    User.getUsers( {Habilitado} )
-    .then((result) => {
+    UserModel.getUsers( {Habilitado} )
+    .then( result => {
         res.status(200)
             .json({
-                 usuarios: result.recordset 
+                 usuarios: result 
             });
     }).catch((error) => {
         res.status( error.status | 500)
@@ -152,11 +144,46 @@ exports.changeStateUser = ( req, res ) => {
 }
 
 exports.getAuthenticateUserInfo = ( req, res ) => {
+    console.log(req.headers);
     
     res.status(200)
-        .json(req.user)
+        .json(req.headers)
 }
 
-exports.refreshToken = ( req, res ) => {
-    
+exports.refreshToken = async ( req, res ) => {
+    const {refreshToken, userName} = matchedData(req, {locations: ['body']});
+
+    try {
+        const user = await UserModel.getUsers({ secretToken: refreshToken, userName})
+        console.log('users', req.user);
+        
+        if ( !user ) {
+            throw {
+                status:401, code:'DTOKEN', 
+                message:'The refresh token is not valid.'
+            }
+        }
+        if( user._id.toString() !== req.user._id.toString() ) {
+            throw {
+                status: 401, code:'ITOKEN',
+                message: 'The sent token does not belong to your user.',
+            }
+        }
+        if ( user.enabled == 0 ) {
+           throw {
+                    status:403, code:'UDESH',   
+                    message:'Tu usuario se encuentra deshabilitado!'
+                };
+        }
+        const {_token : tokenGen, expiration} = await jwt.createToken(user);
+            res.status(200)
+            .json({ 
+                token: tokenGen, 
+                refreshToken, 
+                expiration 
+            });
+        saveLog(user._id, {userName: user.userName},`${userName} refresh token.`)                   
+    } catch( _err ) {
+        next( _err );
+    }
 }

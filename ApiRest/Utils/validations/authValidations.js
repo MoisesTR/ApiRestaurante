@@ -3,7 +3,7 @@ const { sanitize }              = require('express-validator/filter');
 
 exports.userSignUpValidation = [
     body('IdRol', 'IdRol es requerido y debe ser un entero').isInt(),
-    body('IdTrabajador', 'IdTrabajador es requerido y debe ser un entero').isInt(),
+    body('IdTrabajador', 'IdTrabajador es requerido y debe ser un entero').isInt().optional({nullable: true}),
     body('Username', 'username debe tener un minimo de 5 caracteres y maximo 40.').isLength({ min: 5, max: 40 }),
     body('Email', 'Campo email debe ser un Email').isEmail().optional({ nullable: true }),
     body('Imagen', 'Imagen debe ser un archivo').optional({ nullable: true }),
