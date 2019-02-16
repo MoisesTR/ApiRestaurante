@@ -64,3 +64,7 @@ exports.updateRol = createRol.concat([
     param('IdRol', 'Id del Rol es requerido!').isInt(),
     sanitize('IdRol').toInt()
 ])
+
+exports.refreshToken = [
+    body('refreshToken').isLength({min: 15, max: 30})
+];

@@ -144,45 +144,39 @@ exports.changeStateUser = ( req, res ) => {
 }
 
 exports.getAuthenticateUserInfo = ( req, res ) => {
-    console.log(req.headers);
-    
     res.status(200)
-        .json(req.headers)
+        .json(req.user)
 }
 
-exports.refreshToken = async ( req, res ) => {
-    const {refreshToken, userName} = matchedData(req, {locations: ['body']});
+exports.refreshToken = async ( req, res, next ) => {
+    const {refreshToken} = matchedData(req, {locations: ['body']});
 
     try {
-        const user = await UserModel.getUsers({ secretToken: refreshToken, userName})
-        console.log('users', req.user);
+        const refreshT = await UserModel.getRefreshT(refreshToken);
+        console.log('users', req.user, refreshT);
         
-        if ( !user ) {
+        if ( !refreshT ) {
             throw {
                 status:401, code:'DTOKEN', 
                 message:'The refresh token is not valid.'
             }
         }
-        if( user._id.toString() !== req.user._id.toString() ) {
+        if( refreshT.IdUsuario !== req.user.sub ) {
+            const op = await UserModel.deleteRefreshT( refreshToken );
             throw {
                 status: 401, code:'ITOKEN',
                 message: 'The sent token does not belong to your user.',
             }
         }
-        if ( user.enabled == 0 ) {
-           throw {
-                    status:403, code:'UDESH',   
-                    message:'Tu usuario se encuentra deshabilitado!'
-                };
-        }
-        const {_token : tokenGen, expiration} = await jwt.createToken(user);
-            res.status(200)
+        const {_token : tokenGen, expiration} = jwt.createToken(req.user);
+
+        res.status(200)
             .json({ 
                 token: tokenGen, 
-                refreshToken, 
+                refreshToken: refreshT.RefreshT, 
                 expiration 
             });
-        saveLog(user._id, {userName: user.userName},`${userName} refresh token.`)                   
+    //     saveLog(user._id, {userName: user.userName},`${userName} refresh token.`)                   
     } catch( _err ) {
         next( _err );
     }

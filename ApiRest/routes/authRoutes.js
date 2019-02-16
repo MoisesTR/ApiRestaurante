@@ -10,8 +10,8 @@ router
     //Rutas para manejo de Usuarios
     .post('/signup',        validations.userSignUpValidation,       validsParams, AuthController.signUp)
     .post('/signin',        validations.userSignInValidation,       validsParams, AuthController.signIn)
-    .get( '/me',            containToken,  ensureAuth,      validations.meInfo,     validsParams, AuthController.getAuthenticateUserInfo)
-    .post('/refresh',       AuthController.refreshToken)
+    .get( '/me',            containToken,   ensureAuth,     validations.meInfo,     validsParams, AuthController.getAuthenticateUserInfo)
+    .post('/refreshtoken',  containToken,   ensureAuth,     validations.refreshToken,   validsParams,     AuthController.refreshToken)
     .get( '/users',         Habilitado,                 validsParams, AuthController.getUsers)
     .put( '/update-user/:IdUsuario(\\d+)',  validations.userSignInValidation, validations.userUpdate, validsParams, AuthController.updateUser)
     .delete('/user/:IdUsuario(\\d+)',       AuthController.changeStateUser)

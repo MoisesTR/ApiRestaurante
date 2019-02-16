@@ -17,7 +17,7 @@ exports.createToken = ( user )  => {
         Email:      user.Email,
         // IdTrabajador:   user.IdTrabajador,
         iar:    moment().unix(), /* Fecha de creacion */
-        exp:    moment().add(4,"hours").unix() /* Token expira en un dia */
+        exp:    moment().add(1,"minutes").unix() /* Token expira en un dia */
     };
     //jsonwebtoken agrega el campo iat por defecto
     //Generated jwts will include an iat (issued at) claim by default unless noTimestamp is specified. 

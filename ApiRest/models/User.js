@@ -102,6 +102,7 @@ class UserModel {
     
     static async getRefreshT( RefreshT ) {
         const aoj = [];
+        let filter = ' WHERE RefreshT = @RefreshT';
 
         pushAOJParam(aoj,   'RefreshT',     sql.VarChar(30),    RefreshT);
         const resp = await queryExecute(baseRefreshT + filter, aoj);
