@@ -61,12 +61,10 @@ function getFacturaById(req, res ) {
     
     CompraInsumos.getFacturaById( data.IdFactura ) 
     .then((result) => {
-        var jsonString = result.recordset[0];
-        jsonString = JSON.parse(jsonString['JSON_F52E2B61-18A1-11d1-B105-00805F49916B']);
-        console.log(JSON.stringify(jsonString));
+            
         res.status(200)
             .json({
-                    factura:jsonString.Factura[0]
+                    factura:result.recordset[0]['Factura'][0]
                 })
     })
     .catch((err) =>  {
@@ -107,6 +105,44 @@ function obtenerFacturasCompra(req, res ) {
     })  
 }
 
+function getFacturasIngresadas(req, res ) {
+    let data = matchedData(req,{locations:['params','query','body']});
+    console.log(data);
+    
+    CompraInsumos.getFacturasIngresadas( data )
+    .then((result) => {
+        res.status(200)
+            .json({
+                    facturas:result.recordset
+                });
+    })
+    .catch((err) =>  {
+        res.status(500)
+            .json(mssqlErrors(err));
+        console.error(err);
+    })  
+}
+
+
+function getProductosMasComprados(req, res ) {
+    let data = matchedData(req,{locations:['params','query','body']});
+    console.log(data);
+    
+    CompraInsumos.getProductosMasComprados( data )
+    .then((result) => {
+        res.status(200)
+            .json({
+                productostop:result.recordset
+                });
+    })
+    .catch((err) =>  {
+        res.status(500)
+            .json(mssqlErrors(err));
+        console.error(err);
+    })  
+}
+
+
 
 module.exports = {
     createFacturaCompra, 
@@ -115,6 +151,8 @@ module.exports = {
     getFacturaById,
     updateFacturaCompra,
     updateDetalleFacturaCompra,
+    getFacturasIngresadas,
+    getProductosMasComprados,
     obtenerFacturasCompra
     
 }

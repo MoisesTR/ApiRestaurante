@@ -30,10 +30,10 @@ function getProductos(req, res) {
     });
 }
 
-function getProductosByIdProveedor(req, res) {
+function getProductosByProveedorId(req, res) {
     let data = req.params;
 
-    ProductoModel.getProductosByIdProveedor(data.IdProveedor)
+    Producto.getProductosByProveedorId(data.IdProveedor)
     .then((results) => {
         res.status(200).json({
             productos: results.recordset
@@ -96,7 +96,7 @@ function changeStateProducto(req, res) {
 module.exports = {
     createProducto,
     getProductoById,
-    getProductosByIdProveedor,
+    getProductosByProveedorId,
     getProductos,
     updateProducto,
     changeStateProducto

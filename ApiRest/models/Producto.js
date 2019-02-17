@@ -32,11 +32,11 @@ class ProductoModel {
         return queryExecute('SELECT * FROM VIEW_BASIC_GET_PRODUCT' + filter, aoj)
     }
 
-    static getProductosByIdProveedor(IdProveedor) {
+    getProductosByProveedorId(IdProveedor) {
         let aoj = [];
 
         pushAOJParam(aoj, 'IdProveedor',       sql.Int,        IdProveedor);
-        return storedProcExecute('USP_GET_PRODUCTOS_PROVEEDOR',aoj)
+        return storedProcExecute('dbo.USP_GET_PRODUCTOS_PROVEEDOR',aoj)
     }
     
     createProducto( data ) {

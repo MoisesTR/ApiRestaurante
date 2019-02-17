@@ -403,12 +403,11 @@ GO
 CREATE PROCEDURE USP_CREATE_UNIDAD_MEDIDA(
 	@IdClasifUDM		INT,
     @NombUnidad					NVARCHAR(50),
-    @Simbolo					NVARCHAR(3),
-	@IdUnidadMedidaBase			INT
+    @Simbolo					NVARCHAR(3)
 )
 AS BEGIN
-	INSERT INTO UNIDAD_MEDIDA(IdClasifUDM,NombUnidad,Simbolo,IdUDMBase)
-	VALUES(@IdClasifUDM,@NombUnidad,@Simbolo, @IdUnidadMedidaBase)
+	INSERT INTO UNIDAD_MEDIDA(IdClasifUDM,NombUnidad,Simbolo,FactorConversion)
+	VALUES(@IdClasifUDM,@NombUnidad,@Simbolo,1)
 	SELECT @@IDENTITY AS IdUnidadMedida
 END
 GO

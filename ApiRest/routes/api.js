@@ -67,7 +67,7 @@ Router
     //Rutas producto controller
     .get('/productos\$',                              habilitadoValid,    validations.getProducts,    validsParams,   ProductoController.getProductos)
     .get('/productos/:IdProducto(\\d+)',            ProductoController.getProductoById)
-    .get('/productos/proveedor/:IdProveedor(\\d+)', ProductoProveedorController.getProductosByProveedorId)
+    .get('/productos/proveedor/:IdProveedor(\\d+)', ProductoController.getProductosByProveedorId)
     .post('/productos\$',                             validations.createProducto,         validsParams,   ProductoController.createProducto)
     .put('/productos/:IdProducto(\\d+)',            validations.updateProducto,         validsParams,   ProductoController.updateProducto)
     .delete('/productos/:IdProducto(\\d+)',         changeStateGeneric('IdProducto'),   validsParams,   ProductoController.changeStateProducto)
@@ -117,6 +117,8 @@ Router
     .get('/updateDetalleFactura',   habilitadoValid,                    validations.updateClasificacion,    validsParams ,          FactCompController.updateDetalleFacturaCompra)
     .get('/getCambiosFactura',      habilitadoValid,                    validations.getCambiosFacturaById,  validsParams ,          FactCompController.getCambiosFacturaById)
     .get('/listarfacturas',         habilitadoValid,                    validations.obtenerFacturasC,       validsParams ,          FactCompController.obtenerFacturasCompra)
+    .get('/getFacturas', FactCompController.getFacturasIngresadas)
+    .get('/top5Productos', FactCompController.getProductosMasComprados)
     //Rutas para los menues
     .post('/menu', menuController.createMenu)
     .get('/menus/rol/:IdRol(\\d+)',validations.getMenuesByRol,menuController.getMenuesByRol)

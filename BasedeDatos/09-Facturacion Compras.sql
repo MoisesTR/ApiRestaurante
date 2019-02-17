@@ -50,7 +50,6 @@ CREATE TABLE FACTURA_COMPRA(
 	TotalDescuento	NUMERIC(14,2) DEFAULT 0 CHECK(TotalDescuento >= 0) NOT NULL,
 	TotalCordobas	NUMERIC(14,2) DEFAULT 0 CHECK(TotalCordobas >= 0) NOT NULL,
 	TotalOrigenFactura NUMERIC(14,2) DEFAULT 0 CHECK(TotalOrigenFactura >= 0) NOT NULL,
-	Retencion		BIT NOT NULL,
 	ImgRespaldo	NVARCHAR(200) NULL DEFAULT 'noimage.png',
 	Habilitado	BIT DEFAULT 1 NOT NULL,
 	CreatedAt	SMALLDATETIME DEFAULT GETDATE() NOT NULL,
@@ -107,7 +106,6 @@ CREATE PROCEDURE USP_CREATE_FACTURA_COMPRA(
 	@TotalDescuento	NUMERIC(14,2),
 	@TotalCordobas	NUMERIC(14,2),
 	@TotalOrigenFactura NUMERIC(14,2),
-	@Retencion		BIT,
 	@IdFactura		INT OUTPUT
 )
 AS BEGIN
@@ -119,9 +117,9 @@ AS BEGIN
 	END
 
 	INSERT INTO dbo.FACTURA_COMPRA(IdProveedor,NumRefFactura, IdTrabajador,IdTipoMoneda, IdFormaPago, NombVendedor,
-		FechaFactura,FechaRecepcion, SubTotal, TotalIva,CambioActual, TotalDescuento, TotalCordobas,TotalOrigenFactura,Retencion)
+		FechaFactura,FechaRecepcion, SubTotal, TotalIva,CambioActual, TotalDescuento, TotalCordobas,TotalOrigenFactura)
 	VALUES(@IdProveedor,@NumRefFactura, @IdTrabajador,@IdTipoMoneda, @IdFormaPago, @NombVendedor, @FechaFactura,@FechaRecepcion, @Subtotal,
-			@TotalIva, @CambioActual, @TotalDescuento, @TotalCordobas, @TotalOrigenFactura,@Retencion)
+			@TotalIva, @CambioActual, @TotalDescuento, @TotalCordobas, @TotalOrigenFactura)
 	SET @IdFactura = @@IDENTITY
 END
 GO
@@ -149,130 +147,7 @@ AS BEGIN
 	
 	SELECT @IdDetalle = @@IDENTITY
 END
-GO
-GO
-IF OBJECT_ID('dbo.USP_GET_FACTURAS_COMPRA',N'P') IS NOT NULL
-	DROP PROCEDURE dbo.USP_GET_FACTURAS_COMPRA
-GO
-CREATE PROCEDURE dbo.USP_GET_FACTURAS_COMPRA (
-	@IdFechaFiltro		INT --1 Fecha Recepcion, 2-Fecha Ingreso--
-	, @FechaInicio		SMALLDATETIME
-	, @FechaFin			SMALLDATETIME
-	, @IdProveedor		INT NULL
-	, @IdEstadoFactura	INT NULL
-)
-AS BEGIN
-
-	SELECT IdFactura
-			, NumRefFactura
-			, FC.IdProveedor
-			, FC.IdTipoMoneda
-			, FC.IdFormaPago
-			, PRO.NombProveedor
-			, TRA.IdTrabajador
-			, TRA.Nombres +' ' + TRA.Apellidos AS [TrabajadorIngreso]
-			, FC.IdEstadoFactura
-			, NombVendedor
-			, FechaFactura = CONVERT(VARCHAR(10),FC.FechaFactura,126)
-			, FechaRecepcion = CONVERT(VARCHAR(10),FC.FechaRecepcion,126)
-			, FC.SubTotal
-			, FC.TotalIva
-			, FC.CambioActual
-			, FC.TotalDescuento
-			, FC.TotalCordobas
-			, FC.TotalOrigenFactura
-			, FC.Habilitado
-			, FechaIngreso = FC.CreatedAt 
-			, HoraIngreso = CONVERT(VARCHAR(10),FC.CreatedAt,108) + ' ' + RIGHT(CONVERT(VARCHAR(30), FC.CreatedAt , 9), 2) 
-	FROM	dbo.FACTURA_COMPRA FC
-			INNER JOIN dbo.ESTADO_FACTURA EF
-				ON FC.IdEstadoFactura = EF.IdEstadoFactura
-			INNER JOIN dbo.PROVEEDOR PRO
-				ON FC.IdProveedor = PRO.IdProveedor
-			INNER JOIN dbo.TRABAJADOR TRA
-				ON FC.IdTrabajador = TRA.IdTrabajador
-	WHERE	(@IdFechaFiltro IS NULL 
-			AND FC.IdProveedor = @IdProveedor)
-			AND FC.IdEstadoFactura = ISNULL(@IdEstadoFactura,FC.IdEstadoFactura)
-			OR 
-			(@IdFechaFiltro IS NOT NULL 
-			AND FC.IdProveedor = @IdProveedor)
-			AND FC.IdEstadoFactura = ISNULL(@IdEstadoFactura,FC.IdEstadoFactura)
-			AND (( @IdFechaFiltro = 1 AND FC.FechaRecepcion BETWEEN ISNULL(@FechaInicio,FC.FechaRecepcion) AND ISNULL(@FechaFin,FC.FechaRecepcion))
-				OR @IdFechaFiltro = 2 AND FC.CreatedAt BETWEEN ISNULL(@FechaInicio,FC.FechaRecepcion) AND ISNULL(@FechaFin,FC.FechaRecepcion))
-	ORDER BY CASE WHEN @IdFechaFiltro IS NULL THEN FC.FechaRecepcion 
-					WHEN @IdFechaFiltro = 1 THEN FC.FechaRecepcion 
-					WHEN @IdFechaFiltro = 2 THEN FC.FechaFactura
-					END ASC
-END
-
-GO
-
-
-CREATE PROCEDURE [dbo].[USP_GET_FACTURA_BY_ID](
-@IdFactura INT 
-)
-AS
-BEGIN
-SELECT FACT.IdFactura
-		, FACT.Serie
-		, FACT.NumRefFactura
-		, FACT.IdProveedor
-		, FACT.IdTrabajador
-		, IdEstadoFactura
-		, TRA.Nombres +' ' + TRA.Apellidos AS [TrabajadorIngreso]
-		, HoraIngreso = CONVERT(VARCHAR(10),FACT.CreatedAt,108) + ' ' + RIGHT(CONVERT(VARCHAR(30), FACT.CreatedAt, 9), 2) 
-		, PRO.NombProveedor
-		, FACT.NombVendedor
-		, FACT.FechaFactura
-		, FechaRecepcion = CONVERT(VARCHAR(10),FACT.FechaRecepcion,126)
-		, FechaIngresoFormato = CONVERT(VARCHAR(8),FACT.FechaFactura,103)
-		, FACT.SubTotal
-		, FACT.TotalIva
-		, FACT.CambioActual
-		, FACT.TotalDescuento
-		, FACT.TotalCordobas
-		, FACT.Retencion 
-		, FACT.Habilitado
-		, FACT.CreatedAt
-		, FACT.UpdatedAt	
-		, Fact.TotalOrigenFactura
-    , Detalle = (
-        SELECT	DETA.IdDetalle
-				, DETA.IdFactura
-				, PRO.IdProducto
-				, PRO.NombProducto
-				, UM.NombUnidad
-				, DETA.PrecioUnitario
-				, DETA.Cantidad
-				, DETA.GravadoIva
-				, DETA.SubTotal
-				, DETA.SubTotal_Cal
-				, DETA.Iva
-				, DETA.Iva_Cal
-				, DETA.Descuento
-				, DETA.TotalDetalle
-				, DETA.Total_Cal
-				, DETA.Bonificacion
-				, DETA.Habilitado
-				, DETA.CreatedAt
-				, DETA.UpdatedAt
-		FROM	dbo.DETALLE_FACTURA_COMPRA DETA
-				INNER JOIN dbo.PRODUCTO PRO
-					ON DETA.IdProducto = PRO.IdProducto
-				INNER JOIN dbo.UNIDAD_MEDIDA UM
-					ON PRO.IdUnidadMedida = UM.IdUnidadMedida
-		WHERE	 DETA.IdFactura = FACT.IdFactura
-        FOR JSON PATH
-    )
-FROM	dbo.FACTURA_COMPRA FACT
-	INNER JOIN dbo.TRABAJADOR TRA
-		ON FACT.IdTrabajador = TRA.IdTrabajador
-	INNER JOIN dbo.PROVEEDOR PRO
-		ON FACT.IdProveedor = PRO.IdProveedor
-WHERE	FACT.IdFactura = @IdFactura
-FOR JSON PATH , ROOT('Factura')
-END
 
 GO
 USE master
+
