@@ -14,18 +14,19 @@ class TipoCambio {
         pushAOJParam(aoj,   'ValorMonedaPrincipal',	sql.Numeric(19,7),  ValorMonedaPrincipal);
         pushAOJParam(aoj,   'ValorCambioOficial',   sql.Numeric(19,7),  ValorCambioOficial);
         pushAOJParam(aoj,   'ValorCambioParalelo',  sql.Numeric(19,7),  ValorCambioParalelo);
-        pushAOJParam(aoj,   'Fecha',                sql.SmallDateTime(),    Fecha);
+        pushAOJParam(aoj,   'Fecha',                sql.Date(),    Fecha);
         return storedProcExecute( 'USP_CREATE_TIPO_CAMBIO_MONEDA', aoj);
     }
 
-    static getTiposCambio() {
+    static async getTiposCambio() {
         const aoj  = [];
         let     filter =  '';
 
-        return queryExecute( baseSelect + filter, aoj );
+        const resp  = await queryExecute( baseSelect + filter, aoj );
+        return resp.recordset;
     }
 
-    static getTipoCambio( IdTipCambio, IdMonedaPrincipal, IdMonedaCambio, Fecha ) {
+    static async getTipoCambio( IdTipCambio, IdMonedaPrincipal, IdMonedaCambio, Fecha ) {
         const   aoj = [];
         let select  = baseSelect;
         let     filter = '';
@@ -43,7 +44,7 @@ class TipoCambio {
             pushAOJParam(aoj,   'IdMonedaCambio',       sql.TinyInt,    IdMonedaCambio);
             if ( !!Fecha ) {
                 filter = addEqualParamInFilter(filter, 'Fecha');
-                pushAOJParam(aoj,   'Fecha',    sql.SmallDateTime(),    Fecha);
+                pushAOJParam(aoj,   'Fecha',    sql.Date(),    Fecha);
             } 
             else {
                 select = select.replace('SELECT ','SELECT TOP 1 ');
@@ -53,7 +54,8 @@ class TipoCambio {
             }
         }
 
-        return queryExecute( select + filter, aoj );
+        const resp = await queryExecute( select + filter, aoj );
+        return resp.recordset[0];
     }
 
     static disHableTipoCambio( IdTipCambio ) {

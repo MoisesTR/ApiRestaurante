@@ -30,7 +30,7 @@ create table DETALLE_BODEGA_CENTRAL(
     IdEstadoEm int NOT NULL,
     IdDetalleAP int NULL,
     IdBodegaAP int NULL,
-	Cantidad int NOT NULL CHECK(Cantidad >= 0),
+	Cantidad NUMERIC(15,7) NOT NULL CHECK(Cantidad >= 0),
     Fecha date NOT NULL,
 	Habilitado Bit DEFAULT 1 NOT NULL,
     constraint pk_IdDetalleBC primary key(IdDetalle,IdBodegaC),
