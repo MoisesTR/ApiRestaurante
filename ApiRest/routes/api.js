@@ -67,6 +67,7 @@ Router
     //Rutas producto controller
     .get('/productos\$',                              habilitadoValid,    validations.getProducts,    validsParams,   ProductoController.getProductos)
     .get('/productos/:IdProducto(\\d+)',            ProductoController.getProductoById)
+    .get('/productos/proveedor/:IdProveedor(\\d+)', ProductoProveedorController.getProductosByProveedorId)
     .post('/productos\$',                             validations.createProducto,         validsParams,   ProductoController.createProducto)
     .put('/productos/:IdProducto(\\d+)',            validations.updateProducto,         validsParams,   ProductoController.updateProducto)
     .delete('/productos/:IdProducto(\\d+)',         changeStateGeneric('IdProducto'),   validsParams,   ProductoController.changeStateProducto)

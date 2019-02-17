@@ -3,6 +3,8 @@ const Categoria = require('../../models/catalogos/Categoria');
 
 function createCategoria(req,res){ 
     const data = matchedData(req)
+    console.log('req categoria');
+    
 
     Categoria.createCategoria( data.NombCategoria, data.DescCategoria )
     .then((results) => {

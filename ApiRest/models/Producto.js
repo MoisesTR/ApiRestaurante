@@ -31,10 +31,18 @@ class ProductoModel {
         }
         return queryExecute('SELECT * FROM VIEW_BASIC_GET_PRODUCT' + filter, aoj)
     }
+
+    static getProductosByIdProveedor(IdProveedor) {
+        let aoj = [];
+
+        pushAOJParam(aoj, 'IdProveedor',       sql.Int,        IdProveedor);
+        return storedProcExecute('USP_GET_PRODUCTOS_PROVEEDOR',aoj)
+    }
     
     createProducto( data ) {
         const aoj = [];
-
+        console.log(+data.IsGranel);
+        console.log(data);
         pushAOJParam(aoj, 'IdProveedor',        sql.Int,            data.IdProveedor)
         pushAOJParam(aoj, 'IdSubClasificacion', sql.Int,            data.IdSubClasificacion)
         pushAOJParam(aoj, 'IdEstado',           sql.Int,            data.IdEstado);
@@ -43,7 +51,7 @@ class ProductoModel {
         pushAOJParam(aoj, 'Imagen',             sql.NVarChar(100),  data.Imagen);
         pushAOJParam(aoj, 'IdEnvase',           sql.Int,            data.IdEnvase);
         pushAOJParam(aoj, 'IdEmpaque',          sql.Int,            data.IdEmpaque);
-        pushAOJParam(aoj, 'IsGranel',           sql.Bit,            +data.IsGranel);
+        pushAOJParam(aoj, 'IsGranel',           sql.Bit(),            +data.IsGranel);
         pushAOJParam(aoj, 'IdUnidadMedida',     sql.Int,            data.IsGranel  ? null : data.IdUnidadMedida);
         pushAOJParam(aoj, 'ValorUnidadMedida',  sql.Numeric(10, 5), data.IsGranel  ? null : data.ValorUnidadMedida)
         pushAOJParam(aoj, 'CantidadEmpaque',    sql.Int,            data.CantidadEmpaque);

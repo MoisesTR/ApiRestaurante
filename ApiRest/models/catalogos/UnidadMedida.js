@@ -28,7 +28,7 @@ class UnidadMedidaModel {
         pushAOJParam(aoj, 'IdClasifUDM',    sql.Int,            params.IdClasifUDM)
         pushAOJParam(aoj, 'NombUnidad',     sql.NVarChar(50),   params.NombUnidad)
         pushAOJParam(aoj, 'Simbolo',        sql.NVarChar(3),    params.Simbolo);
-        pushAOJParam(aoj, 'NImportancia',   sql.Int,            params.NImportancia);
+        // pushAOJParam(aoj, 'NImportancia',   sql.Int,            params.NImportancia);
         return storedProcExecute('dbo.USP_CREATE_UNIDAD_MEDIDA', aoj)
     }
 

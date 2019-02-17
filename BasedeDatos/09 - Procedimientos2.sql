@@ -72,6 +72,7 @@ CREATE PROCEDURE USP_CREATE_PRODUCTO(
 			, CodProd
 			, CodOriginal
 			, CodBarra
+			, IsGranel
 			)
 			VALUES(
 			@IdProveedor
@@ -90,6 +91,7 @@ CREATE PROCEDURE USP_CREATE_PRODUCTO(
 			, @CodProd
 			, @CodOriginal
 			, @CodBarra
+			, @IsGranel
 			)
 			SELECT @@IDENTITY AS IdProducto
 		--	COMMIT TRANSACTION
@@ -214,11 +216,11 @@ AS BEGIN
 		, P.CreatedAt
 		, P.UpdatedAt 
 		FROM dbo.PRODUCTO P
-		INNER JOIN dbo.SUBCLASIFICACION_PRODUCTO SC 
+		LEFT JOIN dbo.SUBCLASIFICACION_PRODUCTO SC 
 			ON P.IdSubClasificacion = SC.IdSubClasificacion
-		INNER JOIN dbo.CLASIFICACION_PRODUCTO C 
+		LEFT JOIN dbo.CLASIFICACION_PRODUCTO C 
 			ON SC.IdClasificacion = C.IdClasificacion
-		INNER JOIN dbo.CATEGORIA_PRODUCTO CP 
+		LEFT JOIN dbo.CATEGORIA_PRODUCTO CP 
 			ON C.IdCategoria = CP.IdCategoria
 		INNER JOIN dbo.PROVEEDOR PRO
 			ON P.IdProveedor = PRO.IdProveedor
@@ -243,11 +245,11 @@ AS BEGIN
 		, P.CreatedAt
 		, P.UpdatedAt 
 		FROM dbo.PRODUCTO P
-		INNER JOIN dbo.SUBCLASIFICACION_PRODUCTO SC 
+		LEFT JOIN dbo.SUBCLASIFICACION_PRODUCTO SC 
 			ON P.IdSubClasificacion = SC.IdSubClasificacion
-		INNER JOIN dbo.CLASIFICACION_PRODUCTO C 
+		LEFT JOIN dbo.CLASIFICACION_PRODUCTO C 
 			ON SC.IdClasificacion = C.IdClasificacion
-		INNER JOIN dbo.CATEGORIA_PRODUCTO CP 
+		LEFT JOIN dbo.CATEGORIA_PRODUCTO CP 
 			ON C.IdCategoria = CP.IdCategoria
 		INNER JOIN dbo.PROVEEDOR PRO
 			ON P.IdProveedor = PRO.IdProveedor
@@ -399,14 +401,14 @@ IF OBJECT_ID('USP_CREATE_UNIDAD_MEDIDA','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_UNIDAD_MEDIDA
 GO
 CREATE PROCEDURE USP_CREATE_UNIDAD_MEDIDA(
-	@IdClasifUnidadMedida		INT,
+	@IdClasifUDM		INT,
     @NombUnidad					NVARCHAR(50),
     @Simbolo					NVARCHAR(3),
 	@IdUnidadMedidaBase			INT
 )
 AS BEGIN
 	INSERT INTO UNIDAD_MEDIDA(IdClasifUDM,NombUnidad,Simbolo,IdUDMBase)
-	VALUES(@IdClasifUnidadMedida,@NombUnidad,@Simbolo, @IdUnidadMedidaBase)
+	VALUES(@IdClasifUDM,@NombUnidad,@Simbolo, @IdUnidadMedidaBase)
 	SELECT @@IDENTITY AS IdUnidadMedida
 END
 GO

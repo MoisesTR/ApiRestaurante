@@ -23,7 +23,7 @@ exports.signUp = async ( req, res ) => {
             else
                 throw { status: 401, code: "EEXIST", message: 'No se registro el usuario con email:' + userData.Email + ', ya se encuentra registrado!' };
         } else {
-            const User = new UserModel();
+            const User = new UserModel(0, userData.Username, userData.Email, userData.Imagen );
             const userResult = await User.createUser({...userData})
             
             res.status(201)

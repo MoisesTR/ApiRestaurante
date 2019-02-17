@@ -8,8 +8,9 @@ class ClasificacionUdmModel {
         const   aoj = [];
         let     filter = '';
 
+        console.log(Habilitado);
         filter += addEqualParamInFilter( filter, 'Habilitado' );
-        pushAOJParam(aoj,   'Habilitado',   sql.Int,    +Habilitado)
+        pushAOJParam(aoj,   'Habilitado',   sql.Int,    1)
         return queryExecute( baseSelect + filter, aoj)
     }
     

@@ -178,7 +178,7 @@ exports.updateSucursal = createSucursal.concat([
 
 const createProducto = [
     body('IdProveedor', 'Selecciona Un proveedor.').isInt(),
-    body('IdSubClasificacion', 'Selecciona Una SubClasificacion.').isInt(),
+    body('IdSubClasificacion', 'Selecciona Una SubClasificacion.').isInt().optional({nullable:true}),
     body('IdEstado','Elige el estado del producto.').isInt(),
     body('NombProducto','Ingresa el Nombre del Producto.').isString(),
     body('DescProducto','Ingresa la Descripcion del producto.').isString(),
@@ -191,12 +191,12 @@ const createProducto = [
     body('ValorUnidadMedida').isNumeric().optional({nullable: true}),
     body('DiasRotacion').isInt(),
     body('IdTipInsumo').isInt(),
-    body('CodigoProducto').isString(),
-    body('CodigoInterno').optional({nullable:true}),
-    body('CodigoBarra').optional({nullable:true}),
+    body('CodProd').isString(),
+    body('CodOriginal').optional({nullable:true}),
+    body('CodBarra').optional({nullable:true}),
     sanitize('ValorUnidadMedida').toFloat(),
     sanitize('DiasRotacion').toInt(),
-    sanitize('CodigoProducto').toString(),
+    sanitize('CodProd').toString(),
     sanitize('IsGranel').toBoolean()
 ];
 exports.createProducto = createProducto;

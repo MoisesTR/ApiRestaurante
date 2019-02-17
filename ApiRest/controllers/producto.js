@@ -30,6 +30,21 @@ function getProductos(req, res) {
     });
 }
 
+function getProductosByIdProveedor(req, res) {
+    let data = req.params;
+
+    ProductoModel.getProductosByIdProveedor(data.IdProveedor)
+    .then((results) => {
+        res.status(200).json({
+            productos: results.recordset
+        });
+    }).catch((err) => {
+        res.status(500)
+            .json(mssqlErrors(err));
+    });
+
+}
+
 function createProducto(req, res) {
     var data = matchedData(req, {locations:['body']});
 
@@ -81,6 +96,7 @@ function changeStateProducto(req, res) {
 module.exports = {
     createProducto,
     getProductoById,
+    getProductosByIdProveedor,
     getProductos,
     updateProducto,
     changeStateProducto
