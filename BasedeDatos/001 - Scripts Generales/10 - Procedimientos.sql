@@ -1,5 +1,6 @@
 use ATOMIC_RESTAURANTE;
 go
+---------------------------------------------INICIO PROCEDIMIENTOS CATEGORIA-----------------------------
 IF OBJECT_ID('USP_CREATE_CATEGORIA','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_CATEGORIA
 GO
@@ -50,6 +51,9 @@ CREATE PROCEDURE USP_GET_CLASIFICACIONES_BY_ID_CATEGORIA(
 END 
 
 GO
+---------------------------------------------FIN PROCEDIMIENTOS CATEGORIA-----------------------------
+
+---------------------------------------------INICIO PROCEDIMIENTOS CLASIFICACION-----------------------------
 IF OBJECT_ID('USP_CREATE_CLASIFICACION','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_CLASIFICACION
 GO
@@ -125,6 +129,11 @@ CREATE PROCEDURE USP_CREATE_SUBCLASIFICACION(
 		END
 END
 GO
+
+---------------------------------------------FIN PROCEDIMIENTOS CLASIFICACION-----------------------------
+
+---------------------------------------------INICIO PROCEDIMIENTOS SUB-CLASIFICACION-----------------------------
+
 IF OBJECT_ID('USP_UPDATE_SUBCLASIFICACION','P') IS NOT NULL
 	DROP PROCEDURE USP_UPDATE_SUBCLASIFICACION
 GO
@@ -166,6 +175,11 @@ CREATE PROCEDURE USP_GET_SUBCLASIFICACION(
 	WHERE IdSubClasificacion=@IdSubClasificacion;
 END
 GO
+
+---------------------------------------------FIN PROCEDIMIENTOS SUB-CLASIFICACION-----------------------------
+
+---------------------------------------------INICIO PROCEDIMIENTOS PROVEEDOR----------------------------------
+
 IF OBJECT_ID('USP_CREATE_PROVEEDOR','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_PROVEEDOR
 GO
@@ -256,73 +270,5 @@ CREATE PROCEDURE USP_DISP_PROVEEDOR(
 	WHERE IdProveedor = @IdProveedor;
 END
 GO
-IF OBJECT_ID('UFN_CHECK_ESTADO_EMPAQUE','FN') IS NOT NULL
-	DROP FUNCTION UFN_CHECK_ESTADO_EMPAQUE
-GO
-CREATE FUNCTION UFN_CHECK_ESTADO_EMPAQUE(
-	@IdProducto		INT,
-	@Cantidad		INT
-)
-RETURNS INT
-AS
-BEGIN
-	DECLARE @CANTIDAD_ESPERADA INT;
-	DECLARE @RETORNO INT;
-	SELECT @CANTIDAD_ESPERADA = CantidadEmpaque FROM PRODUCTO WHERE IdProducto= @IdProducto;
-	IF @CANTIDAD_ESPERADA = NULL
-		SET @RETORNO	= 3;
-	ELSE IF @CANTIDAD_ESPERADA = @Cantidad
-		SET @RETORNO	= 1;
-	ELSE
-		SET @RETORNO	= 2;
-	RETURN @RETORNO;
-END
 
-GO
-IF OBJECT_ID('dbo.VIEW_BASIC_GET_PRODUCT','V') IS NOT NULL	
-	DROP VIEW dbo.VIEW_BASIC_GET_PRODUCT;
-GO
-CREATE VIEW dbo.VIEW_BASIC_GET_PRODUCT 
-AS
-SELECT IdProducto
-		, PRO.IdProveedor
-		, C.IdCategoria
-		, CP.NombCategoria
-		, P.IdSubClasificacion
-		, SC.NombSubClasificacion
-		, C.IdClasificacion
-		, C.NombClasificacion
-		, p.IdEstado
-		, p.NombProducto
-		, p.DescProducto
-		, p.Imagen
-		, P.DiasRotacion
-		, P.IdTipInsumo
-		, P.CodProd
-		, P.CodOriginal
-		, P.CodBarra
-		, P.Habilitado
-		, P.CreatedAt
-		, P.UpdatedAt 
-		FROM dbo.PRODUCTO P
-		LEFT JOIN dbo.SUBCLASIFICACION_PRODUCTO SC 
-			ON P.IdSubClasificacion = SC.IdSubClasificacion
-		LEFT JOIN dbo.CLASIFICACION_PRODUCTO C 
-			ON SC.IdClasificacion = C.IdClasificacion
-		LEFT JOIN dbo.CATEGORIA_PRODUCTO CP 
-			ON C.IdCategoria = CP.IdCategoria
-		INNER JOIN	dbo.TIPO_INSUMO	AS TI
-			ON P.IdTipInsumo	= TI.IdTipInsumo
-		INNER JOIN dbo.PROVEEDOR PRO
-			ON P.IdProveedor = PRO.IdProveedor
-
-GO
-
-USE master;
-
-
-
---INSERT INTO RESTAURANTE(IdMoneda, IdPais, IdMonedaFacturacion, IsAutoBackup,IsCuotaFija,NombRestaurante,DescRestaurante,CuotaFija,PorcIva,RazonSocial,SitioWeb,Correo,TelPrincipal,TelPrincipal2,FechaFundacion,Login,Workspace,Habilitado)
---VALUES (1,1,1,1,1,'Restaurante de la familia Chang','Ninguna',1,0.15,'Ninguna','restaurangechang.com','chang@gmail.com',22492774,87792956,GETDATE(), 'WUT', 'WORK',1)
-
---SELECT * FROM USUARIO
+---------------------------------------------FIN PROCEDIMIENTOS PROVEEDOR----------------------------------

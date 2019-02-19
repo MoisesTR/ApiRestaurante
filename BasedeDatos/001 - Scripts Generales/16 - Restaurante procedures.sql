@@ -26,9 +26,40 @@ CREATE PROCEDURE USP_CREATE_RESTAURANTE (
 )
 AS BEGIN
 
-INSERT INTO RESTAURANTE(IdMoneda,IdPais,IdMonedaFacturacion,IsAutoBackup,IsCuotaFija,NombRestaurante
-	,DescRestaurante,CuotaFija,PorcIva,RazonSocial,SitioWeb,Correo,TelPrincipal,TelPrincipal2,FechaFundacion,Login,Workspace)
-	VALUES(@IdMoneda,@IdPais,@IdMonedaFacturacion,@IsAutoBackup,@IsCuotaFija,@NombRestaurante
-	,@DescRestaurante,@CuotaFija,@PorcIva,@RazonSocial,@SitioWeb,@Correo,@TelPrincipal,@TelPrincipal2,@FechaFundacion,@Login,@Workspace)
+INSERT INTO 
+	RESTAURANTE( IdMoneda
+				, IdPais
+				, IdMonedaFacturacion
+				, IsAutoBackup
+				, IsCuotaFija
+				, NombRestaurante
+				, DescRestaurante
+				, CuotaFija
+				, PorcIva
+				, RazonSocial
+				, SitioWeb 
+				, Correo
+				, TelPrincipal
+				, TelPrincipal2
+				, FechaFundacion
+				, [Login]
+				, Workspace)
+	VALUES	( @IdMoneda
+			, @IdPais
+			, @IdMonedaFacturacion
+			, @IsAutoBackup
+			, @IsCuotaFija
+			, @NombRestaurante
+			, @DescRestaurante
+			, @CuotaFija
+			, @PorcIva
+			, @RazonSocial
+			, @SitioWeb 
+			, @Correo
+			, @TelPrincipal
+			, @TelPrincipal2
+			, @FechaFundacion
+			, @Login
+			, @Workspace)
 
 END

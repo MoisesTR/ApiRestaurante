@@ -20,6 +20,7 @@ AS BEGIN
 END
 
 GO
+----------------------------------INICIO DE PROCEDIMIENTOS RELACIONADOS A LOS PRODUCTOS-------------------
 IF OBJECT_ID('USP_CREATE_PRODUCTO','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_PRODUCTO
 GO
@@ -176,14 +177,14 @@ AS BEGIN
 			, P.CreatedAt
 			, P.UpdatedAt 
 	FROM dbo.PRODUCTO P
-	INNER JOIN dbo.SUBCLASIFICACION_PRODUCTO SC 
-		ON P.IdSubClasificacion = SC.IdSubClasificacion
-	INNER JOIN dbo.CLASIFICACION_PRODUCTO C 
-		ON SC.IdClasificacion = C.IdClasificacion
-	INNER JOIN dbo.CATEGORIA_PRODUCTO CP 
-		ON C.IdCategoria = CP.IdCategoria
 	INNER JOIN dbo.PROVEEDOR PRO
 		ON P.IdProveedor = PRO.IdProveedor
+	LEFT JOIN dbo.SUBCLASIFICACION_PRODUCTO SC 
+		ON P.IdSubClasificacion = SC.IdSubClasificacion
+	LEFT JOIN dbo.CLASIFICACION_PRODUCTO C 
+		ON SC.IdClasificacion = C.IdClasificacion
+	LEFT JOIN dbo.CATEGORIA_PRODUCTO CP 
+		ON C.IdCategoria = CP.IdCategoria
 	 WHERE IdProducto = @IdProducto
 END
 GO
@@ -216,14 +217,14 @@ AS BEGIN
 		, P.CreatedAt
 		, P.UpdatedAt 
 		FROM dbo.PRODUCTO P
+		INNER JOIN dbo.PROVEEDOR PRO
+			ON P.IdProveedor = PRO.IdProveedor
 		LEFT JOIN dbo.SUBCLASIFICACION_PRODUCTO SC 
 			ON P.IdSubClasificacion = SC.IdSubClasificacion
 		LEFT JOIN dbo.CLASIFICACION_PRODUCTO C 
 			ON SC.IdClasificacion = C.IdClasificacion
 		LEFT JOIN dbo.CATEGORIA_PRODUCTO CP 
 			ON C.IdCategoria = CP.IdCategoria
-		INNER JOIN dbo.PROVEEDOR PRO
-			ON P.IdProveedor = PRO.IdProveedor
 
 	END
 	ELSE
@@ -245,14 +246,14 @@ AS BEGIN
 		, P.CreatedAt
 		, P.UpdatedAt 
 		FROM dbo.PRODUCTO P
+		INNER JOIN dbo.PROVEEDOR PRO
+			ON P.IdProveedor = PRO.IdProveedor
 		LEFT JOIN dbo.SUBCLASIFICACION_PRODUCTO SC 
 			ON P.IdSubClasificacion = SC.IdSubClasificacion
 		LEFT JOIN dbo.CLASIFICACION_PRODUCTO C 
 			ON SC.IdClasificacion = C.IdClasificacion
 		LEFT JOIN dbo.CATEGORIA_PRODUCTO CP 
 			ON C.IdCategoria = CP.IdCategoria
-		INNER JOIN dbo.PROVEEDOR PRO
-			ON P.IdProveedor = PRO.IdProveedor
 		WHERE P.Habilitado = @Habilitado
 	END
 END
@@ -267,32 +268,33 @@ CREATE PROCEDURE USP_DISP_PRODUCTO(
 	UPDATE dbo.PRODUCTO SET Habilitado = @Habilitado,UpdatedAt=GETDATE() 
 	WHERE IdProducto=@IdProducto
 END
+
 go
---IF OBJECT_ID('dbo.USP_GET_PRODUCTOS_PROVEEDORES','P') IS NOT NULL
---	DROP PROCEDURE dbo.USP_GET_PRODUCTOS_PROVEEDORES
---GO
---CREATE PROCEDURE dbo.USP_GET_PRODUCTOS_PROVEEDORES
---	@Habilitado BIT NULL
---AS BEGIN
---	IF @Habilitado is NULL
---		SELECT	VPD.*
---				, PVE.NombProveedor
---				, Cantidad = 1
---				, Descuento = 0
---				, GravadoIva = 0 
---		FROM	dbo.V_ProductosDetallados VPD
---				INNER JOIN dbo.PROVEEDOR PVE
---					ON VPD.IdProveedor = PVE.IdProveedor
---	ELSE
---		SELECT VPD.*
---				, Cantidad = 1
---				, Descuento = 0
---				, GravadoIva = 0 
---		FROM	dbo.V_ProductosDetallados VPD
---				INNER JOIN dbo.PROVEEDOR PVE
---					ON VPD.IdProveedor = PVE.IdProveedor
---		WHERE	VPD.Habilitado = @Habilitado;
---END 
+IF OBJECT_ID('dbo.USP_GET_PRODUCTOS_PROVEEDORES','P') IS NOT NULL
+	DROP PROCEDURE dbo.USP_GET_PRODUCTOS_PROVEEDORES
+GO
+CREATE PROCEDURE dbo.USP_GET_PRODUCTOS_PROVEEDORES
+	@Habilitado BIT NULL
+AS BEGIN
+	IF @Habilitado is NULL
+		SELECT	VPD.*
+				, PVE.NombProveedor
+				, Cantidad = 1
+				, Descuento = 0
+				, GravadoIva = 0 
+		FROM	dbo.V_ProductosDetallados VPD
+				INNER JOIN dbo.PROVEEDOR PVE
+					ON VPD.IdProveedor = PVE.IdProveedor
+	ELSE
+		SELECT VPD.*
+				, Cantidad = 1
+				, Descuento = 0
+				, GravadoIva = 0 
+		FROM	dbo.V_ProductosDetallados VPD
+				INNER JOIN dbo.PROVEEDOR PVE
+					ON VPD.IdProveedor = PVE.IdProveedor
+		WHERE	VPD.Habilitado = @Habilitado;
+END 
 GO
 
 --IF OBJECT_ID('USP_GET_PRODUCTO_PROVEEDORES','P') IS NOT NULL
@@ -310,17 +312,43 @@ GO
 IF OBJECT_ID('USP_GET_PRODUCTOS_PROVEEDOR','P') IS NOT NULL
 	DROP PROCEDURE USP_GET_PRODUCTOS_PROVEEDOR
 GO
---CREATE PROCEDURE USP_GET_PRODUCTOS_PROVEEDOR(
---	@IdProveedor INT
---) AS BEGIN
---	SELECT	VPD.*
---			, PVE.NombProveedor
---	FROM	dbo.V_ProductosDetallados VPD
---		INNER JOIN PROVEEDOR PVE
---			ON	VPD.IdProveedor = PVE.IdProveedor
---	WHERE VPD.IdProveedor = @IdProveedor;
---END
---GO
+CREATE PROCEDURE USP_GET_PRODUCTOS_PROVEEDOR(
+	@IdProveedor INT
+) AS BEGIN
+	SELECT	VPD.*
+			, PVE.NombProveedor
+	FROM	dbo.V_ProductosDetallados VPD
+		INNER JOIN PROVEEDOR PVE
+			ON	VPD.IdProveedor = PVE.IdProveedor
+	WHERE VPD.IdProveedor = @IdProveedor;
+END
+GO
+IF OBJECT_ID('USP_GET_PRODUCTO_PROVEEDOR','P') IS NOT NULL
+	DROP PROCEDURE USP_GET_PRODUCTO_PROVEEDOR
+GO
+CREATE PROCEDURE USP_GET_PRODUCTO_PROVEEDOR(
+	@IdProveedor INT
+)
+AS BEGIN
+	SELECT 
+		PRO.IdProducto
+		, PVE.IdProveedor
+		, PRO.IdEnvase
+		, PRO.IdEmpaque
+		, PRO.IdUnidadMedida
+		, PRO.ValorUnidadMedida
+		, PRO.CantidadEmpaque
+		, PRO.Habilitado 
+	FROM dbo.PRODUCTO PRO
+	INNER JOIN dbo.PROVEEDOR PVE
+		ON PRO.IdProveedor = PVE.IdProveedor
+	WHERE PRO.IdProveedor = @IdProveedor
+END
+
+----------------------------------FIN DE PROCEDIMIENTOS RELACIONADOS A LOS PRODUCTOS-------------------
+GO
+
+----------------------------------INICIO PROCEDIMIENTOS RELACIONADOS A LOS EMPAQUES-------------------
 IF OBJECT_ID('dbo.USP_CREATE_EMPAQUE','P') IS NOT NULL
 	DROP PROCEDURE dbo.USP_CREATE_EMPAQUE
 GO
@@ -359,6 +387,9 @@ AS BEGIN
 	WHERE IdEmpaque = @IdEmpaque;
 END
 GO
+----------------------------------INICIO PROCEDIMIENTOS RELACIONADOS A LOS EMPAQUES------------
+
+----------------------------------INICIO PROCEDIMIENTOS RELACIONADOS A LOS ENVASES------------
 IF OBJECT_ID('USP_CREATE_ENVASE','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_ENVASE
 GO
@@ -396,7 +427,12 @@ AS BEGIN
 	UPDATE dbo.ENVASE SET NombEnvase = @NombEnvase, DescEnvase = @DescEnvase, UpdatedAt = GETDATE()
 		WHERE IdEnvase = @IdEnvase
 END
+----------------------------------FIN PROCEDIMIENTOS RELACIONADOS A LOS ENVASES------------
+
+----------------------------------FIN PROCEDIMIENTOS RELACIONADOS A LOS EMPAQUES DE PRODUCTOS-------
 GO
+
+----------------------------------INICIO PROCEDIMIENTOS RELACIONADOS A LAS UNIDADES DE MEDIDA-------
 IF OBJECT_ID('USP_CREATE_UNIDAD_MEDIDA','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_UNIDAD_MEDIDA
 GO
@@ -441,6 +477,9 @@ CREATE PROCEDURE dbo.USP_DISP_UNIDAD_MEDIDA(
 	UPDATE dbo.UNIDAD_MEDIDA set Habilitado = @Habilitado,UpdatedAt=GETDATE() Where IdUnidadMedida = @IdUnidadMedida;
 END
 GO
+----------------------------------FIN PROCEDIMIENTOS RELACIONADOS A LAS UNIDADES DE MEDIDA-------
+
+----------------------------------INICIO PROCEDIMIENTOS RELACIONADOS A LAS SUCURSALES------------
 IF OBJECT_ID('USP_CREATE_SUCURSAL','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_SUCURSAL
 GO
@@ -472,6 +511,37 @@ BEGIN
 		SELECT IdSucursal,NombSucursal,Direccion, Telefono1, Telefono2, Habilitado from dbo.SUCURSAL_RESTAURANTE WHERE Habilitado = @Habilitado
 END
 GO
+IF OBJECT_ID('dbo.USP_UPDATE_SUCURSAL',N'P') IS NOT NULL
+	DROP PROCEDURE dbo.USP_UPDATE_SUCURSAL
+GO
+CREATE PROCEDURE [dbo].USP_UPDATE_SUCURSAL(
+	@IdSucursal			INT,
+    @NombSucursal		NVARCHAR(100) ,
+    @Direccion			NVARCHAR(250) ,
+	@Telefono1			NVARCHAR(20) ,
+	@Telefono2			NVARCHAR(20) NULL
+) AS BEGIN
+	UPDATE dbo.SUCURSAL_RESTAURANTE SET NombSucursal=@NombSucursal,Direccion=@Direccion,
+    Telefono1 = @Telefono1,Telefono2 = ISNULL(@Telefono2, Telefono2), UpdatedAt=GETDATE() 
+	WHERE IdSucursal = @IdSucursal;
+END 
+GO
+IF OBJECT_ID('dbo.USP_DISP_SUCURSAL',N'P') IS NOT NULL
+	DROP PROCEDURE dbo.USP_DISP_SUCURSAL
+GO
+CREATE PROCEDURE dbo.USP_DISP_SUCURSAL(
+	@IdSucursal			INT,
+	@Habilitado			BIT
+) AS BEGIN
+	UPDATE dbo.SUCURSAL_RESTAURANTE SET Habilitado = @Habilitado, UpdatedAt = GETDATE() WHERE IdSucursal = @IdSucursal
+END
+
+GO
+
+----------------------------------FIN PROCEDIMIENTOS RELACIONADOS A LAS SUCURSALES------------
+
+----------------------------------FIN PROCEDIMIENTOS RELACIONADOS A LOS TRABAJADORES----------
+
 IF OBJECT_ID('USP_CREATE_TRABAJADOR','P') IS NOT NULL
 	DROP PROCEDURE USP_CREATE_TRABAJADOR
 GO
@@ -537,78 +607,6 @@ AS BEGIN
 	IF EXISTS(SELECT 1 FROM USUARIO WHERE IdTrabajador = @IdTrabajador)
 		UPDATE USUARIO SET Imagen = @Imagen FROM USUARIO WHERE IdTrabajador = @IdTrabajador
 END
+----------------------------------FIN PROCEDIMIENTOS RELACIONADOS A LOS TRABAJADORES------------
 GO
-IF OBJECT_ID('USP_GET_PRODUCTO_PROVEEDOR','P') IS NOT NULL
-	DROP PROCEDURE USP_GET_PRODUCTO_PROVEEDOR
-GO
-CREATE PROCEDURE USP_GET_PRODUCTO_PROVEEDOR(
-	@IdProveedor INT
-)
-AS BEGIN
-	SELECT 
-		PRO.IdProducto
-		, PVE.IdProveedor
-		, PRO.IdEnvase
-		, PRO.IdEmpaque
-		, PRO.IdUnidadMedida
-		, PRO.ValorUnidadMedida
-		, PRO.CantidadEmpaque
-		, PRO.Habilitado 
-	FROM dbo.PRODUCTO PRO
-	INNER JOIN dbo.PROVEEDOR PVE
-		ON PRO.IdProveedor = PVE.IdProveedor
-	WHERE PRO.IdProveedor = @IdProveedor
-END
-GO
-IF OBJECT_ID('UFN_CHECK_ESTADO_EMPAQUE','FN') IS NOT NULL
-	DROP FUNCTION UFN_CHECK_ESTADO_EMPAQUE
-GO
-CREATE FUNCTION UFN_CHECK_ESTADO_EMPAQUE(
-	@IdProducto INT,
-	@Cantidad INT
-)
-RETURNS INT
-AS
-BEGIN
-	DECLARE @CANTIDAD_ESPERADA INT;
-	DECLARE @RETORNO INT;
-	SELECT @CANTIDAD_ESPERADA = CantidadEmpaque 
-	FROM dbo.PRODUCTO 
-		WHERE IdProducto = @IdProducto;
-	IF @CANTIDAD_ESPERADA = NULL
-		SET @RETORNO= 3;
-	ELSE IF @CANTIDAD_ESPERADA = @Cantidad
-		SET @RETORNO = 1;
-	ELSE
-		SET @RETORNO= 2;
-	RETURN @RETORNO;
-END
-GO
-IF OBJECT_ID('dbo.USP_UPDATE_SUCURSAL',N'P') IS NOT NULL
-	DROP PROCEDURE dbo.USP_UPDATE_SUCURSAL
-GO
-CREATE PROCEDURE [dbo].USP_UPDATE_SUCURSAL(
-	@IdSucursal			INT,
-    @NombSucursal		NVARCHAR(100) ,
-    @Direccion			NVARCHAR(250) ,
-	@Telefono1			NVARCHAR(20) ,
-	@Telefono2			NVARCHAR(20) NULL
-) AS BEGIN
-	UPDATE dbo.SUCURSAL_RESTAURANTE SET NombSucursal=@NombSucursal,Direccion=@Direccion,
-    Telefono1 = @Telefono1,Telefono2 = ISNULL(@Telefono2, Telefono2), UpdatedAt=GETDATE() 
-	WHERE IdSucursal = @IdSucursal;
-END 
-GO
-IF OBJECT_ID('dbo.USP_DISP_SUCURSAL',N'P') IS NOT NULL
-	DROP PROCEDURE dbo.USP_DISP_SUCURSAL
-GO
-CREATE PROCEDURE dbo.USP_DISP_SUCURSAL(
-	@IdSucursal			INT,
-	@Habilitado			BIT
-) AS BEGIN
-	UPDATE dbo.SUCURSAL_RESTAURANTE SET Habilitado = @Habilitado, UpdatedAt = GETDATE() WHERE IdSucursal = @IdSucursal
-END
-
-GO	
-
 USE master

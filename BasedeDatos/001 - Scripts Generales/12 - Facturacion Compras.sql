@@ -29,8 +29,10 @@ CREATE TABLE dbo.ESTADO_FACTURA(
 )
 GO
 INSERT INTO ESTADO_FACTURA(NombEstado, DescripcionEstado)
-VALUES('Borrador',null),('Abierta(En Edicion)','Que la factura se esta ingresando, y no se ha calculado'),
-('Cerrada', null), ('Cancelada', null)
+VALUES('Borrador',null)
+	, ('Abierta(En Edicion)', 'Que la factura se esta ingresando, y no se ha calculado')
+	, ('Cerrada', null)
+	, ('Cancelada', null)
 GO
 CREATE TABLE FACTURA_COMPRA(
 	IdFactura		INT IDENTITY(1,1),
@@ -87,67 +89,6 @@ CREATE TABLE DETALLE_FACTURA_COMPRA(
 	CONSTRAINT FK_FacturaCompraDetalle FOREIGN KEY(IdFactura) REFERENCES FACTURA_COMPRA(IdFactura),
 	CONSTRAINT FK_ProductoFacturaCompra FOREIGN KEY(IdProducto) REFERENCES PRODUCTO(IdProducto)
 )
-GO
-IF OBJECT_ID('dbo.USP_CREATE_FACTURA_COMPRA', N'P') IS NOT NULL
-	DROP PROCEDURE USP_CREATE_FACTURA_COMPRA
-GO
-CREATE PROCEDURE USP_CREATE_FACTURA_COMPRA(
-	@NumRefFactura  NVARCHAR(50),
-	@IdProveedor	INT,
-	@IdTrabajador	INT,
-	@IdTipoMoneda	INT,
-	@IdFormaPago	INT,
-	@NombVendedor	NVARCHAR(100),
-	@FechaFactura	SMALLDATETIME,
-	@FechaRecepcion	SMALLDATETIME,
-	@SubTotal		NUMERIC(14,2),
-	@TotalIva		NUMERIC(14,2),	
-	@CambioActual	NUMERIC(14,2),
-	@TotalDescuento	NUMERIC(14,2),
-	@TotalCordobas	NUMERIC(14,2),
-	@TotalOrigenFactura NUMERIC(14,2),
-	@IdFactura		INT OUTPUT
-)
-AS BEGIN
-
-	IF EXISTS(SELECT NumRefFactura FROM dbo.FACTURA_COMPRA WHERE NumRefFactura = @NumRefFactura) 
-	BEGIN 
-		RAISERROR('El codigo de la factura ya se encuentra registrado!',16,1)
-		RETURN	
-	END
-
-	INSERT INTO dbo.FACTURA_COMPRA(IdProveedor,NumRefFactura, IdTrabajador,IdTipoMoneda, IdFormaPago, NombVendedor,
-		FechaFactura,FechaRecepcion, SubTotal, TotalIva,CambioActual, TotalDescuento, TotalCordobas,TotalOrigenFactura)
-	VALUES(@IdProveedor,@NumRefFactura, @IdTrabajador,@IdTipoMoneda, @IdFormaPago, @NombVendedor, @FechaFactura,@FechaRecepcion, @Subtotal,
-			@TotalIva, @CambioActual, @TotalDescuento, @TotalCordobas, @TotalOrigenFactura)
-	SET @IdFactura = @@IDENTITY
-END
-GO
-IF OBJECT_ID('dbo.USP_CREATE_DETALLE_FACTURA_COMPRA', N'P') IS NOT NULL
-	DROP PROCEDURE dbo.USP_CREATE_DETALLE_FACTURA_COMPRA
-GO
-CREATE PROCEDURE USP_CREATE_DETALLE_FACTURA_COMPRA(
-	@IdDetalle		INT OUTPUT,
-	@IdFactura		INT ,
-	@IdProducto		INT ,
-	@PrecioUnitario NUMERIC(14,2),
-	@Cantidad		INT,
-	@GravadoIva		BIT ,
-	@SubTotal		NUMERIC(14,2),
-	@Iva			NUMERIC(14,2),
-	@Descuento		NUMERIC(14,2),
-	@TotalDetalle	NUMERIC(14,2),
-	@Bonificacion	BIT NULL
-)
-AS BEGIN
-	INSERT INTO DETALLE_FACTURA_COMPRA(IdFactura, IdProducto, PrecioUnitario, Cantidad,
-				GravadoIva, SubTotal, Iva, Descuento, TotalDetalle, Bonificacion)
-	VALUES(@IdFactura, @IdProducto, @PrecioUnitario, @Cantidad, @GravadoIva,@SubTotal,
-			@Iva, @Descuento,@TotalDetalle, @Bonificacion )
-	
-	SELECT @IdDetalle = @@IDENTITY
-END
-
 GO
 USE master
 

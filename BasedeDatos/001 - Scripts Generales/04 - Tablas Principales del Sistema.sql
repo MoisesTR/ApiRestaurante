@@ -172,6 +172,7 @@ CREATE TABLE ESTADO_PRODUCTO(
 );
 GO
 
+SP_HELPTEXT'USP_CREATE_PRODUCTO'
 CREATE TABLE dbo.PRODUCTO (
     IdProducto			INT IDENTITY(1,1),
     IdSubClasificacion	INT					NULL,
@@ -184,7 +185,7 @@ CREATE TABLE dbo.PRODUCTO (
 	IsGranel			BIT					NOT NULL,
 	CodProd				VARCHAR(25)			NOT NULL	UNIQUE,
 	CodOriginal			VARCHAR(25)			NULL,
-	CodBarra			VARCHAR(25)			NOT NULL,
+	CodBarra			VARCHAR(25)			NULL,
 	CodBarraOriginal	VARCHAR(25)			NULL,
     ValorUnidadMedida	NUMERIC(10,5)		NULL,
 	CantidadEmpaque		INT					NULL, --si tiene empaque 
