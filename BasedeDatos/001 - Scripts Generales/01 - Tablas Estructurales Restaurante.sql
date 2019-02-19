@@ -9,6 +9,8 @@ ELSE
 GO
 USE ATOMIC_RESTAURANTE;
 GO
+
+
 --// Tabla Para almacenar las Monedas de posible uso dentro del Sistema
 CREATE TABLE dbo.FACTURACION_MONEDA (
 	IdMoneda		TINYINT			NOT NULL IDENTITY(1,1),
@@ -46,6 +48,7 @@ CREATE NONCLUSTERED INDEX IDX_PAIS_NOMBRE_CODIGO
 ON	dbo.PAIS( IdPais, CodAlfa3)
 INCLUDE(NombPais, CodNumerico, PrefijoTelefonico)
 
+
 GO
 --// Tabla para almacenar el tipo de cambio oficial y paralelo de la moneda
 CREATE TABLE dbo.FACTURACION_TIPO_CAMBIO_MONEDA (
@@ -66,6 +69,7 @@ CREATE TABLE dbo.FACTURACION_TIPO_CAMBIO_MONEDA (
 				REFERENCES dbo.FACTURACION_MONEDA(IdMoneda)
 )
 GO
+
 --// Tabla para almacenar los Bancos disponibles en el sistema
 --// en esta solo se almacenara informacion de la casa matriz
 CREATE TABLE dbo.FACTURACION_BANCOS ( 
@@ -183,6 +187,8 @@ CREATE TABLE TELEFONO_SUCURSAL(
 )
 GO
 
+
+-- DE MOMENTO OMITIR
 CREATE TABLE	dbo.TIPO_BODEGA_SUCURSAL (
 	IdTipBode			TINYINT		IDENTITY(1,1),
 	NombTipBod			NVARCHAR(50)	NOT NULL,
@@ -214,7 +220,9 @@ CREATE TABLE	dbo.BODEGA_SUCURSAL (
 				REFERENCES	dbo.TIPO_BODEGA_SUCURSAL(IdTipBode)
 );
 GO
+-----------------
 
+-- CREAR POR DEFECTO, AL CREAR EL RESTAURANTE
 CREATE TABLE	dbo.AREA_PRODUCCION(
 	IdAreaProduccion	INT IDENTITY(1,1),
 	IdSucursal			INT					NOT NULL,
@@ -274,6 +282,7 @@ CREATE TABLE	dbo.TRABAJADOR (
 )
 GO
 
+-- CREAR POR DEFECTO, AL CREAR EL RESTAURANTE
 CREATE TABLE dbo.BODEGA_AREA_PRODUCCION(
 	IdBodegaAreaP			INT IDENTITY(1,1),
 	IdAreaProduccion		INT					NOT NULL,

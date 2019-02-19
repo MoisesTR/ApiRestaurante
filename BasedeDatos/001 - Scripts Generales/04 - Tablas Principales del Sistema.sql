@@ -16,6 +16,7 @@ CREATE TABLE dbo.TIPO_INSUMO (
 )
 
 GO
+-- OMITIR DE MOMENTO
 CREATE TABLE dbo.PROCEDENCIA_PRODUCTO(
 	IdProcedencia	INT IDENTITY(1,1),
     Nombre			NVARCHAR(50)		NOT NULL,
@@ -36,7 +37,7 @@ CREATE TABLE MOTIVO_BAJA_PRODUCTO(
     UpdatedAt			SMALLDATETIME		NULL,
     CONSTRAINT PK_MOTIVO_BAJA_PRODUCTO PRIMARY KEY(IdMotivo)
 );
-GO
+GO---------------------
 
 CREATE TABLE CLASIFICACION_UNIDAD_MEDIDA (
     IdClasifUDM					INT IDENTITY(1,1),
@@ -216,6 +217,8 @@ CREATE TABLE dbo.PRODUCTO (
 );
 
 GO
+
+-- OMITIR DE MOMENTO
 CREATE TABLE  PRODUCTO_ORIGEN(
 	IdProducto			INT				NOT NULL,
     IdOrigen			INT				NOT NULL,
@@ -261,10 +264,9 @@ CREATE TABLE ENTRADA_BODEGA_AREA_PRODUCCION (
 	IdMoneda					TINYINT			NOT NULL,
 	IdTipDesc					TINYINT			NULL,
 	IdTrabajador				INT				NOT NULL,
+	IdFactura					INT				NOT NULL,
 	NFactura					NVARCHAR(50)	NOT NULL,
 	RepresentanteProveedor		NVARCHAR(100)	NOT NULL,
-	PorcRetencion				NUMERIC(19,7)	NULL,
-	Retencion					NUMERIC(19,7)	NULL,
 	PorcIva						NUMERIC(19,7)	NULL,
 	IvaTotal					NUMERIC(19,7)	NULL,
 	IvaTotal_OMoneda			NUMERIC(19,7)	NULL,
@@ -292,6 +294,8 @@ CREATE TABLE ENTRADA_BODEGA_AREA_PRODUCCION (
 				REFERENCES			dbo.FACTURACION_MONEDA	(IdMoneda),
 	CONSTRAINT FK_Tipo_Descuento_Entrada					FOREIGN KEY(IdTipDesc)
 				REFERENCES			dbo.TIPO_DE_DESCUENTO	( IdTipDesc )
+
+				
 );
 GO
 CREATE TABLE DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION (
@@ -322,8 +326,6 @@ CREATE TABLE	dbo.DETALLE_BODEGA_AP	(
 	IdBodegaAreaP		INT					NOT NULL,
 	IdDetalleEntradaAP	INT					NOT NULL,-- PAra saber que producto de que detalle
 	IdEntradaBodegaAP	INT					NOT NULL,--
-    IdProductoProveedor	INT					NOT NULL,
-	IdEstadoEmpaque		INT					NOT NULL,
     Cantidad			INT					NOT NULL	check(Cantidad >= 0),
     FechaHoraIngreso	SMALLDATETIME		NOT NULL,
     FechaHoraProduccion SMALLDATETIME		NULL,
