@@ -3,6 +3,14 @@ const { addEqualParamInFilter } = require('../../Utils/util');
 const baseSelect = 'SELECT IdAreaProduccion, IdSucursal, NumAP,CodBarAP, NombAP, Habilitado, CreatedAt, UpdatedAt FROM AREA_PRODUCCION';
 
 module.exports = class AreaProduccion {
+    constructor({IdSucursal,CodBarAP, NombAP, Habilitado, CreatedAt}) {
+        this.IdSucursal = IdSucursal;
+        this.CodBarAP   = CodBarAP;
+        this.NombAP     = NombAP;
+        this.Habilitado = Habilitado;
+        this.CreatedAt  = CreatedAt;
+    }
+
     static async getArea({ IdAreaProduccion, IdSucursal }) {
         const aoj = [];
         let filter = '';
@@ -33,19 +41,19 @@ module.exports = class AreaProduccion {
         return response.recordset;
     }
     
-    createArea({IdSucursal, NombAP}) {
+    createArea() {
         const aoj = [];
         
-        pushAOJParam(aoj,   'IdSucursal',   sql.Int,    IdSucursal);
-        pushAOJParam(aoj,   'NombAP',        sql.NVarChar(50),   NombAP);
+        pushAOJParam(aoj,   'IdSucursal',   sql.Int,            this.IdSucursal);
+        pushAOJParam(aoj,   'NombAP',       sql.NVarChar(50),   this.NombAP);
         return storedProcExecute('USP_CREATE_AREA_PRODUCCION', aoj);
     }
     
-    updateArea({IdAreaProduccion, NombAP}) {
+    updateArea() {
         const aoj = [];
         
-        pushAOJParam(aoj,   'IdAreaProduccion',   sql.Int,    IdAreaProduccion);
-        pushAOJParam(aoj,   'NombAP',        sql.NVarChar(50),   NombAP);
+        pushAOJParam(aoj,   'IdAreaProduccion', sql.Int,            this.IdAreaProduccion);
+        pushAOJParam(aoj,   'NombAP',           sql.NVarChar(50),   this.NombAP);
         return storedProcExecute('USP_UPDATE_AREA_PRODUCCION', aoj);
     }
     

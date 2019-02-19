@@ -1,3 +1,5 @@
+const { sql, pushAOJParam, storedProcExecute, queryExecute } = require('../../Utils/defaultImports')
+
 class DetalleBodegaSucursal {
     constructor({IdDetalle, IdBodegaC, IdProducto, IdEstadoEm, IdDetalleAP, IdBodegaAP}) {
         this.IdDetalle= IdDetalle;
@@ -9,7 +11,11 @@ class DetalleBodegaSucursal {
     }
 
     createDetalle() {
-
+        pushAOJParam(aoj,   'IdBodegaC' , sql.Int ,IdBodegaC);
+        pushAOJParam(aoj, , sql. ,);
+        pushAOJParam(aoj, , sql. ,);
+        pushAOJParam(aoj, , sql. ,);
+        pushAOJParam(aoj, , sql. ,);
     }
 
     updateDetalle() {

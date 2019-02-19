@@ -26,3 +26,15 @@ exports.getDetalleBodega = ( req, res, next ) => {
     });
 
 }
+
+exports.createDetalle = (req, res, next) => {
+    const data = matchedData(req, {locations: ['body']});
+  
+    DetalleBodSucModel.getDetalle()
+    .then(detalle => {
+        res.status(200) 
+            .json(detalle);
+    }).catch((err) => {
+        next(err);
+    });
+}

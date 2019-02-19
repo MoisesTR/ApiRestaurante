@@ -14,11 +14,11 @@ CREATE TABLE NUMERO_TELEFONO_TRABAJADOR(
 )
 GO
 create table BODEGA_CENTRAL(
-	IdBodegaC INT IDENTITY(1,1) NOT NULL,
+	IdBodegaC	INT IDENTITY(1,1) NOT NULL,
 	IdUbicacion INT NULL, --Es el id de la sucursal en que se encuentra
-    Nombre NVARCHAR(50) NOT NULL,
+    Nombre		NVARCHAR(50) NOT NULL,
     Descripcion NVARCHAR(50),
-    Habilitado Bit DEFAULT 1 NOT NULL,
+    Habilitado	Bit DEFAULT 1 NOT NULL,
     constraint pk_IdBodegaAPCentral primary key(IdBodegaC),
 	CONSTRAINT FK_UBICACION_BODEGA_CENTRAL FOREIGN KEY(IdUbicacion) REFERENCES SUCURSAL(IdSucursal) 
 )
@@ -29,7 +29,7 @@ create table DETALLE_BODEGA_CENTRAL(
 	IdProducto int NOT NULL,
     IdEstadoEm int NOT NULL,
     IdDetalleAP int NULL,
-    IdBodegaAP int NULL,
+    IdBodegaAP	int NULL,
 	Cantidad NUMERIC(15,7) NOT NULL CHECK(Cantidad >= 0),
     Fecha date NOT NULL,
 	Habilitado Bit DEFAULT 1 NOT NULL,
@@ -41,17 +41,16 @@ create table DETALLE_BODEGA_CENTRAL(
 )
 GO
 CREATE TABLE DETALLE_BODEGA_SUCURSAL (
-	IdDetalle INT IDENTITY(1,1),
-    IdBodegaAP INT NOT NULL,
-    IdDetalleBc INT NOT NULL,
-    IdBodegaAPBc INT NOT NULL,
-    IdEstado INT NULL, --estado del empaque
-	Cantidad INT NOT NULL,
-    FechaIngreso SMALLDATETIME NOT NULL,
-	Habilitado Bit DEFAULT 1 NOT NULL,
+	IdDetalle	INT IDENTITY(1,1),
+    IdBodegaAP	INT NOT NULL,
+	IdDocumento	INT	NOT NULL,
+    IdEstado	INT NULL, --estado del empaque
+	IdProducto	INT	NOT NULL,
+	Cantidad	NUMERIC(17,5)	NOT NULL,
+    FechaIngreso	SMALLDATETIME	NOT NULL,
+	Habilitado		Bit DEFAULT 1 NOT NULL,
     CONSTRAINT PK_DETA_INVENT PRIMARY KEY (IdDetalle,IdBodegaAP),
     CONSTRAINT U_DETA_INVENT UNIQUE(IdDetalle,IdBodegaAP),
-    --CONSTRAINT FK_PRO_EN_INVENT FOREIGN KEY (IdProducto)REFERENCES Producto (IdProducto),
     CONSTRAINT FK_PRO_EN_INVENT FOREIGN KEY (IdDetalleBc,IdBodegaAPBc)REFERENCES DETALLE_BODEGA_CENTRAL(IdDetalle,IdBodegaC),
     CONSTRAINT FK_INVENT_DETALL FOREIGN KEY (IdBodegaAP)
         REFERENCES BODEGA_SUCURSAL(IdBodegaS),
