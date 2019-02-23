@@ -1,4 +1,4 @@
-const { sql, pushAOJParam,pushAOJOuput, queryExecute,storedProcExecute } = require('../Utils/defaultImports');
+const { sql, pushAOJParam,pushAOJOuput, queryExecute,storedProcExecute, executeStoredProc } = require('../Utils/defaultImports');
 
 class CompraInsumosModel {
     
@@ -6,7 +6,7 @@ class CompraInsumosModel {
         
     }
 
-    createFacturaCompra( data ) {
+    createFacturaCompra( data, conn ) {
         let aoj = [];
         
         pushAOJParam(aoj, 'NumRefFactura',       sql.NVarChar(50),   data.NumRefFactura);
@@ -24,7 +24,7 @@ class CompraInsumosModel {
         pushAOJParam(aoj, 'TotalCordobas',       sql.Numeric(14,2),  data.TotalCordobas);
         pushAOJParam(aoj, 'TotalOrigenFactura',  sql.Numeric(14,2),  data.TotalOrigenFactura);
         pushAOJOuput(aoj, 'IdFactura',           sql.Int);
-        return storedProcExecute('USP_CREATE_FACTURA_COMPRA',aoj)
+        return executeStoredProc('USP_CREATE_FACTURA_COMPRA',aoj, conn)
     }
     
     updateFacturaCompra( data ) {
@@ -46,7 +46,7 @@ class CompraInsumosModel {
     }
     
     
-    createDetalleFacturaCompra( data ) {
+    createDetalleFacturaCompra( data, conn ) {
         let aoj = [];
 
         pushAOJOuput(aoj, 'IdDetalle',       sql.Int);
@@ -63,7 +63,7 @@ class CompraInsumosModel {
         return storedProcExecute('USP_CREATE_DETALLE_FACTURA_COMPRA',aoj)
     }
     
-    updateDetalleFacturaCompra( data ) {
+    updateDetalleFacturaCompra( data, conn ) {
         let aoj = [];
      
         pushAOJParam(aoj, 'IdFactura',       sql.Int,            data.IdFactura);

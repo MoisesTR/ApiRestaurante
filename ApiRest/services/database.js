@@ -58,7 +58,7 @@ function addInputOrOutputParam( request, parametersJson ) {
  * @param {Object} config 
  * @param {Connection} userConn 
  */
-async function executeStoredProc( spName, parametersJsonArray, config, userConn ) {
+async function executeStoredProc( spName, parametersJsonArray, userConn ) {
     let     isConnSupplied  = !!userConn;
     let     conn            =  ( isConnSupplied ) ? userConn : undefined;
     if  ( isConnSupplied ) {
@@ -72,7 +72,7 @@ async function executeStoredProc( spName, parametersJsonArray, config, userConn 
         
         return execSP(pool, spName, parametersJsonArray);			
     } catch( _err ) {
-        return Promise.reject( _err )
+        return _err;
     }
 };
 

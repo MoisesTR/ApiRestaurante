@@ -1,5 +1,5 @@
 const { addLikeParamInFilter, addEqualParamInFilter }   =  require( '../../Utils/util');
-const { sql, pushAOJParam,pushAOJOuput, queryExecute, storedProcExecute } = require('../../Utils/defaultImports')
+const { sql, pushAOJParam,pushAOJOuput, queryExecute,executeStoredProc ,storedProcExecute } = require('../../Utils/defaultImports')
 const baseSelect =`SELECT IdMovimiento, NumSubCuenta, IdDocumento,IdMoneda, FechaMovimiento, Debe, DebeMonLocal, Haber, HaberMonLocal, Habilitado, CreatedAt, UpdatedAt 
 FROM CONTABILIDAD_MOVIMIENTO_SUBCUENTA`;
 const baseUpdate = `UPDATE CONTABILIDAD_MOVIMIENTO_SUBCUENTA SET Habilitado = @Habilitado, UpdatedAt = GETDATE()`;
@@ -45,7 +45,7 @@ module.exports = class MovimientoSubCuenta {
         return response.recordset;
     }
 
-    createMovimiento({NumSubCuenta, IdDocumento,FechaMovimiento,IdMoneda, Debe, DebeMonLocal, Haber, HaberMonLocal}, conn) {
+    createMovimiento({NumSubCuenta, IdDocumento,FechaMovimiento,IdMoneda, Debe, DebeMonLocal, Haber, HaberMonLocal}, userConn) {
         const aoj = [];
         
         pushAOJOuput(aoj, 'IdMovimiento',       sql.Int);
@@ -57,10 +57,10 @@ module.exports = class MovimientoSubCuenta {
         pushAOJParam(aoj, 'DebeMonLocal',       sql.Numeric(17,5),  +DebeMonLocal)
         pushAOJParam(aoj, 'Haber'   ,           sql.Numeric(17,5),  +Haber)
         pushAOJParam(aoj, 'HaberMonLocal' ,     sql.Numeric(17,5),  +HaberMonLocal)
-        return storedProcExecute('USP_CREATE_CONTABILIDAD_MOVIMIENTO_SUBCUENTA', aoj)
+        return executeStoredProc('USP_CREATE_CONTABILIDAD_MOVIMIENTO_SUBCUENTA', aoj, userConn )
     }
     
-    updateMovimiento({}, conn) {
+    updateMovimiento({IdMovimiento, FechaMovimiento, Debe, DebeMonLocal, Haber, HaberMonLocal}, conn) {
         const aoj = [];
         
         pushAOJParam(aoj, 'IdMovimiento',       sql.Int,        +IdMovimiento)
@@ -69,7 +69,7 @@ module.exports = class MovimientoSubCuenta {
         pushAOJParam(aoj, 'DebeMonLocal',       sql.Numeric(17,5),  +DebeMonLocal)
         pushAOJParam(aoj, 'Haber'   ,           sql.Numeric(17,5),  +Haber)
         pushAOJParam(aoj, 'HaberMonLocal' ,     sql.Numeric(17,5),  +HaberMonLocal)
-        return storedProcExecute('USP_UPDATE_CONTABILIDAD_MOVIMIENTO_SUBCUENTA', aoj)
+        return executeStoredProc('USP_UPDATE_CONTABILIDAD_MOVIMIENTO_SUBCUENTA', aoj, conn)
     }
 
 

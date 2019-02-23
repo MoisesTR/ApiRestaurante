@@ -237,6 +237,39 @@ exports.createFacturaCompra  = [
     sanitize('IdTipoMoneda' ).toInt(),
 ];
 
+exports.bulkCreateFacturaCompra  = [
+    body('NumRefFactura').isString(),
+    body('IdProveedor'  ).isInt(),
+    body('IdTrabajador' ).isInt(),
+    body('IdTipoMoneda' ).isInt(),
+    body('IdFormaPago'  ).isInt(),
+    body('NombVendedor' ).isString(),
+    isDate('FechaFactura'),
+    isDate('FechaRecepcion'),
+    body('SubTotal').isNumeric(),
+    body('TotalIva').isNumeric(),
+    body('CambioActual').isNumeric(),
+    body('TotalDescuento').isNumeric(),
+    body('TotalCordobas').isNumeric(),
+    body('TotalOrigenFactura').isNumeric(),
+    sanitize('IdProveedor'  ).toInt(),
+    sanitize('IdTrabajador' ).toInt(),
+    sanitize('IdTipoMoneda' ).toInt(),
+    body('productos').isArray(),
+    body('productos.*.IdProducto'   ).isInt(),
+    body('productos.*.PrecioUnitario').isNumeric(),
+    body('productos.*.Cantidad'     ).isNumeric(),
+    body('productos.*.GravadoIva'   ).isNumeric(),
+    body('productos.*.SubTotal'     ).isNumeric(),
+    body('productos.*.Iva'          ).isNumeric(),
+    body('productos.*.Descuento'    ).isNumeric(),
+    body('productos.*.TotalDetalle' ).isNumeric(),
+    body('productos.*.Bonificacion' ).isInt().optional({nullable:true}),
+    sanitize('IdFactura'    ).toInt(),
+    sanitize('IdProducto'   ).toInt(),
+];
+
+
 exports.updateFacturaCompra  = [
     body('NumRefFactura'),
     body('IdTrabajador'),
