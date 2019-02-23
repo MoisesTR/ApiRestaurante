@@ -1,11 +1,11 @@
 USE ATOMIC_RESTAURANTE
 GO
-SELECT IdClasCuenta,NombClasC,DescClasC,Habilitado,CreatedAt, UpdatedAt FROM CONTABILIDAD_CLASE_CUENTA
+--SELECT IdClasCuenta,NombClasC,DescClasC,Habilitado,CreatedAt, UpdatedAt FROM CONTABILIDAD_CLASE_CUENTA
 
-SELECT IdGrupo, G.IdClasCuenta,C.NombClasC,NombGrupo, G.Habilitado, G.CreatedAt, G.UpdatedAt 
-FROM CONTABILIDAD_GRUPO_CUENTA AS G
-INNER JOIN CONTABILIDAD_CLASE_CUENTA AS C
-	ON G.IdClasCuenta = C.IdClasCuenta
+--SELECT IdGrupo, G.IdClasCuenta,C.NombClasC,NombGrupo, G.Habilitado, G.CreatedAt, G.UpdatedAt 
+--FROM CONTABILIDAD_GRUPO_CUENTA AS G
+--INNER JOIN CONTABILIDAD_CLASE_CUENTA AS C
+--	ON G.IdClasCuenta = C.IdClasCuenta
 
 
 GO

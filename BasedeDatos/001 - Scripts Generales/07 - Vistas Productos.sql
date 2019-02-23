@@ -30,11 +30,11 @@ SELECT	p.IdProducto
 		, p.CodProd
 		, p.CodOriginal
 		, cl.IdCategoria
-		, cp.NombCategoria
+		, NombCategoria = ISNULL(cp.NombCategoria, 'No Tiene')
 		, p.IdSubClasificacion
-		, sp.NombSubClasificacion
+		, NombSubClasificacion = ISNULL(sp.NombSubClasificacion, 'No Tiene')
 		, cl.IdClasificacion
-		, cl.NombClasificacion
+		, NombClasificacion = ISNULL(cl.NombClasificacion, 'No Tiene')
 		, p.IdEnvase
 		, e.NombEnvase
 		, p.IdEmpaque
