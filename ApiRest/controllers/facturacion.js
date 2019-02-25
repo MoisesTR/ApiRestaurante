@@ -31,6 +31,8 @@ exports.bulkCreateFacturaCompra = async ( req, res, next ) =>  {
         const IdFactura = resInFact.output.IdFactura;
          
         const table = new sql.Table('DETALLE_FACTURA_COMPRA');
+        console.log('El id de la factura');
+        console.log(IdFactura);
             // table.columns.add('IdDetalle',       sql.Int,   {nullable: false, primary: true, identi}); 
         table.columns.add('IdFactura',       sql.Int,   {nullable: false});
         table.columns.add('IdProducto',      sql.Int,   {nullable: false});
@@ -41,7 +43,7 @@ exports.bulkCreateFacturaCompra = async ( req, res, next ) =>  {
         table.columns.add('Iva',             sql.Numeric(17,5), {nullable: false});
         table.columns.add('Descuento',       sql.Numeric(17,5), {nullable: false});
         table.columns.add('TotalDetalle',    sql.Numeric(17,5), {nullable: false});
-        table.columns.add('Bonificacion',    sql.Bit,   {nullable: true});
+        // table.columns.add('Bonificacion',    sql.Bit, {nullable: true});
         
         for (let i = 0; i < productos.length; i++) {
             let {IdProducto, PrecioUnitario, Cantidad, GravadoIva, SubTotal, Iva, Descuento, TotalDetalle, Bonificacion} = productos[i];
@@ -55,7 +57,7 @@ exports.bulkCreateFacturaCompra = async ( req, res, next ) =>  {
                 Iva,
                 Descuento,
                 TotalDetalle,
-                Bonificacion,
+                Bonificacion
             );  
         }
         const insDetail = await tran.request()

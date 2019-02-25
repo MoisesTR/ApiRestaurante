@@ -39,16 +39,15 @@ IF OBJECT_ID('dbo.USP_CREATE_DETALLE_FACTURA_COMPRA', N'P') IS NOT NULL
 	DROP PROCEDURE dbo.USP_CREATE_DETALLE_FACTURA_COMPRA
 GO
 CREATE PROCEDURE USP_CREATE_DETALLE_FACTURA_COMPRA(
-	@IdDetalle		INT OUTPUT,
 	@IdFactura		INT ,
 	@IdProducto		INT ,
-	@PrecioUnitario NUMERIC(14,2),
-	@Cantidad		INT,
+	@PrecioUnitario NUMERIC(17,5),
+	@Cantidad		NUMERIC(17,5),
 	@GravadoIva		BIT ,
-	@SubTotal		NUMERIC(14,2),
-	@Iva			NUMERIC(14,2),
-	@Descuento		NUMERIC(14,2),
-	@TotalDetalle	NUMERIC(14,2),
+	@SubTotal		NUMERIC(17,5),
+	@Iva			NUMERIC(17,5),
+	@Descuento		NUMERIC(17,5),
+	@TotalDetalle	NUMERIC(17,5),
 	@Bonificacion	BIT NULL
 )
 AS BEGIN
@@ -57,7 +56,6 @@ AS BEGIN
 	VALUES(@IdFactura, @IdProducto, @PrecioUnitario, @Cantidad, @GravadoIva,@SubTotal,
 			@Iva, @Descuento,@TotalDetalle, @Bonificacion )
 	
-	SELECT @IdDetalle = @@IDENTITY
 END
 GO
 IF OBJECT_ID('dbo.USP_GET_FACTURAS_COMPRA',N'P') IS NOT NULL

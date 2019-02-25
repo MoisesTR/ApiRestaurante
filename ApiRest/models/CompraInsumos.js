@@ -8,6 +8,7 @@ class CompraInsumosModel {
 
     createFacturaCompra( data, conn ) {
         let aoj = [];
+        console.log(data);
         
         pushAOJParam(aoj, 'NumRefFactura',       sql.NVarChar(50),   data.NumRefFactura);
         pushAOJParam(aoj, 'IdProveedor',         sql.Int,            data.IdProveedor);
