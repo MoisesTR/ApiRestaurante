@@ -110,7 +110,7 @@ Router
     .get('/detallebodegaap',                            bodegaApController.getDetalleBodegaAp)
     .put('/generarfactura/:IdEntradaBodegaAP(\\d+)',    validations.crearFactura,               validsParams,   bodegaApController.generarFactura)
     //Facturacion
-    .post('/bulk/factComp',  FactCompController.bulkCreateFacturaCompra)
+    .post('/bulk/factComp',     validations.bulkCreateFacturaCompra,        validsParams,       FactCompController.bulkCreateFacturaCompra)
     .post('/factComp',              validations.createFacturaCompra,        validsParams,       FactCompController.createFacturaCompra)
     .post('/detalleFactComp',       validations.createDetalleFacturaCompra, validsParams,       FactCompController.createDetalleFacturaCompra)
     .get('/getFactura',             habilitadoValid,                    validations.getFacturaById,         validsParams ,          FactCompController.getFacturaById)
