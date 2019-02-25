@@ -124,7 +124,7 @@ exports.executeQueryByConfig    = executeQueryByConfig;
  * @param {Array} parametersJsonArray
  */
 exports.storedProcExecute = (spName, parametersJsonArray) => {
-    return executeStoredProc(spName, parametersJsonArray, conSql.config);
+    return executeStoredProc(spName, parametersJsonArray);
 };
 
 exports.queryExecute = (queryString, parametersJsonArray) => {
