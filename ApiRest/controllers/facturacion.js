@@ -21,10 +21,10 @@ exports.createFacturaCompra = (req, res) => {
 
 exports.bulkCreateFacturaCompra = async ( req, res, next ) =>  {
     const data = matchedData(req);
-    
+    let tran;
     try {
         const pool = await getConnectionPoolGlobal();
-        const tran = new sql.Transaction(pool); 
+        tran = await new sql.Transaction(pool); 
         const err = await tran.begin();
         const resInFact = await CompraInsumos.createFacturaCompra( data, tran );
         const IdFactura = resInFact.output.IdFactura;
