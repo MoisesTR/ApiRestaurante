@@ -37,7 +37,7 @@ module.exports = class Documento {
         return queryExecute(baseSelect + filter, aoj);
     }
 
-    createDocumento({IdTipDoc, IdRestaurante, IdSucursal, IdMoneda, Serie, NumDoc, NombDoc, DescDoc}) {
+    createDocumento({IdTipDoc, IdRestaurante, IdSucursal, IdMoneda, Serie, NumDoc, NombDoc, DescDoc}, tran) {
         const aoj = [];
 
         pushAOJParam(aoj, 'IdTipDoc',   sql.TinyInt,    IdTipDoc);

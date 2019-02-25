@@ -6,7 +6,7 @@ const   sql = require('mssql');
 const   { getConnectionPoolGlobal }   = require('../config/mssqlConfig');
 const   CompraInsumos       = new CompraInsumosModel();
 
-function createFacturaCompra(req, res) {
+exports.createFacturaCompra = (req, res) => {
     let data = matchedData(req);
     
     CompraInsumos.createFacturaCompra( data )
@@ -82,7 +82,7 @@ exports.bulkCreateFacturaCompra = async ( req, res, next ) =>  {
     }
 }
 
-function updateFacturaCompra(req, res) {
+exports.updateFacturaCompra = (req, res) => {
     const data = matchedData(req);
 
     CompraInsumos.updateFacturaCompra( data )
@@ -94,7 +94,7 @@ function updateFacturaCompra(req, res) {
 }
 
 
-function createDetalleFacturaCompra(req, res) {
+exports.createDetalleFacturaCompra = (req, res) => {
     let data = matchedData(req);
    
     CompraInsumos.createDetalleFacturaCompra( data )
@@ -108,7 +108,7 @@ function createDetalleFacturaCompra(req, res) {
     })
 }
 
-function updateDetalleFacturaCompra(req, res) {
+exports.updateDetalleFacturaCompra = (req, res) => {
     let data = matchedData(req);
 
     CompraInsumos.updateDetalleFacturaCompra( data )
@@ -122,7 +122,7 @@ function updateDetalleFacturaCompra(req, res) {
 }
 
 
-function getFacturaById(req, res ) {
+exports.getFacturaById = (req, res ) => {
     let data = matchedData(req,{locations:['params','query','body']});
     
     CompraInsumos.getFacturaById( data.IdFactura ) 
@@ -141,7 +141,7 @@ function getFacturaById(req, res ) {
 }
 
 
-function getCambiosFacturaById(req, res ) {
+exports.getCambiosFacturaById = (req, res ) => {
     let data = matchedData(req,{locations:['params','query','body']});
     
     CompraInsumos.getCambiosFacturaById( data.IdFactura )
@@ -153,7 +153,7 @@ function getCambiosFacturaById(req, res ) {
 }
 
 
-function obtenerFacturasCompra(req, res ) {
+exports.obtenerFacturasCompra = (req, res ) => {
     let data = matchedData(req,{locations:['params','query','body']});
     console.log(data);
     
@@ -171,7 +171,7 @@ function obtenerFacturasCompra(req, res ) {
     })  
 }
 
-function getFacturasIngresadas(req, res ) {
+exports.getFacturasIngresadas = (req, res ) => {
     let data = matchedData(req,{locations:['params','query','body']});
     console.log(data);
     
@@ -190,7 +190,7 @@ function getFacturasIngresadas(req, res ) {
 }
 
 
-function getProductosMasComprados(req, res ) {
+exports.getProductosMasComprados = (req, res ) => {
     let data = matchedData(req,{locations:['params','query','body']});
     console.log(data);
     
@@ -206,19 +206,4 @@ function getProductosMasComprados(req, res ) {
             .json(mssqlErrors(err));
         console.error(err);
     })  
-}
-
-
-
-module.exports = {
-    createFacturaCompra, 
-    createDetalleFacturaCompra,
-    getCambiosFacturaById,
-    getFacturaById,
-    updateFacturaCompra,
-    updateDetalleFacturaCompra,
-    getFacturasIngresadas,
-    getProductosMasComprados,
-    obtenerFacturasCompra
-    
 }

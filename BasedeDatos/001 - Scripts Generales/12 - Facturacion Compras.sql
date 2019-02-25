@@ -80,7 +80,7 @@ CREATE TABLE DETALLE_FACTURA_COMPRA(
 	Iva_Cal				AS CAST(ROUND(((Cantidad * PrecioUnitario) * GravadoIva * 0.15),2) AS NUMERIC(17,5)),
 	Descuento			Numeric(17,5) NOT NULL CHECK(Descuento >= 0),
 	TotalDetalle		NUMERIC(17,5) NOT NULL,
-	Total_Cal			AS CAST(ROUND((((Cantidad * PrecioUnitario) + (Cantidad * PrecioUnitario * GravadoIva * 0.15)) - Descuento),2) AS NUMERIC(14,2)),
+	Total_Cal			AS CAST(ROUND((((Cantidad * PrecioUnitario) + (Cantidad * PrecioUnitario * GravadoIva * 0.15)) - Descuento),2) AS NUMERIC(17,2)),
 	Bonificacion		BIT DEFAULT 0 NOT NULL,
 	Habilitado			BIT DEFAULT 1 NOT NULL,
 	CreatedAt			DATE NOT NULL DEFAULT GETDATE(),
