@@ -21,6 +21,7 @@ exports.createFacturaCompra = (req, res) => {
 
 exports.bulkCreateFacturaCompra = async ( req, res, next ) =>  {
     const data = matchedData(req);
+    const {productos} = data;
     let tran;
     try {
         const pool = await getConnectionPoolGlobal();
