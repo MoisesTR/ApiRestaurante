@@ -25,7 +25,7 @@ exports.bulkCreateFacturaCompra = async ( req, res, next ) =>  {
     try {
         const pool = await getConnectionPoolGlobal();
         const tran = new sql.Transaction(pool); 
-        tran.begin();
+        const err = await tran.begin();
         const resInFact = await CompraInsumos.createFacturaCompra( data, tran );
         const IdFactura = resInFact.output.IdFactura;
          
