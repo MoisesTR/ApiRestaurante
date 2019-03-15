@@ -68,7 +68,9 @@ CREATE TABLE	dbo.CONTABILIDAD_TIPO_DE_GASTO (
 SET IDENTITY_INSERT CONTABILIDAD_TIPO_DE_GASTO ON;
 
 INSERT INTO CONTABILIDAD_TIPO_DE_GASTO(IdTipGasto, NombTipGas, DescTipGas)
-VALUES(1,'Gastos Fijos','Son aquellos gastos que siempre van a estar mes a mes y que a largo plazo no cambiarán.'),(2,'Gastos Variables','Como lo indica su nombre, varían ya sea en semanas o meses.'),(3,'Gastos Inesperados','Se usa para definir dentro del presupuesto un gasto eventual.')
+VALUES(1,'Gastos Fijos','Son aquellos gastos que siempre van a estar mes a mes y que a largo plazo no cambiarán.'),
+(2,'Gastos Variables','Como lo indica su nombre, varían ya sea en semanas o meses.')
+,(3,'Gastos Inesperados','Se usa para definir dentro del presupuesto un gasto eventual.')
 
 SET IDENTITY_INSERT CONTABILIDAD_TIPO_DE_GASTO OFF;
 GO
