@@ -99,24 +99,8 @@ exports.updateFacturaCompra = (req, res) => {
 
 exports.createDetalleFacturaCompra = (req, res) => {
     let data = matchedData(req);
-<<<<<<< HEAD
-    let aoj = [];
-    db.pushOutParam(aoj, 'IdDetalle', sql.Int);
-    db.pushAOJParam(aoj, 'IdFactura', sql.Int,data.IdFactura);
-    db.pushAOJParam(aoj, 'IdProducto', sql.Int,data.IdProducto);
-    db.pushAOJParam(aoj, 'PrecioUnitario', sql.Numeric(14,2),data.PrecioUnitario);
-    db.pushAOJParam(aoj, 'Cantidad', sql.Numeric(14,2),data.Cantidad);
-    db.pushAOJParam(aoj, 'GravadoIva', sql.Bit,data.GravadoIva);
-    db.pushAOJParam(aoj, 'SubTotal', sql.Numeric(14,2),data.SubTotal);
-    db.pushAOJParam(aoj, 'Iva', sql.Numeric(14,2),data.Iva);
-    db.pushAOJParam(aoj, 'Descuento', sql.Numeric(14,2),data.Descuento);
-    db.pushAOJParam(aoj, 'TotalDetalle', sql.Numeric(14,2),data.TotalDetalle);
-    db.pushAOJParam(aoj, 'Bonificacion', sql.Bit,data.Bonificacion);
-    db.storedProcExecute('USP_CREATE_DETALLE_FACTURA_COMPRA',aoj)
-=======
    
     CompraInsumos.createDetalleFacturaCompra( data )
->>>>>>> redefinicion_base_10102018
     .then((result) => {
         res.status(200)
             .json({IdDetalle: result.output.IdDetalle})
@@ -129,23 +113,8 @@ exports.createDetalleFacturaCompra = (req, res) => {
 
 exports.updateDetalleFacturaCompra = (req, res) => {
     let data = matchedData(req);
-<<<<<<< HEAD
-    let aoj = [];
-    db.pushAOJParam(aoj, 'IdFactura', sql.Int,data.IdFactura);
-    db.pushAOJParam(aoj, 'IdProducto', sql.Int,data.IdProducto);
-    db.pushAOJParam(aoj, 'PrecioUnitario', sql.Numeric(14,2),data.PrecioUnitario);
-    db.pushAOJParam(aoj, 'Cantidad', sql.Numeric(14,2),data.Cantidad);
-    db.pushAOJParam(aoj, 'GravadoIva', sql.Bit,data.GravadoIva);
-    db.pushAOJParam(aoj, 'SubTotal', sql.Numeric(14,2),data.SubTotal);
-    db.pushAOJParam(aoj, 'Iva', sql.Numeric(14,2),data.Iva);
-    db.pushAOJParam(aoj, 'Descuento', sql.Numeric(14,2),data.Descuento);
-    db.pushAOJParam(aoj, 'TotalDetalle', sql.Numeric(14,2),data.TotalDetalle);
-    db.pushAOJParam(aoj, 'Bonificacion', sql.Bit,data.Bonificacion);
-    db.storedProcExecute('USP_CREATE_DETALLE_FACTURA_COMPRA',aoj)
-=======
 
     CompraInsumos.updateDetalleFacturaCompra( data )
->>>>>>> redefinicion_base_10102018
     .then((result) => {
         res.status(200).json({IdDetalle: result.output.IdDetalle})
     })
@@ -190,18 +159,8 @@ exports.getCambiosFacturaById = (req, res ) => {
 exports.obtenerFacturasCompra = (req, res ) => {
     let data = matchedData(req,{locations:['params','query','body']});
     console.log(data);
-<<<<<<< HEAD
-    db.pushAOJParam(aoj, 'IdFechaFiltro', sql.Int,data.IdFechaFiltro);
-    db.pushAOJParam(aoj, 'FechaInicio', sql.Date,data.FechaInicio);
-    db.pushAOJParam(aoj, 'FechaFin', sql.Date,data.FechaFin);
-    db.pushAOJParam(aoj, 'CodFactura', sql.NVarChar(100),data.CodFactura);
-    db.pushAOJParam(aoj, 'IdProveedor', sql.Int,data.IdProveedor);
-    db.pushAOJParam(aoj, 'IdEstadoFactura', sql.Int,data.IdEstadoFactura);
-    db.storedProcExecute('USP_GET_FACTURAS_COMPRA',aoj)
-=======
     
     CompraInsumos.obtenerFacturasCompra( data )
->>>>>>> redefinicion_base_10102018
     .then((result) => {
         res.status(200)
             .json({

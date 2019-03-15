@@ -20,18 +20,6 @@ function getProveedorById(req, res) {
 
 function getProveedores(req, res) {
     var data = matchedData(req, {locations:['query']})
-<<<<<<< HEAD
-    console.log('Proveedores');
-    db.pushAOJParam(aoj, 'Habilitado', sql.Int, +data.Habilitado)
-    db.storedProcExecute('USP_GET_PROVEEDORES', aoj)
-        .then((results) => {
-            var jsonString = results.recordset[0];
-            jsonString = JSON.parse(jsonString['JSON_F52E2B61-18A1-11d1-B105-00805F49916B']);
-            res.status(200).json(jsonString);
-        }).catch((err) => {
-            res.status(500).json(mssqlErrors(err));
-        });
-=======
 
     Proveedor.getProveedores( data.Habilitado ) 
     .then((results) => {
@@ -40,7 +28,6 @@ function getProveedores(req, res) {
     }).catch((err) => {
         res.status(500).json(mssqlErrors(err));
     });
->>>>>>> redefinicion_base_10102018
 }
 
 function createProveedor(req, res) {
