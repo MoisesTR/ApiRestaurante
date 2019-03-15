@@ -1,63 +1,105 @@
-const { matchedData, sanitize } = require('express-validator/filter');
-let sql  = require('mssql');
-let db = require('../services/database');
-let {mssqlErrors } = require('../Utils/util');
+const   { matchedData } = require('express-validator/filter');
+const   {mssqlErrors }      = require('../Utils/util');
+const   CompraInsumosModel  = require('../models/CompraInsumos');
+const   MovimientoCuenta    = require('../models/contabilidad/movimientoCuenta');
+const   sql = require('mssql');
+const   { getConnectionPoolGlobal }   = require('../config/mssqlConfig');
+const   CompraInsumos       = new CompraInsumosModel();
 
-function createFacturaCompra(req, res) {
+exports.createFacturaCompra = (req, res) => {
     let data = matchedData(req);
-    let aoj = [];
-    db.pushAOJParam(aoj, 'NumRefFactura', sql.NVarChar(50),data.NumRefFactura);
-    db.pushAOJParam(aoj, 'IdProveedor', sql.Int,data.IdProveedor);
-    db.pushAOJParam(aoj, 'IdTrabajador', sql.Int,data.IdTrabajador);
-    db.pushAOJParam(aoj, 'IdTipoMoneda', sql.Int,data.IdTipoMoneda);
-    db.pushAOJParam(aoj, 'IdFormaPago', sql.Int,data.IdFormaPago);
-    db.pushAOJParam(aoj, 'NombVendedor', sql.NVarChar(100),data.NombVendedor);
-    db.pushAOJParam(aoj, 'FechaFactura', sql.Date,data.FechaFactura);
-    db.pushAOJParam(aoj, 'FechaRecepcion', sql.Date,data.FechaRecepcion);
-    db.pushAOJParam(aoj, 'SubTotal', sql.Numeric(14,2),data.SubTotal);
-    db.pushAOJParam(aoj, 'TotalIva', sql.Numeric(14,2),data.TotalIva);
-    db.pushAOJParam(aoj, 'CambioActual', sql.Numeric(14,2),data.CambioActual);
-    db.pushAOJParam(aoj, 'TotalDescuento', sql.Numeric(14,2),data.TotalDescuento);
-    db.pushAOJParam(aoj, 'TotalCordobas', sql.Numeric(14,2),data.TotalCordobas);
-    db.pushAOJParam(aoj, 'TotalOrigenFactura', sql.Numeric(14,2),data.TotalOrigenFactura);
-    db.pushAOJParam(aoj, 'Retencion', sql.Bit,data.Retencion);
-    db.pushOutParam(aoj, 'IdFactura', sql.Int);
-    db.storedProcExecute('USP_CREATE_FACTURA_COMPRA',aoj)
+    
+    CompraInsumos.createFacturaCompra( data )
     .then((result) => {
-        res.status(200).json({IdFactura: result.output.IdFactura})
+        res.status(200)
+            .json({
+                    IdFactura: result.output.IdFactura
+                });
     })
-    .catch((err) => {
-        res.status(500).json(mssqlErrors(err))
-    })
+    .catch( err => res.status(500).json( mssqlErrors(err) ) )
 }
 
-function updateFacturaCompra(req, res) {
-    let data = matchedData(req);
-    let aoj = [];
-    db.pushAOJParam(aoj, 'NumRefFactura', sql.NVarChar(50),data.NumRefFactura);
-    db.pushAOJParam(aoj, 'IdProveedor', sql.Int,data.IdProveedor);
-    db.pushAOJParam(aoj, 'IdTrabajador', sql.Int,data.IdTrabajador);
-    db.pushAOJParam(aoj, 'NombVendedor', sql.NVarChar(100),data.NombVendedor);
-    db.pushAOJParam(aoj, 'FechaIngreso', sql.Date,data.FechaIngreso);
-    db.pushAOJParam(aoj, 'SubTotal', sql.Numeric(14,2),data.SubTotal);
-    db.pushAOJParam(aoj, 'TotalIva', sql.Numeric(14,2),data.TotalIva);
-    db.pushAOJParam(aoj, 'CambioActual', sql.Numeric(14,2),data.CambioActual);
-    db.pushAOJParam(aoj, 'TotalDescuento', sql.Numeric(14,2),data.TotalDescuento);
-    db.pushAOJParam(aoj, 'TotalCordobas', sql.Numeric(14,2),data.TotalCordobas);
-    db.pushAOJParam(aoj, 'Retencion', sql.Bit,data.Retencion);
-    db.pushOutParam(aoj, 'IdFactura', sql.Int);
-    db.storedProcExecute('USP_CREATE_FACTURA_COMPRA',aoj)
+exports.bulkCreateFacturaCompra = async ( req, res, next ) =>  {
+    const data = matchedData(req);
+    const {productos} = data;
+    let tran;
+    try {
+        const pool = await getConnectionPoolGlobal();
+        tran = await new sql.Transaction(pool); 
+        const err = await tran.begin();
+        const resInFact = await CompraInsumos.createFacturaCompra( data, tran );
+        const IdFactura = resInFact.output.IdFactura;
+         
+        const table = new sql.Table('DETALLE_FACTURA_COMPRA');
+        console.log('El id de la factura');
+        console.log(IdFactura);
+            // table.columns.add('IdDetalle',       sql.Int,   {nullable: false, primary: true, identi}); 
+        table.columns.add('IdFactura',       sql.Int,   {nullable: false});
+        table.columns.add('IdProducto',      sql.Int,   {nullable: false});
+        table.columns.add('PrecioUnitario',  sql.Numeric(17,5), {nullable: false});
+        table.columns.add('Cantidad',        sql.Numeric(17,5), {nullable: false});
+        table.columns.add('GravadoIva',      sql.Bit,   {nullable: false});
+        table.columns.add('SubTotal',        sql.Numeric(17,5), {nullable: false});
+        table.columns.add('Iva',             sql.Numeric(17,5), {nullable: false});
+        table.columns.add('Descuento',       sql.Numeric(17,5), {nullable: false});
+        table.columns.add('TotalDetalle',    sql.Numeric(17,5), {nullable: false});
+        // table.columns.add('Bonificacion',    sql.Bit, {nullable: true});
+        
+        for (let i = 0; i < productos.length; i++) {
+            let {IdProducto, PrecioUnitario, Cantidad, GravadoIva, SubTotal, Iva, Descuento, TotalDetalle, Bonificacion} = productos[i];
+            table.rows.add(
+                IdFactura,
+                IdProducto,
+                PrecioUnitario,
+                Cantidad,
+                GravadoIva,
+                SubTotal,
+                Iva,
+                Descuento,
+                TotalDetalle,
+                Bonificacion
+            );  
+        }
+        const insDetail = await tran.request()
+                                    .bulk(table);
+
+        // Aqui tendrian que ir las inserciones a los documentos y cuentas
+
+        tran.commit();
+        res.status(201)
+            .json({
+                IdFactura,
+                message: "Factura ingresada con exito!!"
+            })
+    } catch( _err ) {
+        if ( (_err.code !== 'ENOTBEGUN') && !!tran ) {
+            tran.rollback((err) => {
+                if ( err ) {
+                    console.error('Error Haciendo Rollback');
+                }   else  {
+                    console.log('Rollback Transaction Exitoso.');
+                }
+            })
+        }
+        next(_err);
+    }
+}
+
+exports.updateFacturaCompra = (req, res) => {
+    const data = matchedData(req);
+
+    CompraInsumos.updateFacturaCompra( data )
     .then((result) => {
-        res.status(200).json({IdFactura: result.output.IdFactura})
+        res.status(200)
+            .json({IdFactura: result.output.IdFactura})
     })
-    .catch((err) => {
-        res.status(500).json(mssqlErrors(err))
-    })
+    .catch(err  => res.status(500).json (mssqlErrors(err) ))
 }
 
 
-function createDetalleFacturaCompra(req, res) {
+exports.createDetalleFacturaCompra = (req, res) => {
     let data = matchedData(req);
+<<<<<<< HEAD
     let aoj = [];
     db.pushOutParam(aoj, 'IdDetalle', sql.Int);
     db.pushAOJParam(aoj, 'IdFactura', sql.Int,data.IdFactura);
@@ -71,16 +113,23 @@ function createDetalleFacturaCompra(req, res) {
     db.pushAOJParam(aoj, 'TotalDetalle', sql.Numeric(14,2),data.TotalDetalle);
     db.pushAOJParam(aoj, 'Bonificacion', sql.Bit,data.Bonificacion);
     db.storedProcExecute('USP_CREATE_DETALLE_FACTURA_COMPRA',aoj)
+=======
+   
+    CompraInsumos.createDetalleFacturaCompra( data )
+>>>>>>> redefinicion_base_10102018
     .then((result) => {
-        res.status(200).json({IdDetalle: result.output.IdDetalle})
+        res.status(200)
+            .json({IdDetalle: result.output.IdDetalle})
     })
     .catch((err) => {
-        res.status(500).json(mssqlErrors(err))
+        res.status(500)
+            .json(mssqlErrors(err))
     })
 }
 
-function updateDetalleFacturaCompra(req, res) {
+exports.updateDetalleFacturaCompra = (req, res) => {
     let data = matchedData(req);
+<<<<<<< HEAD
     let aoj = [];
     db.pushAOJParam(aoj, 'IdFactura', sql.Int,data.IdFactura);
     db.pushAOJParam(aoj, 'IdProducto', sql.Int,data.IdProducto);
@@ -93,52 +142,55 @@ function updateDetalleFacturaCompra(req, res) {
     db.pushAOJParam(aoj, 'TotalDetalle', sql.Numeric(14,2),data.TotalDetalle);
     db.pushAOJParam(aoj, 'Bonificacion', sql.Bit,data.Bonificacion);
     db.storedProcExecute('USP_CREATE_DETALLE_FACTURA_COMPRA',aoj)
+=======
+
+    CompraInsumos.updateDetalleFacturaCompra( data )
+>>>>>>> redefinicion_base_10102018
     .then((result) => {
         res.status(200).json({IdDetalle: result.output.IdDetalle})
     })
+    
     .catch((err) => {
         res.status(500).json(mssqlErrors(err))
     })
 }
 
-function getFacturaById(req, res ) {
-    let aoj = [];
-    let data = matchedData(req,{locations:['params','query','body']});
-    console.log(data);
-    db.pushAOJParam(aoj, 'IdFactura', sql.Int,data.IdFactura);
-    db.storedProcExecute('USP_GET_FACTURA_BY_ID',aoj)
-    .then((result) => {
-        var jsonString = result.recordset[0];
-        jsonString = JSON.parse(jsonString['JSON_F52E2B61-18A1-11d1-B105-00805F49916B']);
-        console.log(JSON.stringify(jsonString));
-        res.status(200).json({factura:jsonString.Factura[0]})
-    })
-    .catch((err) =>  {
-        console.log(err)
-        res.status(500).json(mssqlErrors(err))
-    })
-}
 
-function getCambiosFacturaById(req, res ) {
-    let aoj = [];
+exports.getFacturaById = (req, res ) => {
     let data = matchedData(req,{locations:['params','query','body']});
-    console.log(data);
-    db.pushAOJParam(aoj, 'IdFactura', sql.Int,data.IdFactura);
-    db.storedProcExecute('USP_GET_CAMBIOS_FACTURA_BY_ID',aoj)
+    
+    CompraInsumos.getFacturaById( data.IdFactura ) 
     .then((result) => {
-        res.status(200).json({cambios:result.recordset})
+            
+        res.status(200)
+            .json({
+                    factura:result.recordset[0]['Factura'][0]
+                })
     })
     .catch((err) =>  {
-        console.log(err)
-        res.status(500).json(mssqlErrors(err))
+        res.status(500)
+            .json(mssqlErrors(err))
+        console.error(err)
     })
 }
 
 
-function obtenerFacturasCompra(req, res ) {
-    let aoj = [];
+exports.getCambiosFacturaById = (req, res ) => {
+    let data = matchedData(req,{locations:['params','query','body']});
+    
+    CompraInsumos.getCambiosFacturaById( data.IdFactura )
+    .then((result) => {
+        res.status(200)
+            .json({cambios:result.recordset})
+    })
+    .catch( err =>   res.status(500).json( mssqlErrors(err) )  )
+}
+
+
+exports.obtenerFacturasCompra = (req, res ) => {
     let data = matchedData(req,{locations:['params','query','body']});
     console.log(data);
+<<<<<<< HEAD
     db.pushAOJParam(aoj, 'IdFechaFiltro', sql.Int,data.IdFechaFiltro);
     db.pushAOJParam(aoj, 'FechaInicio', sql.Date,data.FechaInicio);
     db.pushAOJParam(aoj, 'FechaFin', sql.Date,data.FechaFin);
@@ -146,22 +198,56 @@ function obtenerFacturasCompra(req, res ) {
     db.pushAOJParam(aoj, 'IdProveedor', sql.Int,data.IdProveedor);
     db.pushAOJParam(aoj, 'IdEstadoFactura', sql.Int,data.IdEstadoFactura);
     db.storedProcExecute('USP_GET_FACTURAS_COMPRA',aoj)
+=======
+    
+    CompraInsumos.obtenerFacturasCompra( data )
+>>>>>>> redefinicion_base_10102018
     .then((result) => {
-        res.status(200).json({facturas:result.recordset})
+        res.status(200)
+            .json({
+                    facturas:result.recordset
+                });
     })
     .catch((err) =>  {
-        console.log(err)
-        res.status(500).json(mssqlErrors(err))
-    })
+        res.status(500)
+            .json(mssqlErrors(err));
+        console.error(err);
+    })  
 }
 
-module.exports = {
-    createFacturaCompra, 
-    createDetalleFacturaCompra,
-    getCambiosFacturaById,
-    getFacturaById,
-    updateFacturaCompra,
-    updateDetalleFacturaCompra,
-    obtenerFacturasCompra
+exports.getFacturasIngresadas = (req, res ) => {
+    let data = matchedData(req,{locations:['params','query','body']});
+    console.log(data);
     
+    CompraInsumos.getFacturasIngresadas( data )
+    .then((result) => {
+        res.status(200)
+            .json({
+                    facturas:result.recordset
+                });
+    })
+    .catch((err) =>  {
+        res.status(500)
+            .json(mssqlErrors(err));
+        console.error(err);
+    })  
+}
+
+
+exports.getProductosMasComprados = (req, res ) => {
+    let data = matchedData(req,{locations:['params','query','body']});
+    console.log(data);
+    
+    CompraInsumos.getProductosMasComprados( data )
+    .then((result) => {
+        res.status(200)
+            .json({
+                productostop:result.recordset
+                });
+    })
+    .catch((err) =>  {
+        res.status(500)
+            .json(mssqlErrors(err));
+        console.error(err);
+    })  
 }

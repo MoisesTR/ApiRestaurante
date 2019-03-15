@@ -1,29 +1,34 @@
-const db   = require('../services/database');
-const sql  = require('mssql');
 const {mssqlErrors} = require('../Utils/util');
 const {matchedData} = require('express-validator/filter');
+const EstadoProductoModel = require('../models/EstadoProducto');
+const EstadoProducto = new EstadoProductoModel();
 
 function getEstados(req,res){
     let data = matchedData(req,{locations:['query']});
-    let aoj = [];
 
-    db.pushAOJParam(aoj,'Habilitado',sql.Int,+data.Habilitado)
-    db.storedProcExecute('USP_GET_ESTADOSPRODUCTO', aoj)
+    EstadoProducto.getEstados( data )
     .then((results) => {
-        res.status(200).json({estados:results.recordset})
+        res.status(200)
+            .json({
+                estados:results.recordset
+                });
     }).catch((err) => {
-        res.status(500).json( mssqlErrors(err) );
+        res.status(500)
+            .json( mssqlErrors(err) );
     })
 }
 function getEstadoById(req,res){
-    var IdEstado = req.params.IdEstado;
-    var aoj = [];
-    db.pushAOJParam(aoj, 'IdEstado',sql.Int,IdEstado)
-    db.storedProcExecute('USP_GET_ESTADOPRODUCTO_BY_ID', aoj)
+    let IdEstado = req.params.IdEstado;
+    
+    EstadoProducto.getEstadoById( IdEstado )
     .then((results) => {
-        res.status(200).json({ estado:results.recordset[0]})
+        res.status(200)
+            .json({ 
+                    estado: results.recordset[0]
+                });
     }).catch((err) => {
-        res.status(500).json( mssqlErrors(err) );
+        res.status(500)
+            .json( mssqlErrors(err) );
     })
 }
 module.exports={
