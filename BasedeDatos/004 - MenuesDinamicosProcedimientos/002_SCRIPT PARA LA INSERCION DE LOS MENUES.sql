@@ -9,7 +9,7 @@ INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUE
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUES ('Trabajadores','Trabajadores asociados al restaurante','/trabajador','./assets/img/icon/trabajadores.png','no-collase',7)
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUES ('Cargos','Cargos que ocupan los trabajadores en el restaurante ','/cargo','./assets/img/icon/roles.png','no-collase',8)
 --INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUES ('Salidas','Salidas del inventario de bodega','/salida-producto','./assets/img/icon/ventas.png','no-collase',10)
-INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUES ('Configuraciones','Configuraciones generales del sistema','/configuraciones','./assets/img/icon/configuraciones.png','no-collase',12)
+INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUES ('Configuraciones','Configuraciones generales del sistema','#','./assets/img/icon/configuraciones.png','',12)
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUES ('Proveedor','Modulo de Proveedor','#','./assets/img/icon/proveedores.png','',9)
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUES ('Gastos','Gastos','#','./assets/img/icon/gastos.png','',10)
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUES ('Usuarios','Usuarios','/usuarios','./assets/img/icon/usuarios.png','no-collase',11)
@@ -27,6 +27,7 @@ DECLARE @ID_RC_PROVEEDOR INT = (SELECT TOP 1 IdRecursoSistema FROM dbo.RECURSO_S
 DECLARE @ID_RC_INSUMOS INT = (SELECT TOP 1 IdRecursoSistema FROM dbo.RECURSO_SISTEMA WHERE Nombre = 'Insumos' AND IdMenuPadre IS NULL)
 DECLARE @ID_RC_GASTOS INT = (SELECT TOP 1 IdRecursoSistema FROM dbo.RECURSO_SISTEMA WHERE Nombre = 'Gastos' AND IdMenuPadre IS NULL)
 DECLARE @ID_RC_CATALOGOS INT = (SELECT TOP 1 IdRecursoSistema FROM dbo.RECURSO_SISTEMA WHERE Nombre = 'Catalogos' AND IdMenuPadre IS NULL)
+DECLARE @ID_RC_CONFIGURACIONES INT = (SELECT TOP 1 IdRecursoSistema FROM dbo.RECURSO_SISTEMA WHERE Nombre = 'Configuraciones' AND IdMenuPadre IS NULL)
 
 -- MENU FACTURAS
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre) 
@@ -63,6 +64,12 @@ VALUES
 , ('Empaques','Empaques de los productos','/empaques','ninguno',4,@ID_RC_CATALOGOS)
 , ('Envases','Envases de los productos','/envases','ninguno',5,@ID_RC_CATALOGOS)
 , ('Unidades Medida','Unidades de medida de los productos','/unidadmedida','ninguno',6,@ID_RC_CATALOGOS)
+
+
+-- MENU CONFIGURACIONES
+INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre) 
+VALUES ('Documentos y Moneda','Modulo Configuraciones','/configuraciones/documentos','ninguno',1,@ID_RC_CONFIGURACIONES)
+, ('Restaurante','Modulo Configuraciones','/configuraciones/restaurante','ninguno',2,@ID_RC_CONFIGURACIONES)
 
 INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol, IdRecursoSistema)
 SELECT	IdRol = 1
