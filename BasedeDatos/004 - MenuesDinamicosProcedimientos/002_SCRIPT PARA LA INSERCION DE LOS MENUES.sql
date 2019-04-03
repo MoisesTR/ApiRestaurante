@@ -13,6 +13,7 @@ INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUE
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUES ('Proveedor','Modulo de Proveedor','#','./assets/img/icon/proveedores.png','',9)
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUES ('Gastos','Gastos','#','./assets/img/icon/gastos.png','',10)
 INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUES ('Usuarios','Usuarios','/usuarios','./assets/img/icon/usuarios.png','no-collase',11)
+INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Clase,Orden) VALUES ('Testing UI','Testing','/testing','./assets/img/icon/usuarios.png','no-collase',12)
 
 --Opciones especificas del menu(Submenues)
 
@@ -76,34 +77,3 @@ SELECT	IdRol = 1
 		, IdRecursoSistema
 FROM	dbo.RECURSO_SISTEMA
 WHERE	Habilitado = 1
-
-
---SELECT	*
---FROM	dbo.ROL_RECURSO_SISTEMA
---	, 
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,1)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,2)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,3)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,4)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,5)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,6)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,7)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,8)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,9)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,10)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,11)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,12)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,13)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,14)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,15)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,16)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,17)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,18)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,19)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,20)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,21)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,22)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,23)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,23)
---INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol,IdRecursoSistema) VALUES(1,24)
-
