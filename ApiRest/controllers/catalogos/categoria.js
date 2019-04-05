@@ -5,8 +5,7 @@ function createCategoria(req,res){
     const data = matchedData(req)
     console.log('req categoria');
     
-
-    Categoria.createCategoria( data.NombCategoria, data.DescCategoria )
+    Categoria.createCategoria( data.IdTipInsumo,data.NombCategoria, data.DescCategoria )
     .then((results) => {
         res.status(200)
             .json(results.recordset[0])

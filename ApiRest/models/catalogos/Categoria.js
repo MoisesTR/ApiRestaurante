@@ -8,8 +8,7 @@ WHERE IdCategoria = @IdCategoria `;
 class CategoriaModel {    
     static createCategoria( IdTipInsumo,NombCategoria, DescCategoria ){ 
         const aoj = [];
-        console.log('Pruebas');
-        console.log(DescCategoria);
+    
         pushAOJParam(aoj,   'IdTipInsumo',      sql.Bit,            IdTipInsumo);
         pushAOJParam(aoj,   'NombCategoria',    sql.NVarChar(50),   NombCategoria)
         pushAOJParam(aoj,   'DescCategoria',    sql.NVarChar(150),  DescCategoria)
