@@ -25,7 +25,7 @@ const createProveedor = [
     body('IdPais', 'Selecciona el Pais del Proveedor').isInt(),
     body('IsProvServicio', 'Selecciona si es Proveedor de Servicios.').isBoolean(),
     body('NombProveedor', 'Ingrese el Nombre del proveedor.').isString(),
-    body('Direccion', 'Ingrese la direccion del proveedor.').isString().trim(),
+    body('Direccion', 'Ingrese la direccion del proveedor.').isString().trim().optional({nullable: true}),
     body('Email','Ingrese el Email del Proveedor.').optional({nullable: true}),
     body('Imagen').isString().optional({nullable: true}),
     body('DescProveedor').isLength({min: 4, max:200}).optional({nullable:true}),
