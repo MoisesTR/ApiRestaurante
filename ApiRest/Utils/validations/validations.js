@@ -178,7 +178,8 @@ exports.updateSucursal = createSucursal.concat([
 
 const createProducto = [
     body('IdProveedor', 'Selecciona Un proveedor.').isInt(),
-    body('IdSubClasificacion', 'Selecciona Una SubClasificacion.').isInt().optional({nullable:true}),
+    body('IdCategoria', 'Selecciona Una categoria.').isInt(),
+    body('IdClasificacion', 'Selecciona Una clasificación.').isInt().optional({nullable:true}),
     body('IdEstado','Elige el estado del producto.').isInt(),
     body('NombProducto','Ingresa el Nombre del Producto.').isString(),
     body('DescProducto','Ingresa la Descripcion del producto.').isString(),
