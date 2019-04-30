@@ -91,10 +91,10 @@ SET IDENTITY_INSERT dbo.CATEGORIA_PRODUCTO OFF;
 GO
 SET IDENTITY_INSERT dbo.CLASIFICACION_PRODUCTO ON;
 GO
-INSERT INTO CLASIFICACION_PRODUCTO(IdCategoria, NombClasificacion, DescClasificacion) 
-VALUES	(1, 'Pollo','Las distintas cortes de pollo.')
-		,(2,'Pastas','DistINTos tipos de pasta')
-		,(3, 'Granos Basicos',NULL)
+INSERT INTO CLASIFICACION_PRODUCTO(IdClasificacion,IdCategoria, NombClasificacion, DescClasificacion) 
+VALUES	(1, 1, 'Pollo','Las distintas cortes de pollo.')
+		,(2,1, 'Pastas','DistINTos tipos de pasta')
+		,(3,1, 'Granos Basicos',NULL)
 GO
 SET IDENTITY_INSERT dbo.CLASIFICACION_PRODUCTO OFF;
 GO

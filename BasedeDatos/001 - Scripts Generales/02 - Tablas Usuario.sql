@@ -95,8 +95,9 @@ GO
 SET IDENTITY_INSERT dbo.ROL_USUARIO ON
 GO
 	INSERT INTO dbo.ROL_USUARIO(IdRol, NombRol,DescRol,Habilitado)
-	VALUES(1,'Administrador', 'Este Rol Se Utilizara unicamente para los administradores(no trabajadores) de la aplicacion.', 0)
-	, (2,'Developer', 'Rol para desarrolladores', 0)
+	VALUES(1,'Developer', 'Rol para desarrolladores', 1)
+	, (2,'Administrador', 'Este Rol Se Utilizara unicamente para los administradores(no trabajadores) de la aplicacion.', 1)
+	
 GO
 SET IDENTITY_INSERT dbo.ROL_USUARIO OFF
 GO

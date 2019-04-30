@@ -61,10 +61,10 @@ INSERT INTO dbo.RECURSO_SISTEMA(Nombre,Descripcion,Ruta,Icono,Orden,IdMenuPadre)
 VALUES 
 ('Categoria','Categorias de los productos','/categorias','ninguno',1,@ID_RC_CATALOGOS)
 , ('Clasificacion','Clasificaciones de los productos','/clasificacion-productos','ninguno',2,@ID_RC_CATALOGOS) 
-, ('Subclasificación','Subclasificaciones de los productos','/subclasificacion-productos','ninguno',3,@ID_RC_CATALOGOS)
-, ('Empaques','Empaques de los productos','/empaques','ninguno',4,@ID_RC_CATALOGOS)
-, ('Envases','Envases de los productos','/envases','ninguno',5,@ID_RC_CATALOGOS)
-, ('Unidades Medida','Unidades de medida de los productos','/unidadmedida','ninguno',6,@ID_RC_CATALOGOS)
+--, ('Subclasificación','Subclasificaciones de los productos','/subclasificacion-productos','ninguno',2,@ID_RC_CATALOGOS)
+, ('Empaques','Empaques de los productos','/empaques','ninguno',3,@ID_RC_CATALOGOS)
+, ('Envases','Envases de los productos','/envases','ninguno',4,@ID_RC_CATALOGOS)
+, ('Unidades Medida','Unidades de medida de los productos','/unidadmedida','ninguno',5,@ID_RC_CATALOGOS)
 
 
 -- MENU CONFIGURACIONES
@@ -73,7 +73,7 @@ VALUES ('Documentos y Moneda','Modulo Configuraciones','/configuraciones/documen
 , ('Restaurante','Modulo Configuraciones','/configuraciones/restaurante','ninguno',2,@ID_RC_CONFIGURACIONES)
 
 INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol, IdRecursoSistema)
-SELECT	IdRol = 2
+SELECT	IdRol = 1
 		, IdRecursoSistema
 FROM	dbo.RECURSO_SISTEMA
 WHERE	Habilitado = 1

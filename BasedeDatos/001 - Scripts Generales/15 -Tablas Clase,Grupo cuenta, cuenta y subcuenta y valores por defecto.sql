@@ -117,7 +117,7 @@ VALUES (2,1,'Pasivo circulante') -- TODOS LOS IMPUESTOS SON CIRCULANTES
 -- CLASE INGRESOS
 INSERT INTO dbo.CONTABILIDAD_GRUPO_CUENTA(IdClasCuenta,IdGrupo, NombGrupo)
 VALUES (4,1,'Ingresos Operacionales')
-		, (4,2,'Ingress no operacionales')
+		, (4,2,'Ingresos no operacionales')
 		, (4,3, 'Otros ingresos')
 
 --CLASE GASTOS
