@@ -73,7 +73,7 @@ VALUES ('Documentos y Moneda','Modulo Configuraciones','/configuraciones/documen
 , ('Restaurante','Modulo Configuraciones','/configuraciones/restaurante','ninguno',2,@ID_RC_CONFIGURACIONES)
 
 INSERT INTO dbo.ROL_RECURSO_SISTEMA(IdRol, IdRecursoSistema)
-SELECT	IdRol = 1
+SELECT	IdRol = 2
 		, IdRecursoSistema
 FROM	dbo.RECURSO_SISTEMA
 WHERE	Habilitado = 1

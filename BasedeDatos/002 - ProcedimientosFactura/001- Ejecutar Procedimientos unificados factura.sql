@@ -239,7 +239,7 @@ BEGIN
 SELECT BF.IdFactura		
 		, BF.IdUsuario
 		, CreatedAt = CONVERT(VARCHAR(10),BF.CreatedAt,101)
-		, BF.Descripcion
+		, BF.DescCambio
 		, NombreUsuario = USU.Username
 		, Hora = LTRIM(RIGHT(CONVERT(VARCHAR(20), FACT.CreatedAt, 100), 7))
 FROM	dbo.BITACORA_CAMBIOS_FACTURA BF

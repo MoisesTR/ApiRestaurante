@@ -1,22 +1,6 @@
 USE ATOMIC_RESTAURANTE;
 
 GO
-IF OBJECT_ID('V_SUBCLASIFICACIONES','V') IS NOT NULL
-	DROP VIEW V_SUBCLASIFICACIONES
-GO
-CREATE VIEW V_SUBCLASIFICACIONES
-AS
-SELECT 
-		s.IdSubClasificacion
-		, s.NombSubClasificacion
-		, s.DescSubClasificacion
-		, s.IdClasificacion
-		, c.NombClasificacion
-		, s.Habilitado 
-FROM	SUBCLASIFICACION_PRODUCTO s
-		INNER JOIN CLASIFICACION_PRODUCTO c 
-			ON s.IdClasificacion = c.IdClasificacion;
-GO
 
 IF OBJECT_ID('dbo.V_ProductosDetallados','V') IS NOT NULL
 	DROP VIEW dbo.V_ProductosDetallados
@@ -31,8 +15,6 @@ SELECT	p.IdProducto
 		, p.CodOriginal
 		, cl.IdCategoria
 		, NombCategoria = ISNULL(cp.NombCategoria, 'No Tiene')
-		, p.IdSubClasificacion
-		, NombSubClasificacion = ISNULL(sp.NombSubClasificacion, 'No Tiene')
 		, cl.IdClasificacion
 		, NombClasificacion = ISNULL(cl.NombClasificacion, 'No Tiene')
 		, p.IdEnvase
@@ -53,16 +35,14 @@ SELECT	p.IdProducto
 		, P.CreatedAt
 		, P.UpdatedAt
 FROM	Producto p 
-		INNER JOIN ESTADO_PRODUCTO ep 
-			ON	p.IdEstado = ep.IdEstado
+		INNER JOIN CATEGORIA_PRODUCTO cp 
+			ON	P.IdCategoria = cp.IdCategoria
 		INNER JOIN dbo.TIPO_INSUMO im
 			ON	p.IdTipInsumo = im.IdTipInsumo
-		LEFT JOIN SUBCLASIFICACION_PRODUCTO sp 
-			ON	p.IdSubClasificacion = sp.IdSubClasificacion
+		INNER JOIN ESTADO_PRODUCTO ep 
+			ON	p.IdEstado = ep.IdEstado
 		LEFT JOIN CLASIFICACION_PRODUCTO cl 
-			ON	sp.IdClasificacion = cl.IdClasificacion
-		LEFT JOIN CATEGORIA_PRODUCTO cp 
-			ON	cl.IdCategoria = cp.IdCategoria
+			ON	P.IdClasificacion = cl.IdClasificacion
 		LEFT JOIN ENVASE e 
 			ON	p.IdEnvase = e.IdEnvase
 		LEFT JOIN EMPAQUE em 
@@ -72,15 +52,6 @@ FROM	Producto p
     
 	
 GO
-IF OBJECT_ID('V_SUBCLASIFICACIONES','V') IS NOT NULL
-	DROP VIEW V_SUBCLASIFICACIONES
-GO
-CREATE VIEW V_SUBCLASIFICACIONES
-AS
-SELECT s.IdSubClasificacion,s.NombSubClasificacion,s.DescSubClasificacion,s.IdClasificacion,c.NombClasificacion,s.Habilitado FROM SUBCLASIFICACION_PRODUCTO s
-    INNER JOIN CLASIFICACION_PRODUCTO c ON s.IdClasificacion = c.IdClasificacion;
-GO
-
 
 IF OBJECT_ID('dbo.VIEW_BASIC_GET_PRODUCT','V') IS NOT NULL	
 	DROP VIEW dbo.VIEW_BASIC_GET_PRODUCT;
@@ -91,8 +62,6 @@ SELECT IdProducto
 		, PRO.IdProveedor
 		, C.IdCategoria
 		, CP.NombCategoria
-		, P.IdSubClasificacion
-		, SC.NombSubClasificacion
 		, C.IdClasificacion
 		, C.NombClasificacion
 		, p.IdEstado
@@ -108,16 +77,14 @@ SELECT IdProducto
 		, P.CreatedAt
 		, P.UpdatedAt 
 		FROM dbo.PRODUCTO P
-		LEFT JOIN dbo.SUBCLASIFICACION_PRODUCTO SC 
-			ON P.IdSubClasificacion = SC.IdSubClasificacion
-		LEFT JOIN dbo.CLASIFICACION_PRODUCTO C 
-			ON SC.IdClasificacion = C.IdClasificacion
-		LEFT JOIN dbo.CATEGORIA_PRODUCTO CP 
-			ON C.IdCategoria = CP.IdCategoria
-		INNER JOIN	dbo.TIPO_INSUMO	AS TI
-			ON P.IdTipInsumo	= TI.IdTipInsumo
 		INNER JOIN dbo.PROVEEDOR PRO
 			ON P.IdProveedor = PRO.IdProveedor
+		INNER JOIN dbo.CATEGORIA_PRODUCTO CP 
+			ON P.IdCategoria = CP.IdCategoria
+		LEFT JOIN dbo.CLASIFICACION_PRODUCTO C 
+			ON P.IdClasificacion = C.IdClasificacion
+		INNER JOIN	dbo.TIPO_INSUMO	AS TI
+			ON P.IdTipInsumo = TI.IdTipInsumo
 
 GO
 

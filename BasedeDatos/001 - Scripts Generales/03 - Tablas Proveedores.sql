@@ -1,6 +1,14 @@
 USE ATOMIC_RESTAURANTE
 
 GO
+
+EXEC USP_DELETE_ALL_F_CONSTRAINT_TABLE 'dbo.TELEFONOS_PROVEEDOR'
+
+
+GO
+IF OBJECT_ID('dbo.PROVEEDOR') IS NOT NULL
+	DROP TABLE dbo.PROVEEDOR
+
 CREATE TABLE dbo.PROVEEDOR(
     IdProveedor			INT IDENTITY(1,1),
 	IdPais				TINYINT				NOT NULL	DEFAULT 1, --Foraneo
@@ -16,7 +24,6 @@ CREATE TABLE dbo.PROVEEDOR(
     NombRepresentante	NVARCHAR(100)		NULL,
 	Documento			NVARCHAR(50)		NULL,
 	Abreviatura			NVARCHAR(20)		NULL,
-    --Retencion2			Bit					NULL	DEFAULT 0,
 	Habilitado			Bit					NOT NULL	DEFAULT 1,
     CreatedAt			SMALLDATETIME		NOT NULL	DEFAULT GETDATE(),
     UpdatedAt			SMALLDATETIME		NULL,
@@ -63,6 +70,9 @@ ALTER TABLE PROVEEDOR
 	ADD CONSTRAINT U_NumeroRuc UNIQUE(Documento)
 GO
 
+IF OBJECT_ID('dbo.TIPO_DE_DESCUENTO') IS NOT NULL
+	DROP TABLE dbo.TIPO_DE_DESCUENTO
+GO
 CREATE TABLE dbo.TIPO_DE_DESCUENTO (
 	IdTipDesc		TINYINT			NOT NULL,
 	NombTipDesc		VARCHAR(50)		NOT NULL,
@@ -73,7 +83,10 @@ CREATE TABLE dbo.TIPO_DE_DESCUENTO (
 )
 
 INSERT INTO TIPO_DE_DESCUENTO(IdTipDesc, NombTipDesc)
-VALUES(1, 'Descuento porcentual por Item'),(2, 'Descuento monetario por Item'), (3, 'Descuento porcentual sobre la transaccion.'),  (4, 'Descuento monetario sobre la transaccion.')
+VALUES(1, 'Descuento porcentual por Item')
+,(2, 'Descuento monetario por Item')
+, (3, 'Descuento porcentual sobre la transaccion.')
+,  (4, 'Descuento monetario sobre la transaccion.')
 
 
 USE master

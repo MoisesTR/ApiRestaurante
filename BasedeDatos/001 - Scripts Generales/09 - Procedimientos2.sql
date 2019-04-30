@@ -26,7 +26,8 @@ IF OBJECT_ID('USP_CREATE_PRODUCTO','P') IS NOT NULL
 GO
 CREATE PROCEDURE USP_CREATE_PRODUCTO(
 	@IdProveedor		INT,
-    @IdSubClasificacion INT,
+	@IdCategoria		INT,
+	@IdClasificacion	INT,
     @IdEstado			INT,
     @NombProducto		NVARCHAR(50),
     @DescProducto		NVARCHAR(200),
@@ -61,10 +62,14 @@ CREATE PROCEDURE USP_CREATE_PRODUCTO(
 		--BEGIN TRY
 			INSERT INTO dbo.PRODUCTO(
 			IdProveedor
-			, IdSubClasificacion
-			, IdEstado,NombProducto
-			, DescProducto,Imagen
-			, IdEnvase,IdEmpaque
+			, IdCategoria
+			, IdClasificacion
+			, IdEstado
+			, NombProducto
+			, DescProducto
+			, Imagen
+			, IdEnvase
+			, IdEmpaque
 			, IdUnidadMedida
 			, ValorUnidadMedida
 			, CantidadEmpaque
@@ -77,7 +82,8 @@ CREATE PROCEDURE USP_CREATE_PRODUCTO(
 			)
 			VALUES(
 			@IdProveedor
-			, @IdSubClasificacion
+			, @IdCategoria
+			, @IdClasificacion
 			, @IdEstado
 			, @NombProducto
 			, @DescProducto
@@ -110,7 +116,7 @@ GO
 CREATE PROCEDURE USP_UPDATE_PRODUCTO(
 	@IdProducto			INT,
     @IdCategoria		INT,
-    @IdSubClasificacion INT,
+    @IdClasificacion	INT,
     @IdEstado			INT,
     @NombProducto		NVARCHAR(50),
     @Descripcion		NVARCHAR(200),
@@ -128,10 +134,9 @@ CREATE PROCEDURE USP_UPDATE_PRODUCTO(
 
 ) AS BEGIN 
 	UPDATE dbo.PRODUCTO 
-	SET IdSubClasificacion= ISNULL(@IdSubClasificacion,IdSubClasificacion)
-		,	IdEstado = @IdEstado
+	SET IdEstado = @IdEstado
 		,	NombProducto = @NombProducto
-		,	cantidadEmpaque = @CantidadEmpaque
+		,	CantidadEmpaque = @CantidadEmpaque
 		,   DescProducto	= @Descripcion
 		,	Imagen		= @Imagen
 		,	IdEnvase	= @IdEnvase
@@ -158,7 +163,6 @@ AS BEGIN
 			, P.IdProveedor
 			, C.IdCategoria
 			, C.IdClasificacion
-			, P.IdSubClasificacion
 			, P.IdEstado
 			, P.IdEnvase
 			, P.IdEmpaque
@@ -179,12 +183,10 @@ AS BEGIN
 	FROM dbo.PRODUCTO P
 	INNER JOIN dbo.PROVEEDOR PRO
 		ON P.IdProveedor = PRO.IdProveedor
-	LEFT JOIN dbo.SUBCLASIFICACION_PRODUCTO SC 
-		ON P.IdSubClasificacion = SC.IdSubClasificacion
+	INNER JOIN dbo.CATEGORIA_PRODUCTO CP 
+		ON P.IdCategoria = CP.IdCategoria
 	LEFT JOIN dbo.CLASIFICACION_PRODUCTO C 
-		ON SC.IdClasificacion = C.IdClasificacion
-	LEFT JOIN dbo.CATEGORIA_PRODUCTO CP 
-		ON C.IdCategoria = CP.IdCategoria
+		ON P.IdClasificacion = C.IdClasificacion
 	 WHERE IdProducto = @IdProducto
 END
 GO
@@ -200,8 +202,6 @@ AS BEGIN
 		, PRO.IdProveedor
 		, C.IdCategoria
 		, CP.NombCategoria
-		, P.IdSubClasificacion
-		, SC.NombSubClasificacion
 		, C.IdClasificacion
 		, C.NombClasificacion
 		, p.IdEstado
@@ -219,12 +219,11 @@ AS BEGIN
 		FROM dbo.PRODUCTO P
 		INNER JOIN dbo.PROVEEDOR PRO
 			ON P.IdProveedor = PRO.IdProveedor
-		LEFT JOIN dbo.SUBCLASIFICACION_PRODUCTO SC 
-			ON P.IdSubClasificacion = SC.IdSubClasificacion
+		INNER JOIN dbo.CATEGORIA_PRODUCTO CP 
+			ON P.IdCategoria = CP.IdCategoria
 		LEFT JOIN dbo.CLASIFICACION_PRODUCTO C 
-			ON SC.IdClasificacion = C.IdClasificacion
-		LEFT JOIN dbo.CATEGORIA_PRODUCTO CP 
-			ON C.IdCategoria = CP.IdCategoria
+			ON P.IdClasificacion = C.IdClasificacion
+		
 
 	END
 	ELSE
@@ -233,27 +232,27 @@ AS BEGIN
 		, PRO.IdProveedor
 		, C.IdCategoria
 		, CP.NombCategoria
-		, P.IdSubClasificacion
-		, SC.NombSubClasificacion
 		, C.IdClasificacion
 		, C.NombClasificacion
-		, P.IdEstado
-		, P.NombProducto
-		, P.DescProducto
-		, P.Imagen
+		, p.IdEstado
+		, p.NombProducto
+		, p.DescProducto
+		, p.Imagen
 		, P.DiasRotacion
+		, P.IdTipInsumo
+		, P.CodProd
+		, P.CodOriginal
+		, P.CodBarra
 		, P.Habilitado
 		, P.CreatedAt
 		, P.UpdatedAt 
 		FROM dbo.PRODUCTO P
 		INNER JOIN dbo.PROVEEDOR PRO
 			ON P.IdProveedor = PRO.IdProveedor
-		LEFT JOIN dbo.SUBCLASIFICACION_PRODUCTO SC 
-			ON P.IdSubClasificacion = SC.IdSubClasificacion
+		INNER JOIN dbo.CATEGORIA_PRODUCTO CP 
+			ON P.IdCategoria = CP.IdCategoria
 		LEFT JOIN dbo.CLASIFICACION_PRODUCTO C 
-			ON SC.IdClasificacion = C.IdClasificacion
-		LEFT JOIN dbo.CATEGORIA_PRODUCTO CP 
-			ON C.IdCategoria = CP.IdCategoria
+			ON P.IdClasificacion = C.IdClasificacion
 		WHERE P.Habilitado = @Habilitado
 	END
 END
