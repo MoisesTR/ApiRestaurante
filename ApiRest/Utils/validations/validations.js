@@ -25,7 +25,7 @@ const createProveedor = [
     body('IdPais', 'Selecciona el Pais del Proveedor').isInt(),
     body('IsProvServicio', 'Selecciona si es Proveedor de Servicios.').isBoolean(),
     body('NombProveedor', 'Ingrese el Nombre del proveedor.').isString(),
-    body('Direccion', 'Ingrese la direccion del proveedor.').isString().trim(),
+    body('Direccion', 'Ingrese la direccion del proveedor.').isString().trim().optional({nullable: true}),
     body('Email','Ingrese el Email del Proveedor.').optional({nullable: true}),
     body('Imagen').isString().optional({nullable: true}),
     body('DescProveedor').isLength({min: 4, max:200}).optional({nullable:true}),
@@ -178,7 +178,8 @@ exports.updateSucursal = createSucursal.concat([
 
 const createProducto = [
     body('IdProveedor', 'Selecciona Un proveedor.').isInt(),
-    body('IdSubClasificacion', 'Selecciona Una SubClasificacion.').isInt().optional({nullable:true}),
+    body('IdCategoria', 'Selecciona Una categoria.').isInt(),
+    body('IdClasificacion', 'Selecciona Una clasificación.').isInt().optional({nullable:true}),
     body('IdEstado','Elige el estado del producto.').isInt(),
     body('NombProducto','Ingresa el Nombre del Producto.').isString(),
     body('DescProducto','Ingresa la Descripcion del producto.').isString(),

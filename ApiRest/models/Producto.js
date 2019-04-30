@@ -44,7 +44,8 @@ class ProductoModel {
         console.log(+data.IsGranel);
         console.log(data);
         pushAOJParam(aoj, 'IdProveedor',        sql.Int,            data.IdProveedor)
-        pushAOJParam(aoj, 'IdSubClasificacion', sql.Int,            data.IdSubClasificacion)
+        pushAOJParam(aoj, 'IdCategoria', sql.Int,            data.IdCategoria)
+        pushAOJParam(aoj, 'IdClasificacion', sql.Int,            data.IdClasificacion)
         pushAOJParam(aoj, 'IdEstado',           sql.Int,            data.IdEstado);
         pushAOJParam(aoj, 'NombProducto',       sql.NVarChar(50),   data.NombProducto);
         pushAOJParam(aoj, 'DescProducto',       sql.NVarChar(200),  data.DescProducto);
@@ -69,7 +70,7 @@ class ProductoModel {
         pushAOJParam(aoj, 'IdProveedor',        sql.Int,            data.IdProveedor)
         pushAOJParam(aoj, 'IdProducto',         sql.Int,            data.IdProducto)
         pushAOJParam(aoj, 'IdCategoria',        sql.Int,            data.IdCategoria)
-        pushAOJParam(aoj, 'IdSubClasificacion', sql.Int,            data.IdSubClasificacion)
+        pushAOJParam(aoj, 'IdClasificacion',        sql.Int,            data.IdClasificacion)
         pushAOJParam(aoj, 'IdEstado',           sql.Int,            data.IdEstado)
         pushAOJParam(aoj, 'NombProducto',       sql.NVarChar(50),   data.NombProducto)
         pushAOJParam(aoj, 'DescProducto',       sql.NVarChar(200),  data.DescProducto)

@@ -17,7 +17,7 @@ CREATE TABLE dbo.PROVEEDOR(
 	IsMercado			BIT					NOT NULL	DEFAULT 0,
 	HasSucursales		BIT					NULL,
 	NombProveedor		NVARCHAR(50)		NOT NULL,
-    Direccion			NVARCHAR(200)		NOT NULL,
+    Direccion			NVARCHAR(200)		NOT NULL DEFAULT 'NINGUNA',
     Email				NVARCHAR(100)		NULL,
 	Imagen				NVARCHAR(50)		NOT NULL	DEFAULT 'proveedor.png',
     DescProveedor		NVARCHAR(200)		NULL,

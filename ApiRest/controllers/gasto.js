@@ -8,7 +8,6 @@ function createGasto(req, res) {
     let aoj = [];
 
     db.pushAOJParam(aoj, 'IdClasificacion', sql.Int,data.IdClasificacion);
-    db.pushAOJParam(aoj, 'IdSubClasificacion', sql.Int,data.IdSubClasificacion);
     db.pushAOJParam(aoj, 'FechaIngreso', sql.Date,data.FechaIngreso);
     db.pushAOJParam(aoj, 'NoReferencia', sql.Int,data.NoReferencia);
     db.pushAOJParam(aoj, 'CodigoFactura', sql.NVarChar(100),data.CodigoFactura);
