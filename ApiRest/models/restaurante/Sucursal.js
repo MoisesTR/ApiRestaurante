@@ -1,5 +1,5 @@
 const { sql, pushAOJParam, storedProcExecute, queryExecute } = require('../../Utils/defaultImports')
-const baseSelect = 'SELECT IdSucursal,NombSucursal,Direccion, Telefono1, Telefono2,Habilitado from dbo.SUCURSAL_RESTAURANTE';
+const baseSelect = 'SELECT SUC.IdSucursal,SUC.NombSucursal,SUC.Direccion, SUC.Telefono1, SUC.Telefono2,SUC.Habilitado, RES.IdRestaurante, RES.NombRestaurante from dbo.SUCURSAL_RESTAURANTE SUC INNER JOIN dbo.RESTAURANTE RES ON SUC.IdRestaurante = RES.IdRestaurante ';
 
 class SucursalModel {
     static async getSucursalById( IdSucursal ) {
@@ -12,7 +12,7 @@ class SucursalModel {
     
     static async getSucursales( Habilitado ) {
         const aoj = [];
-        const filter = ' WHERE Habilitado = @Habilitado';
+        const filter = ' WHERE SUC.Habilitado = @Habilitado';
 
         pushAOJParam(aoj, 'Habilitado',      sql.Int,    +Habilitado)
         const resp = await queryExecute( baseSelect+ filter, aoj)
