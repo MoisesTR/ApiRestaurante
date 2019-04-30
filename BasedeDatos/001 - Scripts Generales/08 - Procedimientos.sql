@@ -28,10 +28,44 @@ CREATE PROCEDURE USP_CREATE_RESTAURANTE (
 )
 AS BEGIN
 
-INSERT INTO RESTAURANTE(IdMoneda,IdPais,IdMonedaFacturacion,IsAutoBackup,IsCuotaFija,NombRestaurante
-	,DescRestaurante,CuotaFija,PorcIva,RazonSocial,SitioWeb,Correo,TelPrincipal,TelPrincipal2,FechaFundacion,Login,Workspace)
-	VALUES(@IdMoneda,@IdPais,@IdMonedaFacturacion,@IsAutoBackup,@IsCuotaFija,@NombRestaurante
-	,@DescRestaurante,@CuotaFija,@PorcIva,@RazonSocial,@SitioWeb,@Correo,@TelPrincipal,@TelPrincipal2,@FechaFundacion,@Login,@Workspace)
+	INSERT INTO RESTAURANTE(
+	IdMoneda
+	, IdPais
+	, IdMonedaFacturacion
+	, IsAutoBackup
+	, IsCuotaFija
+	, NombRestaurante
+	, DescRestaurante
+	, CuotaFija
+	, PorcIva
+	, RazonSocial
+	, SitioWeb
+	, Correo
+	, TelPrincipal
+	, TelPrincipal2
+	, FechaFundacion
+	, Login
+	, Workspace
+	)
+VALUES(
+	@IdMoneda
+	, @IdPais
+	, @IdMonedaFacturacion
+	, @IsAutoBackup
+	, @IsCuotaFija
+	, @NombRestaurante
+	, @DescRestaurante
+	, @CuotaFija
+	, @PorcIva
+	, @RazonSocial
+	, @SitioWeb
+	, @Correo
+	, @TelPrincipal
+	, @TelPrincipal2
+	, @FechaFundacion
+	, @Login
+	, @Workspace
+	)
 
 END
 GO
@@ -64,8 +98,12 @@ CREATE PROCEDURE USP_UPDATE_CARGO(
 	@CodCargo	NVARCHAR(4)
 )
 AS BEGIN
-	UPDATE CARGO_TRABAJADOR SET NombCargo=@NombCargo, DescCargo = @DescCargo,CodCargo = @CodCargo, UpdatedAt = GETDATE()
-	WHERE IdCargo = @IdCargo
+	UPDATE	CARGO_TRABAJADOR 
+	SET		NombCargo = @NombCargo
+			, DescCargo = @DescCargo
+			, CodCargo = @CodCargo
+			, UpdatedAt = GETDATE()
+	WHERE	IdCargo = @IdCargo
 END
 GO
 IF OBJECT_ID('USP_DISP_CARGO','P') IS NOT NULL
@@ -86,10 +124,24 @@ CREATE PROCEDURE USP_GET_TRABAJADOR(
 	@IdTrabajador INT
 )
 AS BEGIN
-	SELECT T.IdTrabajador, T.IdSucursal, S.NombSucursal, T.IdCargo, C.NombCargo,
-			T.Nombres, T.Apellidos, T.IdTipDoc, T.Documento, T.Imagen,
-			T.FechaNacimiento, T.Direccion, T.Telefono1, T.Telefono2, T.FechaIngreso,
-			T.Habilitado, T.CreatedAt,T.UpdatedAt
+	SELECT T.IdTrabajador
+	, T.IdSucursal
+	, S.NombSucursal
+	, T.IdCargo
+	, C.NombCargo
+	, T.Nombres
+	, T.Apellidos
+	, T.IdTipDoc
+	, T.Documento
+	, T.Imagen
+	, T.FechaNacimiento
+	, T.Direccion
+	, T.Telefono1
+	, T.Telefono2
+	, T.FechaIngreso
+	, T.Habilitado
+	, T.CreatedAt
+	, T.UpdatedAt
 	FROM dbo.TRABAJADOR T 
 	INNER JOIN dbo.SUCURSAL_RESTAURANTE S ON T.IdSucursal= S.IdSucursal
 	INNER JOIN dbo.CARGO_TRABAJADOR C ON T.IdCargo = C.IdCargo
@@ -115,7 +167,7 @@ CREATE PROCEDURE USP_GET_DETALLE_BODEGA_AP
 AS BEGIN
 	SELECT	IdDetalle,	IdBodegaAreaP,	IdDetalleEntradaAP,	IdEntradaBodegaAP,	P.IdProveedor,	
 			DAP.IdProductoProveedor,	P.IdProducto, P.NombProducto,	CP.IdCategoria,	C.NombCategoria,
-			P.IdSubClasificacion,	SP.NombSubClasificacion,	SP.IdClasificacion,	CP.NombClasificacion,
+			SP.IdClasificacion,	CP.NombClasificacion,
 			Cantidad,	FechaHoraIngreso,	FechaHoraProduccion,	DAP.Habilitado 
 	FROM dbo.DETALLE_BODEGA_AP DAP
 	INNER JOIN PRODUCTO  P 
@@ -141,7 +193,6 @@ CREATE PROCEDURE USP_INSERT_ENTRADA_BODEGA_AREA_PRODUCCION(
 	@RepresentanteProveedor NVARCHAR(50),
 	--SubTotalFactura MONEY NULL CHECK(SubTotalFactura > 0),
 	@PorcRetencion NUMERIC(10,5) NULL,
-	--Retencion MONEY NULL,
 	@PorcIva NUMERIC(10,5) NULL,
 	--IvaTotal MONEY NULL,
 	@PorcDescuento NUMERIC(10,5) NULL,
@@ -150,8 +201,8 @@ CREATE PROCEDURE USP_INSERT_ENTRADA_BODEGA_AREA_PRODUCCION(
 	@FechaHora DATETIME
 )
 AS BEGIN
-	INSERT INTO ENTRADA_BODEGA_AREA_PRODUCCION(IdBodegaAreaP,IdTrabajador,IdProveedor,NFactura,RepresentanteProveedor,PorcRetencion,PorcIva,PorcDescuento,FechaHora)
-	values(@IdBodegaAreaP,@IdTrabajador,@IdProveedor,@NFactura,@RepresentanteProveedor,@PorcRetencion,@PorcIva,@PorcDescuento,@FechaHora)
+	INSERT INTO ENTRADA_BODEGA_AREA_PRODUCCION(IdBodegaAreaP,IdTrabajador,IdProveedor,NFactura,RepresentanteProveedor,PorcIva,PorcDescuento,FechaHora)
+	values(@IdBodegaAreaP,@IdTrabajador,@IdProveedor,@NFactura,@RepresentanteProveedor,@PorcIva,@PorcDescuento,@FechaHora)
 END
 GO
 IF OBJECT_ID('USP_INSERT_DETALLE_ENTRADA_BODEGA_AREA_PRODUCCION','P') IS NOT NULL

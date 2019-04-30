@@ -10,11 +10,30 @@ IF OBJECT_ID('dbo.VIEW_USUARIO_INFO', 'V') IS NOT NULL
 GO
 CREATE VIEW VIEW_USUARIO_INFO
 AS
-	SELECT U.IdUsuario, U.IdTrabajador, T.Nombres,U.IdRol, R.NombRol, R.DescRol , C.NombCargo, Username, U.Imagen, Email, Password,U.Habilitado,U.CreatedAt,U.UpdatedAt
+	SELECT U.IdUsuario
+			, U.IdTrabajador
+			, T.Nombres
+			, U.IdRol
+			, R.NombRol
+			, R.DescRol 
+			, C.NombCargo
+			, Username
+			, U.Imagen
+			, Email
+			, Password
+			, U.Habilitado
+			, U.CreatedAt
+			,U.UpdatedAt
 	FROM USUARIO U
-	LEFT	JOIN dbo.TRABAJADOR T ON U.IdTrabajador = T.IdTrabajador
-	LEFT	JOIN dbo.CARGO_TRABAJADOR C ON T.IdCargo= C.IdCargo
-	INNER	JOIN dbo.ROL_USUARIO R ON U.IdRol = R.IdRol
+	INNER	JOIN 
+		dbo.ROL_USUARIO R 
+			ON U.IdRol = R.IdRol
+	LEFT	JOIN 
+		dbo.TRABAJADOR T 
+			ON U.IdTrabajador = T.IdTrabajador
+	LEFT	JOIN 
+		dbo.CARGO_TRABAJADOR C 
+			ON T.IdCargo= C.IdCargo
 GO
 IF OBJECT_ID('dbo.USP_GET_ROL','P') IS NOT NULL
 	DROP PROCEDURE USP_GET_ROL
@@ -23,7 +42,13 @@ CREATE PROCEDURE USP_GET_ROL(
 	@IdRol INT
 )
 AS BEGIN
-	SELECT IdRol,NombRol,DescRol,Habilitado, CreatedAt FROM ROL_USUARIO WHERE IdRol = @IdRol
+	SELECT IdRol
+	, NombRol
+	, DescRol
+	, Habilitado
+	, CreatedAt 
+	FROM ROL_USUARIO 
+	WHERE IdRol = @IdRol
 END
 GO
 IF OBJECT_ID('dbo.USP_CREATE_ROL_USUARIO','P') IS NOT NULL
@@ -70,8 +95,23 @@ CREATE PROCEDURE USP_GET_USUARIO_BY_USERNAME_OR_EMAIL(
 	@Email NVARCHAR(100)
 )
 AS BEGIN 
-	SELECT IdUsuario, IdTrabajador, Nombres,IdRol, NombRol, DescRol , NombCargo, Username, Imagen, Email, Password,Habilitado,CreatedAt,UpdatedAt
-	FROM VIEW_USUARIO_INFO WHERE Username=@Username or Email = @Email
+	SELECT IdUsuario
+			, IdTrabajador
+			, Nombres
+			, IdRol
+			, NombRol
+			, DescRol 
+			, NombCargo
+			, Username
+			, Imagen
+			, Email
+			, Password
+			, Habilitado
+			, CreatedAt
+			, UpdatedAt
+	FROM VIEW_USUARIO_INFO 
+	WHERE Username = @Username 
+		  OR Email = @Email
 END
 GO
 IF OBJECT_ID('dbo.USP_GET_USUARIO_BY_USERNAME','P') IS NOT NULL
@@ -81,7 +121,20 @@ CREATE PROCEDURE USP_GET_USUARIO_BY_USERNAME(
 	@Username NVARCHAR(50)
 )
 AS BEGIN 
-	SELECT IdUsuario, IdTrabajador, Nombres,IdRol, NombRol, DescRol , NombCargo, Username, Imagen, Email, Password,Habilitado,CreatedAt,UpdatedAt
+	SELECT IdUsuario
+	, IdTrabajador
+	, Nombres
+	, IdRol
+	, NombRol
+	, DescRol 
+	, NombCargo
+	, Username
+	, Imagen
+	, Email
+	, Password
+	, Habilitado
+	, CreatedAt
+	, UpdatedAt
 	FROM VIEW_USUARIO_INFO WHERE Username=@Username
 END
 GO
@@ -100,7 +153,18 @@ CREATE PROCEDURE USP_CREATE_USUARIO(
 AS BEGIN 
 	INSERT INTO USUARIO(IdRol,IdTrabajador,Username,Email,Imagen,Password)
 	VALUES(@IdRol,@IdTrabajador,@Username,@Email,@Imagen,@Password)
-	SELECT U.IdUsuario,U.IdTrabajador,T.Nombres,U.IdRol,R.NombRol,C.NombCargo,Username,Email,U.Habilitado,U.CreatedAt,U.UpdatedAt
+	
+	SELECT U.IdUsuario
+			, U.IdTrabajador
+			, T.Nombres
+			, U.IdRol
+			, R.NombRol
+			, C.NombCargo
+			, Username
+			, Email
+			, U.Habilitado
+			, U.CreatedAt
+			, U.UpdatedAt
 		FROM USUARIO U
 		INNER JOIN TRABAJADOR T ON U.IdTrabajador = T.IdTrabajador
 		INNER JOIN CARGO_TRABAJADOR C ON T.IdCargo= C.IdCargo
@@ -116,7 +180,18 @@ CREATE PROCEDURE USP_GET_USUARIOS(
 )
 AS BEGIN
 	IF @Habilitado IS NULL
-		SELECT IdUsuario, IdTrabajador, Nombres,IdRol, NombRol, DescRol , NombCargo, Username, Imagen, Email,Habilitado,CreatedAt 
+		SELECT IdUsuario
+		, IdTrabajador
+		, Nombres
+		, IdRol
+		, NombRol
+		, DescRol 
+		, NombCargo
+		, Username
+		, Imagen
+		, Email
+		, Habilitado
+		, CreatedAt 
 		FROM dbo.VIEW_USUARIO_INFO
 	ELSE
 		SELECT * FROM VIEW_USUARIO_INFO	WHERE Habilitado = @Habilitado
@@ -129,7 +204,20 @@ CREATE PROCEDURE USP_GET_USUARIO_BY_ID(
 	@IdUsuario INT
 )
 AS BEGIN 
-	SELECT IdUsuario, IdTrabajador, Nombres,IdRol, NombRol, DescRol , NombCargo, Username, Imagen, Email, Password,Habilitado,CreatedAt,UpdatedAt
+	SELECT IdUsuario
+	, IdTrabajador
+	, Nombres
+	, IdRol
+	, NombRol
+	, DescRol 
+	, NombCargo
+	, Username
+	, Imagen
+	, Email
+	--, Password
+	, Habilitado
+	, CreatedAt
+	, UpdatedAt
 	FROM VIEW_USUARIO_INFO WHERE IdUsuario=@IdUsuario
 END
 GO
@@ -140,7 +228,20 @@ CREATE PROCEDURE USP_GET_USUARIO_BY_TRABAJADOR(
 	@IdTrabajador INT
 )
 AS BEGIN
-	SELECT IdUsuario, IdTrabajador, Nombres,IdRol, NombRol, DescRol , NombCargo, Username, Imagen, Email, Password,Habilitado,CreatedAt,UpdatedAt
+	SELECT IdUsuario
+			, IdTrabajador
+			, Nombres
+			, IdRol
+			, NombRol
+			, DescRol
+			, NombCargo
+			, Username
+			, Imagen
+			, Email
+			, Password
+			, Habilitado
+			, CreatedAt
+			, UpdatedAt
 	FROM VIEW_USUARIO_INFO WHERE IdTrabajador = @IdTrabajador
 END
 GO
