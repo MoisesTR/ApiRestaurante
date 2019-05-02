@@ -44,11 +44,11 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use('/api', apiRoutes);
-app.use('/api', catalogRoutes);
-app.use('/api', authRoutes);
-app.use('/api', restaurantRoutes);
-app.use('/api', contabilidadRoutes);
+app.use('/', apiRoutes);
+app.use('/', catalogRoutes);
+app.use('/', authRoutes);
+app.use('/', restaurantRoutes);
+app.use('/', contabilidadRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
