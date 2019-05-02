@@ -12,6 +12,10 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
+app.get('/', (req, res) => {
+    res.status(200).json({ message: 'Welcome to APIRESTAURANTE' });
+});
+
 var port = normalizePort(process.env.PORT || '8080');
 app.set('port', port);
 
