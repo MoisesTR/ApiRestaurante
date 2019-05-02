@@ -1,5 +1,5 @@
 const { matchedData, mssqlErrors } = require('../../Utils/defaultImports');
-const RestauranteModel = require('../../models/Restaurante/Restaurante');
+const RestauranteModel = require('../../models/restaurante/Restaurante');
 
 exports.getRestaurantes = ( req, res) => {
     const   data    = matchedData(req, {locations:'query'});
