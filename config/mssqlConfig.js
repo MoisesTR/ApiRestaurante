@@ -7,8 +7,8 @@ const config = {
     database: 'ATOMIC_RESTAURANTE',
     port: 1433,
     parseJSON: true,
-    encrypt: true,
     options: {
+        encrypt: true,
         trustedConnection: false
     }
 }
