@@ -80,7 +80,7 @@ class ProductoModel {
         pushAOJParam(aoj, 'IdUnidadMedida',     sql.Int,            data.IdUnidadMedida);
         pushAOJParam(aoj, 'ValorUnidadMedida',  sql.Numeric(10, 5), data.ValorUnidadMedida);
         pushAOJParam(aoj, 'CantidadEmpaque',    sql.Int,            data.CantidadEmpaque);
-        pushAOJParam(aoj, 'DiasRotacion',       sql.Int,            data.DiasCaducidad);
+        pushAOJParam(aoj, 'DiasRotacion',       sql.Int,            data.DiasRotacion);
         pushAOJParam(aoj, 'TipoInsumo',         sql.Int,            data.TipoInsumo);
         pushAOJParam(aoj, 'CodOriginal',        sql.NVarChar(200),  data.CodOriginal);
         pushAOJParam(aoj, 'CodProd',            sql.NVarChar(200),  data.CodProd);

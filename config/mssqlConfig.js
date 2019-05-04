@@ -2,7 +2,7 @@ const sql = require('mssql');
 
 const config = {
     user: 'usuario_node',
-    password: 'node123',
+    password: 'UsAtom_2019@',
     server: 'localhost',
     database: 'ATOMIC_RESTAURANTE',
     port: 1433,
