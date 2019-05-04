@@ -3,7 +3,7 @@ const sql = require('mssql');
 const config = {
     user: 'usuario_node',
     password: 'UsAtom_2019@',
-    server: 'localhost',
+    server: 'atomicdev-chang-rest.database.windows.net',
     database: 'ATOMIC_RESTAURANTE',
     port: 1433,
     parseJSON: true,
