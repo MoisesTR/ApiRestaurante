@@ -14,15 +14,19 @@ const reportsRoutes = require('./routes/reports');
 const authRoutes    = require('./routes/authRoutes');
 const restaurantRoutes = require('./routes/restaurantRoutes');
 const contabilidadRoutes = require('./routes/contabilidadRoutes');
+const dotenv    = require('dotenv');
+dotenv.config();
 
 const app = express();
 
 // Comprime todas las respuestas
 app.use(compression())
 
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
