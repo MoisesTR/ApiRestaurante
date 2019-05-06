@@ -30,13 +30,12 @@ const createProveedor = [
     body('Imagen').isString().optional({nullable: true}),
     body('DescProveedor').isLength({min: 4, max:200}).optional({nullable:true}),
     body('NombRepresentante','Ingrese el Nombre del representante.').isLength({min: 3, max:100}).optional({nullable: true}),
-    body('IdTipDoc').isInt(),
+    body('IdTipDoc').isInt().optional({nullable:true}),
     body('Documento','El campo de Ruc es requerido!.'),
     body('Abreviatura').isLength({min:2, max:15}),
     body('IsMercado','El campo de mercado es requerido.').isBoolean(),
     sanitize('IdPais').toInt(),
     sanitize('IsProvServicio').toBoolean(),
-    sanitize('IdTipDoc').toInt(),
     sanitize('IsMercado').toBoolean()
 ];
 exports.createProveedor = createProveedor;
@@ -192,12 +191,11 @@ const createProducto = [
     body('ValorUnidadMedida').isNumeric().optional({nullable: true}),
     body('DiasRotacion').isInt(),
     body('IdTipInsumo').isInt(),
-    body('CodProd').isString(),
+    body('CodProd').isString().optional({nullable:true}),
     body('CodOriginal').optional({nullable:true}),
     body('CodBarra').optional({nullable:true}),
     sanitize('ValorUnidadMedida').toFloat(),
     sanitize('DiasRotacion').toInt(),
-    sanitize('CodProd').toString(),
     sanitize('IsGranel').toBoolean()
 ];
 exports.createProducto = createProducto;

@@ -1,6 +1,6 @@
 const { pushAOJParam, sql, storedProcExecute, queryExecute }  = require('../../Utils/defaultImports')
 const { addLikeParamInFilter, addEqualParamInFilter } = require('../../Utils/util');
-const baseSelect = 'SELECT IdCategoria,IdTipInsumo,NombCategoria,DescCategoria,Habilitado,CreatedAt, UpdatedAt FROM CATEGORIA_PRODUCTO'
+const baseSelect = 'SELECT CAT.IdCategoria,CAT.IdTipInsumo,CAT.NombCategoria,CAT.DescCategoria,CAT.Habilitado,CAT.CreatedAt, CAT.UpdatedAt, TIP.NombTipInsumo FROM CATEGORIA_PRODUCTO AS CAT INNER JOIN dbo.TIPO_INSUMO AS TIP ON CAT.IdTipInsumo = TIP.IdTipInsumo'
 const queryUpdate = `UPDATE CATEGORIA_PRODUCTO 
 SET NombCategoria = @NombCategoria, DescCategoria = @DescCategoria, UpdatedAt= GETDATE()
 WHERE IdCategoria = @IdCategoria `;
@@ -9,7 +9,7 @@ class CategoriaModel {
     static createCategoria( IdTipInsumo,NombCategoria, DescCategoria ){ 
         const aoj = [];
     
-        pushAOJParam(aoj,   'IdTipInsumo',      sql.Bit,            IdTipInsumo);
+        pushAOJParam(aoj,   'IdTipInsumo',      sql.Int,            IdTipInsumo);
         pushAOJParam(aoj,   'NombCategoria',    sql.NVarChar(50),   NombCategoria)
         pushAOJParam(aoj,   'DescCategoria',    sql.NVarChar(150),  DescCategoria)
         return storedProcExecute('USP_CREATE_CATEGORIA', aoj)
@@ -27,11 +27,13 @@ class CategoriaModel {
             filter += addLikeParamInFilter( filter, 'NombCategoria' );
             pushAOJParam(aoj, 'NombCategoria', sql.NVarChar(50), data.NombCategoria)
         }
+
         if ( undefined != data.Habilitado  ) {
-            filter += addEqualParamInFilter( filter, 'Habilitado' );
+            filter += ' WHERE CAT.Habilitado = @Habilitado';
             pushAOJParam(aoj, 'Habilitado',  sql.Bit() , +data.Habilitado)
         }
 
+        console.log(baseSelect +  filter);
         return queryExecute(baseSelect +  filter, aoj)
     }
 
