@@ -42,11 +42,12 @@ exports.bulkCreateFacturaCompra = async ( req, res, next ) =>  {
         table.columns.add('SubTotal',        sql.Numeric(17,5), {nullable: false});
         table.columns.add('Iva',             sql.Numeric(17,5), {nullable: false});
         table.columns.add('Descuento',       sql.Numeric(17,5), {nullable: false});
+        table.columns.add('IdTipDesc',       sql.TinyInt, {nullable: false});
         table.columns.add('TotalDetalle',    sql.Numeric(17,5), {nullable: false});
         // table.columns.add('Bonificacion',    sql.Bit, {nullable: true});
         
         for (let i = 0; i < productos.length; i++) {
-            let {IdProducto, PrecioUnitario, Cantidad, GravadoIva, SubTotal, Iva, Descuento, TotalDetalle, Bonificacion} = productos[i];
+            let {IdProducto, PrecioUnitario, Cantidad, GravadoIva, SubTotal, Iva, Descuento, IdTipDesc,TotalDetalle} = productos[i];
             table.rows.add(
                 IdFactura,
                 IdProducto,
@@ -56,8 +57,8 @@ exports.bulkCreateFacturaCompra = async ( req, res, next ) =>  {
                 SubTotal,
                 Iva,
                 Descuento,
-                TotalDetalle,
-                Bonificacion
+                IdTipDesc,
+                TotalDetalle
             );  
         }
         const insDetail = await tran.request()
@@ -133,7 +134,7 @@ exports.getFacturaById = (req, res ) => {
             
         res.status(200)
             .json({
-                    factura:result.recordset[0]['Factura'][0]
+                    factura: result.recordset[0]['Factura'][0]
                 })
     })
     .catch((err) =>  {
