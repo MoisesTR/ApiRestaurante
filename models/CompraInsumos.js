@@ -9,7 +9,8 @@ class CompraInsumosModel {
     createFacturaCompra( data, conn ) {
         let aoj = [];
         console.log(data);
-        
+
+        pushAOJParam(aoj, 'IdUsuario',       sql.Int,   data.IdUsuario);
         pushAOJParam(aoj, 'NumRefFactura',       sql.NVarChar(50),   data.NumRefFactura);
         pushAOJParam(aoj, 'IdProveedor',         sql.Int,            data.IdProveedor);
         pushAOJParam(aoj, 'IdTrabajador',        sql.Int,            data.IdTrabajador);
@@ -59,6 +60,7 @@ class CompraInsumosModel {
         pushAOJParam(aoj, 'SubTotal',        sql.Numeric(14,2),  data.SubTotal);
         pushAOJParam(aoj, 'Iva',             sql.Numeric(14,2),  data.Iva);
         pushAOJParam(aoj, 'Descuento',       sql.Numeric(14,2),  data.Descuento);
+        pushAOJParam(aoj, 'IdTipDesc',       sql.TinyInt,  data.IdTipDesc);
         pushAOJParam(aoj, 'TotalDetalle',    sql.Numeric(14,2),  data.TotalDetalle);
         pushAOJParam(aoj, 'Bonificacion',    sql.Bit,            data.Bonificacion);
         return storedProcExecute('USP_CREATE_DETALLE_FACTURA_COMPRA',aoj)

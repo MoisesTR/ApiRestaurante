@@ -32,7 +32,7 @@ const createProveedor = [
     body('NombRepresentante','Ingrese el Nombre del representante.').isLength({min: 3, max:100}).optional({nullable: true}),
     body('IdTipDoc').isInt().optional({nullable:true}),
     body('Documento','El campo de Ruc es requerido!.'),
-    body('Abreviatura').isLength({min:2, max:15}),
+    body('Abreviatura').isLength({min:2, max:15}).optional({nullable: true}),
     body('IsMercado','El campo de mercado es requerido.').isBoolean(),
     sanitize('IdPais').toInt(),
     sanitize('IsProvServicio').toBoolean(),
@@ -217,6 +217,7 @@ exports.updateUnidadMedida = createUnidadMedida.concat([
 ]);
 
 exports.createFacturaCompra  = [
+    body('IdUsuario').isInt(),
     body('NumRefFactura').isString(),
     body('IdProveedor'  ).isInt(),
     body('IdTrabajador' ).isInt(),
@@ -231,12 +232,14 @@ exports.createFacturaCompra  = [
     body('TotalDescuento').isFloat(),
     body('TotalCordobas').isFloat(),
     body('TotalOrigenFactura').isFloat(),
+    sanitize('IdUsuario'  ).toInt(),
     sanitize('IdProveedor'  ).toInt(),
     sanitize('IdTrabajador' ).toInt(),
     sanitize('IdTipoMoneda' ).toInt(),
 ];
 
 exports.bulkCreateFacturaCompra  = [
+    body('IdUsuario').isInt(),
     body('NumRefFactura').isString(),
     body('IdProveedor'  ).isInt(),
     body('IdTrabajador' ).isInt(),
@@ -251,6 +254,7 @@ exports.bulkCreateFacturaCompra  = [
     body('TotalDescuento').isNumeric(),
     body('TotalCordobas').isNumeric(),
     body('TotalOrigenFactura').isNumeric(),
+    sanitize('IdUsuario'  ).toInt(),
     sanitize('IdProveedor'  ).toInt(),
     sanitize('IdTrabajador' ).toInt(),
     sanitize('IdTipoMoneda' ).toInt(),
@@ -262,6 +266,7 @@ exports.bulkCreateFacturaCompra  = [
     body('productos.*.SubTotal'     ).isNumeric(),
     body('productos.*.Iva'          ).isNumeric(),
     body('productos.*.Descuento'    ).isNumeric(),
+    body('productos.*.IdTipDesc'    ).isInt(),
     body('productos.*.TotalDetalle' ).isNumeric(),
     body('productos.*.Bonificacion' ).isInt().optional({nullable:true}),
     sanitize('IdFactura'    ).toInt(),
@@ -290,6 +295,7 @@ exports.createDetalleFacturaCompra = [
     body('SubTotal'     ).isNumeric(),
     body('Iva'          ).isNumeric(),
     body('Descuento'    ).isNumeric(),
+    body('IdTipDesc'    ).toInt(),
     body('TotalDetalle' ).isNumeric(),
     body('Bonificacion' ).isInt().optional({nullable:true}),
     sanitize('IdFactura'    ).toInt(),
@@ -341,9 +347,6 @@ exports.obtenerFacturasC = [
     check('IdProveedor').isInt().optional({nullable:true}),
     check('CodFactura').isAlphanumeric().optional({nullable:true}),
     check('IdEstadoFactura').isInt().optional({nullable:true}),
-    sanitize('IdFechaFiltro', 'La fecha filtro enviada no es una fecha valida.').toInt(),
-    sanitize('FechaInicio', 'La fecha Inicio enviada no es una fecha valida.').toDate(),
-    sanitize('FechaFin', 'La Fecha Fin Enviada no es una fecha valida').toDate()
 ];
 
 exports.getMenuesByRol = [
