@@ -1,5 +1,6 @@
-const baseSelect = `SELECT IdProveedor,IdPais,IsProvServicio,NombProveedor,Direccion,Email,Imagen,DescProveedor,NombRepresentante,IdTipDoc,Documento,Abreviatura,IsMercado,Habilitado,CreatedAt,UpdatedAt
-FROM PROVEEDOR`;
+const statement = require('../sqlStatement/proveedorStatement');
+
+const baseSelect = statement.SELECT_PROVEEDOR;
 const { sql, pushAOJParam, queryExecute, storedProcExecute } = require('../Utils/defaultImports')
 
 class ProveedorModel {
@@ -9,20 +10,17 @@ class ProveedorModel {
     
     getProveedorById( IdProveedor ) {
         this.aoj    = [];
-        let filter  = ' WHERE IdProveedor = @IdProveedor';
 
-        pushAOJParam(this.aoj, 'IdProveedor', sql.Int,    IdProveedor)
-        return queryExecute(baseSelect+ filter, this.aoj)
+        pushAOJParam(this.aoj,    'IdProveedor',        sql.Int,    IdProveedor);
+        return  storedProcExecute('USP_GET_PROVEEDOR_BY_ID', this.aoj);
     }
     
     getProveedores( Habilitado ) {
         this.aoj    = [];
-        let filter  = '';
-    
-        if( undefined != Habilitado ) 
-            pushAOJParam(this.aoj, 'Habilitado',  sql.Int,    +Habilitado)
 
-        return queryExecute(baseSelect + filter, this.aoj)
+        pushAOJParam(this.aoj, 'Habilitado',  sql.Bit,    +Habilitado);
+
+        return storedProcExecute('dbo.USP_GET_PROVEEDORES', this.aoj)
     }
     
     createProveedor( data ) {

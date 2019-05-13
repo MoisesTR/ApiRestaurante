@@ -21,10 +21,11 @@ function getProveedorById(req, res) {
 function getProveedores(req, res) {
     var data = matchedData(req, {locations:['query']})
 
-    Proveedor.getProveedores( data.Habilitado ) 
+    Proveedor.getProveedores( data.Habilitado )
     .then((results) => {
+        const result = results.recordset[0] ? results.recordset[0].proveedores : [];
         res.status(200)
-            .json({ proveedores: results.recordset })
+            .json({ proveedores: result })
     }).catch((err) => {
         res.status(500).json(mssqlErrors(err));
     });
