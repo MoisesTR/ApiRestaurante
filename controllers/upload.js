@@ -129,9 +129,7 @@ function subirImagenPorCarpeta(carpeta, id , nombreArchivo,res) {
             const usuario  = results.recordset[0] || null;
 
             if (usuario) {
-                const
-
-                    =  pathRaiz + usuario.Imagen;
+                const pathViejo =  pathRaiz + usuario.Imagen;
 
                 deleteImage(pathViejo, res);
 
