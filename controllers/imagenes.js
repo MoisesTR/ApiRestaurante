@@ -1,32 +1,22 @@
 const fs = require('fs');
 var path = require('path');
-
-function getImageFile(req, res) {
-    var imageFile = req.params.ImageFile;
-    var pathImage = req.params.path;
-    var path_file = './uploads/' + pathImage + '/' + imageFile;
-
-    fs.exists(path_file, function(exists) {
-        if (exists) {
-            res.sendFile(path.resolve(path_file));
-        } else {
-            res.status(404)
-                .json({ message: 'La imagen no existe' });
-        }
-    });
-
-}
-
+/**
+ * TIPO -- CARPETA DONDE ESTA UBICADA LA IMAGEN
+ * IMG -- NOMBRE DE IMAGEN A BUSCAR
+ * @param req
+ * @param res
+ */
 function getImage(req, res) {
-    var tipo = req.params.tipo;
-    var img = req.params.img;
 
-    var pathImagen = path.resolve(__dirname, `../uploads/${tipo}/${img}`);
+    let tipo = req.params.tipo;
+    let img = req.params.img;
+
+    let pathImagen = path.resolve(__dirname, `../uploads/${tipo}/${img}`);
 
     if (fs.existsSync(pathImagen)) {
         res.sendFile(pathImagen);
     } else {
-        var pathNoImagen = path.resolve(__dirname, '../uploads/temp/no-img.jpg')
+        let pathNoImagen = path.resolve(__dirname, '../uploads/temp/no-img.jpg')
         res.sendFile(pathNoImagen);
     }
 
@@ -68,7 +58,6 @@ function deleteImage(req,res) {
 }
 
 module.exports = {
-    getImageFile,
     getImage,
     deleteImage
 }
