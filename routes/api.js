@@ -72,9 +72,8 @@ Router
     .put('/productos/:IdProducto(\\d+)',            validations.updateProducto,         validsParams,   ProductoController.updateProducto)
     .delete('/productos/:IdProducto(\\d+)',         changeStateGeneric('IdProducto'),   validsParams,   ProductoController.changeStateProducto)
 
-    .get('/getImage/:path/:ImageFile',  ImagenController.getImageFile)
     .get('/getImagen/:tipo/:img',       ImagenController.getImage)
-    .post('/uploadImage',               UploadController.uploadImage)
+    .put('/uploadImage/:carpeta/:id',               UploadController.uploadImage)
     .delete('/deleteImage/:tipo/:img',  ImagenController.deleteImage)
     //Rutas sucursal Controller
     .get('/sucursales',                     habilitadoValid,                    validsParams,       SucursalController.getSucursales)

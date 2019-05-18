@@ -1,3 +1,4 @@
+const statement = require('../sqlStatement/productoStatement');
 const { sql, pushAOJParam, queryExecute,storedProcExecute } = require('../Utils/defaultImports');
 const { addLikeParamInFilter, addEqualParamInFilter }   =  require( '../Utils/util');
 
@@ -94,6 +95,14 @@ class ProductoModel {
         pushAOJParam(aoj, 'IdProducto', sql.Int(),   IdProducto)
         pushAOJParam(aoj, 'Habilitado', sql.Bit(),   +Habilitado)
         return  storedProcExecute('USP_DISP_PRODUCTO', aoj)
+    }
+
+    updateImageProducto( IdProducto, Imagen) {
+        const aoj = [];
+
+        pushAOJParam(aoj, 'IdProducto', sql.Int, IdProducto);
+        pushAOJParam(aoj, 'Imagen', sql.NVarChar(200), Imagen);
+        return queryExecute(statement.UPDATE_IMAGE + ' WHERE IdProducto = @IdProducto', aoj)
     }
 }
 

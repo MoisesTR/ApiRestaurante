@@ -1,11 +1,15 @@
 var shortid = require('shortid');
 var fs = require('fs');
+const {mssqlErrors} = require('../Utils/defaultImports.js')
+const ProductoModel     = require('../models/Producto');
+const productoModel = new ProductoModel();
+const trabajadorModel = require('../models/Trabajador.js');
+const usuarioModel = require('../models/User.js');
 
 function uploadImage(req, res) {
 
-    var tipo = req.body.tipo;
-    var imagenAntigua = req.body.imagenAntigua;
-    var removioImagen = req.body.removioImagen == "true";
+    var carpeta = req.params.carpeta;
+    var id = req.params.id;
 
     if (!req.files) {
         return res.status(400).json({
@@ -18,24 +22,12 @@ function uploadImage(req, res) {
     //Carpetas de imagenes validas
     var tiposValidos = ['productos', 'trabajadores', 'usuarios','temp'];
 
-    if (tiposValidos.indexOf(tipo) < 0) {
+    if (tiposValidos.indexOf(carpeta) < 0) {
         return res.status(400).json({
             ok: false,
             "message": 'Carpeta no encontrada'
         });
     }
-
-    var pathViejo = `./uploads/${ tipo }/${ imagenAntigua }`;
-
-
-        if (imagenAntigua != '') {
-            //Si existe , elimina la imagen anterior
-            if (fs.existsSync(pathViejo)) {
-                fs.unlink(pathViejo);
-
-            }
-        }
-
         //Obtener nombre archivo
         var archivo = req.files.image;
         var nombreCortado = archivo.name.split('.');
@@ -54,7 +46,7 @@ function uploadImage(req, res) {
         var nombreArchivo = shortid.generate() + '.' + extArchivo;
 
         //Mover el archivo temporal a un path
-        var path = `./uploads/${ tipo }/${ nombreArchivo }`;
+        var path = `./uploads/${ carpeta }/${ nombreArchivo }`;
 
         archivo.mv(path, err => {
 
@@ -64,16 +56,118 @@ function uploadImage(req, res) {
                     "error": err
                 });
             } else {
-                return res.status(200).json({
-                    "message": 'Peticion realizada correctamente',
-                    "image": nombreArchivo,
-                    "success" : true
-                })
+                subirImagenPorCarpeta(carpeta, id, nombreArchivo, res);
             }
         })
 
 }
 
+function subirImagenPorCarpeta(carpeta, id , nombreArchivo,res) {
+
+    var pathRaiz = './uploads/' + carpeta + "/";
+
+    if (carpeta === 'productos') {
+        productoModel.getProductoById(id)
+            .then((results) => {
+                const producto = results.recordset[0] || null;
+
+                if (producto) {
+                    const pathViejo =  pathRaiz + producto.Imagen;
+
+                    deleteImage(pathViejo, res);
+
+                    productoModel.updateImageProducto(id, nombreArchivo)
+                        .then(() => {
+                        producto.Imagen = nombreArchivo;
+                        return res.status(200).json({ producto: producto})
+                    }).catch((err) => {
+                        return res.status(500).json(mssqlErrors(err));
+                    });
+
+                } else {
+                    return res.status(404).json({
+                        ok: false,
+                        "message": 'El identificador del producto solicitado no existe!',
+                    });
+                }
+            }).catch((err) => {
+            return res.status(500).json(mssqlErrors(err));
+        });
+    }
+
+    if (carpeta === 'trabajadores') {
+        trabajadorModel.getTrabajadorById(id).then((results) => {
+            const trabajador  = results.recordset[0] || null;
+
+            if (trabajador) {
+                const pathViejo =  pathRaiz + trabajador.Imagen;
+
+                deleteImage(pathViejo, res);
+
+                return trabajadorModel.updateImageTrabajador(id, nombreArchivo)
+                    .then(() => {
+                        trabajador.Imagen = nombreArchivo;
+                        res.status(200).json({ trabajador: trabajador})
+                    }).catch((err) => {
+                        res.status(500).json(mssqlErrors(err));
+                });
+
+            } else {
+                return res.status(404).json({
+                    ok: false,
+                    "message": 'El identificador del trabajador solicitado no existe!',
+                });
+            }
+        }).catch((err) => {
+            return res.status(500).json(mssqlErrors(err));
+        });
+    }
+
+    if (carpeta === 'usuarios') {
+
+        usuarioModel.getUserById(id).then((results) => {
+            const usuario  = results.recordset[0] || null;
+
+            if (usuario) {
+                const
+
+                    =  pathRaiz + usuario.Imagen;
+
+                deleteImage(pathViejo, res);
+
+                return usuarioModel.updateImageUsuario(id, nombreArchivo)
+                    .then(() => {
+                        usuario.Imagen = nombreArchivo;
+                        res.status(200).json({ usuario: usuario})
+                    }).catch((err) => {
+                        res.status(500).json(mssqlErrors(err));
+                    });
+            } else {
+                return res.status(400).json({
+                    ok: false,
+                    "message": 'El identificador del usuario solicitado no existe!',
+                });
+            }
+
+        }).catch((err) => {
+            return res.status(500).json(mssqlErrors(err));
+        });
+    }
+
+}
+
+//Si existe , elimina la imagen anterior
+function deleteImage(pathViejo, res) {
+    if (fs.existsSync(pathViejo)) {
+        fs.unlink(pathViejo, (err) =>{
+            return res.status(500).json({
+                "message": 'Error al eliminar la imagen!',
+                "error": err
+            });
+        });
+    }
+}
+
 module.exports = {
     uploadImage
-}
+};

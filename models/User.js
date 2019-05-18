@@ -1,9 +1,10 @@
+const statement = require('../sqlStatement/userStatement');
 const {pushAOJParam, storedProcExecute, queryExecute, sql} = require('../Utils/defaultImports')
 const { addEqualParamInFilter } = require('../Utils/util'); 
-const baseSelect = 'SELECT * FROM dbo.USUARIO';
-const baseRefreshT = 'SELECT RefreshT, IdUsuario, UserAgent, CreatedAt FROM dbo.REFRESH_TOKEN_USER';
-const baseUpdateRT = 'UPDATE dbo.REFRESH_TOKEN_USER SET Habilitado = 0 WHERE IdUsuario';
-const baseDeleteRT = 'DELETE FROM dbo.REFRESH_TOKEN_USER';
+const baseSelect = statement.BASE_SELECT_USER;
+const baseRefreshT = statement.BASE_REFRESH_TK;
+const baseUpdateRT = statement.BASE_UPDATE_RT;
+const baseDeleteRT = statement.BASE_DELETE_RT;
 
 class UserModel {
 
@@ -28,6 +29,13 @@ class UserModel {
         pushAOJParam( aoj, 'Username',  sql.NVarChar(50),   Username);
         const resp = await storedProcExecute('dbo.USP_GET_USUARIO_BY_USERNAME', aoj );
         return resp.recordset[0];
+    }
+
+    static async getUserById( IdUsuario ) {
+        let aoj = [];
+
+        pushAOJParam( aoj, 'IdUsuario',  sql.Int,   IdUsuario);
+        return queryExecute(statement.GET_USER_BY_ID + ' WHERE IdUsuario = @IdUsuario', aoj)
     }
     
     static async getUserByUsernameOrEmail( Username, Email ) {
@@ -108,6 +116,14 @@ class UserModel {
         pushAOJParam(aoj,   'RefreshT',     sql.VarChar(30),    RefreshT);
         const resp = await queryExecute(baseRefreshT + filter, aoj);
         return resp.recordset[0];
+    }
+
+    static async updateImageUsuario( IdUsuario, Imagen) {
+        const aoj = [];
+
+        pushAOJParam(aoj, 'IdUsuario', sql.Int, IdUsuario);
+        pushAOJParam(aoj, 'Imagen', sql.NVarChar(200), Imagen);
+        return queryExecute(statement.UPDATE_IMAGE_USER + ' WHERE IdUsuario = @IdUsuario', aoj)
     }
 }
 

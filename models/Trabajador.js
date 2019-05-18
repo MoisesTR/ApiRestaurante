@@ -1,17 +1,11 @@
+const statement = require('../sqlStatement/trabajadorStatement');
 const { pushAOJParam, storedProcExecute,whereHabilitadoFilter, queryExecute, sql} = require('../Utils/defaultImports')
-const baseSelect = `SELECT T.IdTrabajador, T.IdSucursal, S.NombSucursal, T.IdCargo, C.NombCargo,
-        T.Nombres, T.Apellidos, T.IdTipDoc, T.Documento, T.Imagen,
-        T.FechaNacimiento, T.Direccion, T.Telefono1, T.Telefono2, T.FechaIngreso,
-        T.Habilitado, U.Username,T.CreatedAt,T.UpdatedAt
-        FROM dbo.TRABAJADOR T 
-        INNER JOIN dbo.SUCURSAL_RESTAURANTE S ON T.IdSucursal= S.IdSucursal
-        INNER JOIN dbo.CARGO_TRABAJADOR C ON T.IdCargo = C.IdCargo
-        LEFT  JOIN dbo.USUARIO	U ON T.IdTrabajador = U.IdTrabajador
-        `;
+const baseSelect = statement.BASE_SELECT_TRABAJADOR;
+const updateImage = statement.UPDATE_IMAGE;
 
 class TrabajadorModel {
     
-    static getTrabajadorById( IdTrabajador ) {
+    static async getTrabajadorById( IdTrabajador ) {
         const aoj = [];
         
         pushAOJParam(aoj, 'IdTrabajador', sql.Int, IdTrabajador);
@@ -83,6 +77,16 @@ class TrabajadorModel {
         pushAOJParam(aoj, 'Habilitado',      sql.Bit,   +Habilitado);
         return storedProcExecute('USP_DISP_TRABAJADOR', aoj)
     }
+
+    static async updateImageTrabajador(IdTrabajador, Imagen) {
+        const aoj = [];
+
+        pushAOJParam(aoj, 'IdTrabajador', sql.Int, IdTrabajador);
+        pushAOJParam(aoj, 'Imagen', sql.NVarChar(100), Imagen);
+        return queryExecute(updateImage + ' WHERE IdTrabajador = @IdTrabajador', aoj)
+    }
+
+
 }
 
 module.exports = TrabajadorModel;
