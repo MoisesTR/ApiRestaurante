@@ -9,13 +9,12 @@ const UserModel = require('../models/User');
  * @description Esta funcion recibe un usuario, para la creacion de un token personalizado
  * @param {Object} user
  */
-exports.createToken = ( user )  => {
+exports.createToken = ( {IdUsuario, Username, Email} )  => {
     let     _token  ='';
     const   payload = {
-        sub:        user.IdUsuario,
-        Username:   user.Username,
-        Email:      user.Email,
-        // IdTrabajador:   user.IdTrabajador,
+        sub:        IdUsuario,
+        Username:   Username,
+        Email:      Email,
         iar:    moment().unix(), /* Fecha de creacion */
         exp:    moment().add(1440,"minutes").unix() /* Token expira en un dia */
     };
