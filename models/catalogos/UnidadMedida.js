@@ -1,6 +1,5 @@
+const statement = require('../../sqlStatement/unidadMedidaStatements');
 const {sql, pushAOJParam, storedProcExecute, queryExecute} = require('../../Utils/defaultImports');
-const { addLikeParamInFilter, addEqualParamInFilter } = require('../../Utils/util');
-const baseSelect = 'SELECT IdUnidadMedida, IdClasifUDM, IdUDMBase, NombUnidad, Simbolo, FactorConversion, Habilitado, CreatedAt,UpdatedAt FROM UNIDAD_MEDIDA';
 
 class UnidadMedidaModel {
 
@@ -8,18 +7,18 @@ class UnidadMedidaModel {
         const aoj  = [];
 
         pushAOJParam(aoj, 'IdUnidadMedida',  sql.Int,    IdUnidadMedida)
-        return queryExecute(baseSelect + ' WHERE IdUnidadMedida = @IdUnidadMedida', aoj)
+        return queryExecute(statement.BASE_SELECT + ' WHERE IdUnidadMedida = @IdUnidadMedida', aoj)
     }
 
     getUnidadesMedida( {Habilitado} ){
         const aoj = [];
         let filter  = '';
     
-        if ( Habilitado !== undefined ) {
-            filter += addEqualParamInFilter(filter, 'Habilitado');
-            pushAOJParam(aoj, 'Habilitado',      sql.Bit,   +Habilitado)
+        if ( Habilitado) {
+            filter += ' WHERE CLA.Habilitado = @Habilitado';
+            pushAOJParam(aoj, 'Habilitado',  sql.Bit() , +Habilitado)
         }
-        return queryExecute( baseSelect + filter, aoj) 
+        return queryExecute( statement.BASE_SELECT + filter, aoj)
     }
 
     createUnidadMedida( params ){
