@@ -1,7 +1,6 @@
+const statement = require('../sqlStatement/clasificacionStatement');
 const { sql, pushAOJParam, storedProcExecute, queryExecute } = require('../Utils/defaultImports');
 const { addEqualParamInFilter } = require('../Utils/util');
-const baseSelect    =  `SELECT IdClasificacion, IdCategoria, NombClasificacion,DescClasificacion,Habilitado, CreatedAt,UpdatedAt 
-                        FROM CLASIFICACION_PRODUCTO`;
 
 module.exports =  class ClasificacionController {
 
@@ -20,23 +19,23 @@ module.exports =  class ClasificacionController {
         let filter  = '';
 
         if (  Habilitado ) {
-            filter +=  addEqualParamInFilter( filter, 'Habilitado' );
-            pushAOJParam(aoj, 'Habilitado',  sql.Bit(),  +Habilitado);
+            filter += ' WHERE CLA.Habilitado = @Habilitado';
+            pushAOJParam(aoj, 'Habilitado',  sql.Bit() , +Habilitado)
         }
-        return queryExecute(baseSelect + filter, aoj)
+        return queryExecute(statement.BASE_SELECT + filter, aoj)
     }
     
     getClasificacionesByIdCategoria( IdCategoria, Habilitado ){
         let filter  = '';
         let aoj = [];
     
-        filter +=   ' WHERE IdCategoria = @IdCategoria';
+        filter +=   ' WHERE CLA.IdCategoria = @IdCategoria';
         pushAOJParam(aoj, 'IdCategoria',    sql.Int, IdCategoria)
         if ( Habilitado ) {
             filter  += addEqualParamInFilter(filter, 'Habilitado');
             pushAOJParam(aoj, 'Habilitado', sql.Int, Habilitado)
         }
-        return  queryExecute(baseSelect + filter, aoj)
+        return  queryExecute(statement.BASE_SELECT + filter, aoj)
     }
     
     updateClasificacion( {IdClasificacion, IdCategoria, NombClasificacion, DescClasificacion} = {}) {
@@ -53,9 +52,9 @@ module.exports =  class ClasificacionController {
         const aoj     = [];
         let filter  = '';
     
-        filter += ' WHERE IdClasificacion = @IdClasificacion';
+        filter += ' WHERE CLA.IdClasificacion = @IdClasificacion';
         pushAOJParam(aoj, 'IdClasificacion', sql.Int,    IdClasificacion);
-        return queryExecute(baseSelect + filter, aoj)
+        return queryExecute(statement.BASE_SELECT + filter, aoj)
     }
     
     changeStateClasificacion( IdClasificacion, Habilitado ) {
